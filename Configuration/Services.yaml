@@ -1,0 +1,22 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  DW\Trainingsplatz\:
+    resource: '../Classes/*'
+    exclude: '../Classes/Domain/Model/*'
+
+  DW\Trainingsplatz\Command\InfomailCommand:
+    tags:
+      - name: 'console.command'
+        command: 'trainingsplatz:infomail'
+        description: 'Send Training InfoMails'
+
+  In2code\Femanager\ViewHelpers\Form\HiddenViewHelper: '@DW\Trainingsplatz\ViewHelpers\HiddenViewHelper'
+  In2code\Femanager\Controller\EditController: '@DW\Trainingsplatz\Controller\EditController'
+  In2code\Femanager\Controller\EditInitController: '@DW\Trainingsplatz\Controller\EditInitController'
+  In2code\Femanager\Controller\NewController: '@DW\Trainingsplatz\Controller\NewController'
+  In2code\Femanager\Domain\Model\User: '@DW\Trainingsplatz\Domain\Model\User'
+  In2code\Femanager\Domain\Repository\UserRepository: '@DW\Trainingsplatz\Domain\Repository\UserRepository'

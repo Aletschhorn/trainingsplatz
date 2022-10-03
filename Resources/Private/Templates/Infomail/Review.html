@@ -1,0 +1,50 @@
+<f:layout name="Default" />
+<f:section name="main">
+
+<f:flashMessages as="flashMessages">
+	<f:for each="{flashMessages}" as="flashMessage">
+		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
+	</f:for>
+</f:flashMessages>
+
+<h2>Inhalt InfoMail</h2>
+
+<div class="row">
+	<div class="col-sm-2 col-xs-3 text-right"><b>Betreff</b></div>
+	<div class="col-sm-10 col-xs-9">{infomail.mailSubject}</div>
+</div>
+<br />
+<div class="row">
+	<div class="col-sm-2 col-xs-3 text-right"><b>Mail-Text</b></div>
+	<div class="col-sm-10 col-xs-9"><f:format.nl2br>{infomail.mailBody}</f:format.nl2br></div>
+</div>
+<br />
+<div class="row">
+	<div class="col-sm-2 col-xs-3 text-right"><b>Versand</b></div>
+	<f:switch expression="{infomail.status}">
+		<f:case value="1">
+			<div class="col-sm-10 col-xs-9">am {infomail.statusDate->f:format.date(format:'d.m.y H:i')} an {infomail.sendReceiver} Mitglieder durch {infomail.sendUser.name}</div>
+		</f:case>
+		<f:case value="3">
+			<div class="col-sm-10 col-xs-9">freigegeben am {infomail.statusDate->f:format.date(format:'d.m.y H:i')} durch {infomail.sendUser.name},<br />wird in der Regel innert 60 min versendet</div>
+		</f:case>
+		<f:case value="4">
+			<div class="col-sm-10 col-xs-9">bisher an {infomail.sendReceiver} Mitglieder versendet (am {infomail.statusDate->f:format.date(format:'d.m.y H:i')}), weiterer Versand am Laufen,<br />freigegeben durch {infomail.sendUser.name}</div>
+		</f:case>
+	</f:switch>
+</div>
+
+<br /><br /> 
+	
+<div class="col-sm-offset-2 col-xs-offset-3">
+	<f:link.action action="list" class="btn btn-primary">Zurück</f:link.action> &nbsp;
+	<f:if condition="{infomail.status}==3">
+		<f:link.action action="cancel" arguments="{infomail:infomail}" class="btn btn-default">Versand abbrechen</f:link.action> &nbsp;
+	</f:if>
+	<f:link.action action="copy" arguments="{infomail:infomail}" class="btn btn-default">Weiterer Versand</f:link.action>
+</div>
+
+<hr />
+<f:render partial="Training/Description" arguments="{training:infomail.training}" />
+
+</f:section>

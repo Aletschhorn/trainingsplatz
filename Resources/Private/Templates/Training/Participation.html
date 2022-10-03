@@ -1,0 +1,52 @@
+{namespace tp=DW\Trainingsplatz\ViewHelpers}
+
+<f:layout name="Default" />
+<f:section name="main">
+
+<f:flashMessages as="flashMessages">
+	<f:for each="{flashMessages}" as="flashMessage">
+		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
+	</f:for>
+</f:flashMessages>
+
+<div class="row">
+	<div class="col-lg-7 col-md-12">
+		<h3>Statistische Auswertung der Trainings im Jahr {year}</h3>
+	</div>
+	<div class="col-lg-5 col-md-12">
+		<ul class="pagination" style="margin-top:10px">
+			<f:for each="{navigation}" as="nav">
+				<li class="{f:if(condition:'{nav}=={year}',then:'active')}">
+					<f:link.action action="participation" arguments="{year:nav}">{nav}</f:link.action>
+				</li>
+			</f:for>
+		</ul>
+	</div>
+</div>	
+<br />
+
+
+<f:if condition="{list}">
+	<f:then>
+		<table class="table">
+			<tr>
+				<th>Trainings-Ausschreiber</th>
+				<th>Trainings</th>
+				<th>Teilnehmende</th>
+			</tr>
+			<f:for each="{list}" as="line">
+				<tr>
+					<td><f:link.action action="userParticipation" arguments="{user:line.user}">{line.user.name}</f:link.action></td>
+					<td>{line.trainings->f:count()}</td>
+					<td>{line.answers->f:count()}</td>
+				</tr>
+			</f:for>
+		</table>
+	</f:then>
+	<f:else>
+		<p>Keine ausgewerteten Trainings gefunden</p>
+	</f:else>
+</f:if>
+
+</f:section>
+

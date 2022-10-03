@@ -1,0 +1,115 @@
+<f:layout name="Default" />
+<f:section name="main">
+
+<f:flashMessages as="flashMessages">
+	<f:for each="{flashMessages}" as="flashMessage">
+		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
+	</f:for>
+</f:flashMessages>
+
+<f:if condition="{queued}">
+	<f:then>
+		<h2>Für Versand vorbereitete InfoMails</h2>
+		<table class="table">
+			<f:if condition="{inprogress}">
+				<f:for each="{inprogress}" as="infomail">
+					<tr>
+						<td style="width:150px">
+							<f:render partial="Training/Icons" arguments="{training:infomail.training}" />
+						</td>
+						<td style="width:70px">
+							<f:render partial="Training/Avatar" arguments="{training:infomail.training,style:'margin-left:20px',settings:settings}" />
+						</td>
+						<td>
+							<f:link.action action="review" arguments="{infomail:infomail}"><div class="lead" style="margin-bottom:10px">{infomail.training.title}</div></f:link.action>
+							Wird gegenwärtig versendet. Zum Versand freigegeben am {infomail.statusDate->f:format.date(format:'d.m.y H:i')}
+						</td>
+					</tr>
+				</f:for>
+			</f:if>
+			<f:for each="{queued}" as="infomail">
+				<tr>
+					<td style="width:150px">
+						<f:render partial="Training/Icons" arguments="{training:infomail.training}" />
+					</td>
+					<td style="width:70px">
+						<f:render partial="Training/Avatar" arguments="{training:infomail.training,style:'margin-left:20px',settings:settings}" />
+					</td>
+					<td>
+						<f:link.action action="review" arguments="{infomail:infomail}"><div class="lead" style="margin-bottom:10px">{infomail.training.title}</div></f:link.action>
+						Zum Versand freigegeben am {infomail.statusDate->f:format.date(format:'d.m.y H:i')}
+					</td>
+				</tr>
+			</f:for>
+		</table>
+	</f:then>
+	<f:else>
+		<f:if condition="{inprogress}">
+			<h2>Für Versand vorbereitete InfoMails</h2>
+			<table class="table">
+				<f:for each="{inprogress}" as="infomail">
+					<tr>
+						<td style="width:150px">
+							<f:render partial="Training/Icons" arguments="{training:infomail.training}" />
+						</td>
+						<td style="width:70px">
+							<f:render partial="Training/Avatar" arguments="{training:infomail.training,style:'margin-left:20px',settings:settings}" />
+						</td>
+						<td>
+							<f:link.action action="review" arguments="{infomail:infomail}"><div class="lead" style="margin-bottom:10px">{infomail.training.title}</div></f:link.action>
+							Wird gegenwärtig versendet. Zum Versand freigegeben am {infomail.statusDate->f:format.date(format:'d.m.y H:i')}
+						</td>
+					</tr>
+				</f:for>
+			</table>
+		</f:if>
+	</f:else>
+</f:if>
+
+<f:if condition="{pending}">
+	<f:then>
+		<h2>Pendente InfoMails</h2>
+		<table class="table">
+			<f:for each="{pending}" as="infomail">
+				<tr>
+					<td style="width:150px">
+						<f:render partial="Training/Icons" arguments="{training:infomail.training}" />
+					</td>
+					<td style="width:70px">
+						<f:render partial="Training/Avatar" arguments="{training:infomail.training,style:'margin-left:20px',settings:settings}" />
+					</td>
+					<td>
+						<f:link.action action="show" arguments="{infomail:infomail}"><div class="lead" style="margin-bottom:10px">{infomail.training.title}</div></f:link.action>
+						Wartet seit {infomail.statusDate->f:format.date(format:'d.m.y H:i')}
+					</td>
+				</tr>
+			</f:for>
+		</table>
+	</f:then>
+</f:if>
+
+<f:if condition="{sent}">
+	<f:then>
+		<h2>Versendete InfoMails</h2>
+		<table class="table">
+			<f:for each="{sent}" as="infomail">
+				<tr>
+					<td style="width:150px">
+						<f:render partial="Training/Icons" arguments="{training:infomail.training}" />
+					</td>
+					<td style="width:70px">
+						<f:render partial="Training/Avatar" arguments="{training:infomail.training,style:'margin-left:20px',settings:settings}" />
+					</td>
+					<td>
+						<f:link.action action="review" arguments="{infomail:infomail}"><div class="lead" style="margin-bottom:10px">{infomail.training.title}</div></f:link.action>
+						Versendet am {infomail.statusDate->f:format.date(format:'d.m.y H:i')} an {infomail.sendReceiver} Mitglieder durch {infomail.sendUser.name}
+					</td>
+				</tr>
+			</f:for>
+		</table>
+	</f:then>
+</f:if>
+
+<f:link.action action="list" pageUid="{settings.mainPid}" class="btn btn-primary">Zur&uuml;ck zur Trainingsliste</f:link.action>
+
+</f:section>

@@ -1,0 +1,55 @@
+{namespace tp=DW\Trainingsplatz\ViewHelpers}
+
+<a name="top"></a>
+<div class="pull-right hidden-xs">
+	<f:render partial="Training/IconsMap" arguments="{training:training}" />
+	<f:render partial="Training/Avatar" arguments="{training:training,style:'margin-left:20px',settings:settings}" />
+</div>
+<div class="visible-xs">
+	<f:render partial="Training/IconsMap" arguments="{training:training}" />
+	<f:render partial="Training/Avatar" arguments="{training:training,style:'margin-left:20px',settings:settings}" />
+</div>
+
+<h2><f:if condition="{training.cancelled}">ABGESAGT: </f:if>{training.title}</h2>
+
+<p><f:translate key="LLL:EXT:trainingsplatz/Resources/Private/Language/locallang.xlf:{training.trainingDate->f:format.date(format:'D')}" />, {training.trainingDate->f:format.date(format:'j.')} <f:translate key="LLL:EXT:trainingsplatz/Resources/Private/Language/locallang.xlf:{training.trainingDate->f:format.date(format:'M')}" /> {training.trainingDate->f:format.date(format:'Y')} | {training.sport.title} ({training.intensity.title})</p>
+<f:if condition="{training.guided}"><p>Training mit SportCoach, SportCoach: {training.leader.name}</p></f:if>
+<p>
+	<f:if condition="{training.distance}">Distanz: {training.distance} <f:if condition="{training.duration}"><f:then>|</f:then><f:else><f:if condition="{training.speed}">|</f:if></f:else></f:if> </f:if>
+	<f:if condition="{training.duration}">Dauer: {training.duration} <f:if condition="{training.speed}">|</f:if> </f:if>
+	<f:if condition="{training.speed}">Durchschnittliches Tempo: {training.speed} </f:if>
+</p>
+
+<f:if condition="{training.map}">
+	<f:then>
+		<div id="mapLink" style="display:block">
+			<p><f:if condition="{training.startText}">Treffpunkt: {training.startText} | </f:if><f:link.page section="top" addQueryString="1"  additionalAttributes="{onclick:'document.getElementById(\'map\').style.display=\'block\';document.getElementById(\'mapLink\').style.display=\'none\';'}">Streckenkarte einblenden</f:link.page></p>
+		</div>
+		<div id="map" style="display:none">
+			<p><f:if condition="{training.startText}">Treffpunkt: {training.startText} | </f:if><f:link.page section="top" addQueryString="1" additionalAttributes="{onclick:'document.getElementById(\'map\').style.display=\'none\';document.getElementById(\'mapLink\').style.display=\'block\';'}">Streckenkarte ausblenden</f:link.page></p>
+			<f:render partial="Training/Map" arguments="{training:training}" />
+		</div>
+	</f:then>
+	<f:else>
+		<f:if condition="{training.startOption}==1">
+			<f:then>
+				<div id="mapLink" style="display:block">
+					<p>Treffpunkt: {training.startText}, <f:link.page section="top" addQueryString="1"  additionalAttributes="{onclick:'document.getElementById(\'map\').style.display=\'block\';document.getElementById(\'mapLink\').style.display=\'none\';'}">Karte einblenden</f:link.page></p>
+				</div>
+				<div id="map" style="display:none">
+					<p>Treffpunkt: {training.startText}, <f:link.page section="top" addQueryString="1"  additionalAttributes="{onclick:'document.getElementById(\'map\').style.display=\'none\';document.getElementById(\'mapLink\').style.display=\'block\';'}">Karte ausblenden</f:link.page></p>
+					<f:render partial="Training/Map" arguments="{training:training}" />
+				</div>
+			</f:then>
+			<f:else>
+				<f:if condition="{training.startText}">
+					<p>Treffpunkt: {training.startText}</p>
+				</f:if>
+			</f:else>
+		</f:if>	
+	</f:else>
+</f:if>
+
+
+<f:format.raw><p><f:format.nl2br><tp:linksInText>{training.description}</tp:linksInText></f:format.nl2br></p></f:format.raw>
+<br />

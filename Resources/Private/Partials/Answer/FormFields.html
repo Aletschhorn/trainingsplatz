@@ -1,0 +1,20 @@
+<div class="row">
+	<div class="form-group">
+		<label for="title" class="col-sm-3 col-xs-3 control-label">Name</label>
+		<div class="col-sm-9 col-xs-9">
+			<f:form.textfield property="author" class="form-control" value="{feuser.firstname} {feuser.lastname->f:format.crop(maxCharacters:1,append:'.')}" readonly="readonly" />
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="title" class="col-sm-3 col-xs-3 control-label">Titel</label>
+		<div class="col-sm-9 col-xs-9">
+			<f:form.textfield property="title" value="{answer.title}" maxlength="40" class="form-control" />
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="description" class="col-sm-3 col-xs-3 control-label">Text</label>
+		<div class="col-sm-9 col-xs-9">
+			<f:form.textarea property="description" value="{answer.description}" rows="6" class="form-control" />
+		</div>
+	</div>
+</div>

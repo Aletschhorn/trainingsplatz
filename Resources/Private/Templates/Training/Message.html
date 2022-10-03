@@ -1,0 +1,46 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+<h2>Mail-Nachricht an alle Teilnehmer</h2>
+
+<f:flashMessages as="flashMessages">
+	<f:for each="{flashMessages}" as="flashMessage">
+		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
+	</f:for>
+</f:flashMessages>
+
+<f:form action="messageSend" name="message" class="form-horizontal">
+	<f:form.hidden name="training" value="{training.uid}" />
+	<div class="row">
+		<div class="form-group">
+			<label class="col-sm-2 col-xs-3 control-label">Training</label>
+			<div class="col-sm-9 col-xs-8">
+				<p class="form-control-static">{training.title} am {training.trainingDate->f:format.date(format:'d.m.y')}</p>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 col-xs-3 control-label">Hinweis</label>
+			<div class="col-sm-9 col-xs-8">
+				<p class="form-control-static">Das E-Mail wird mit deinem Namen und deiner Mail-Adresse als Absender verfasst.</p>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="subject" class="col-sm-2 col-xs-3 control-label">Betreff</label>
+			<div class="col-sm-9 col-xs-8">
+				<f:form.textfield name="subject" maxlength="120" class="form-control" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="content" class="col-sm-2 col-xs-3 control-label">Inhalt</label>
+			<div class="col-sm-9 col-xs-8">
+				<f:form.textarea name="content" rows="10" class="form-control" />
+			</div>
+		</div>
+		<div class="col-sm-9 col-sm-offset-2 col-xs-8 col-xs-offset-3">
+			<f:link.action action="show" arguments="{training:training}" class="btn btn-default">Abbrechen</f:link.action> &nbsp; 
+			<f:form.submit value="Senden" class="btn btn-primary" />
+		</div>
+	</div>
+</f:form>
+
+</f:section>

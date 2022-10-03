@@ -1,0 +1,99 @@
+{namespace tp=DW\Trainingsplatz\ViewHelpers}
+
+<f:layout name="Default" />
+<f:section name="main">
+
+<f:flashMessages as="flashMessages">
+	<f:for each="{flashMessages}" as="flashMessage">
+		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
+	</f:for>
+</f:flashMessages>
+
+<div class="tp-navi">
+	<f:if condition="{filter}==0">
+		<f:then>
+			<f:image src="fileadmin/images/training/alle-schwarz.png" alt="Alle Trainings anzeigen" additionalAttributes="{title:'Alle Trainings anzeigen'}" class="active" />
+		</f:then>
+		<f:else>
+			<f:link.action action="list" arguments="{filter:0}">
+				<f:image src="fileadmin/images/training/alle-schwarz.png" alt="Alle Trainings anzeigen" additionalAttributes="{title:'Alle Trainings anzeigen'}" />
+			</f:link.action>
+		</f:else>
+	</f:if>
+	<f:for each="{sports}" as="sport">
+		<f:if condition="{filter}=={sport.uid}">
+			<f:then>
+				<f:image image="{sport.picture.0}" alt="Nur {sport.title}-Trainings anzeigen" additionalAttributes="{title:'Nur {sport.title}-Trainings anzeigen'}" class="active" />
+			</f:then>
+			<f:else>
+				<f:link.action action="list" arguments="{filter:sport.uid}">
+					<f:image image="{sport.picture.0}" alt="Nur {sport.title}-Trainings anzeigen" additionalAttributes="{title:'Nur {sport.title}-Trainings anzeigen'}" />
+				</f:link.action>
+			</f:else>
+		</f:if>
+	</f:for>
+	
+	<div class="pull-right visible-lg visible-md">
+		<f:security.ifHasRole role="{settings.usergroupAdmin}">
+			<f:link.page pageUid="90"><f:image src="fileadmin/images/training/infomail.png" alt="InfoMails versenden" additionalAttributes="{title:'InfoMails versenden'}" /></f:link.page>
+			<f:link.action action="evaluate" pageUid="{settings.evalPid}"><f:image src="fileadmin/images/training/abrechnung.png" alt="Trainings abrechnen" additionalAttributes="{title:'Trainings abrechnen'}" /></f:link.action>
+		</f:security.ifHasRole>
+		<f:security.ifHasRole role="{settings.usergroupMember}">
+			<f:link.action action="new" pageUid="{settings.newPid}"><f:image src="fileadmin/images/training/plus.png" alt="Neues Training erstellen" additionalAttributes="{title:'Neues Training erstellen'}" /></f:link.action>
+		</f:security.ifHasRole>
+		<f:link.page pageUid="{settings.rulesPid}"><f:image src="fileadmin/images/training/paragraph.png" alt="Regeln zu Trainings" additionalAttributes="{title:'Regeln zu Trainings'}" /></f:link.page>
+		<f:link.page pageUid="{settings.helpPid}"><f:image src="fileadmin/images/training/fragezeichen.png" alt="Zeichenerklärung" additionalAttributes="{title:'Zeichenerklärung'}" /></f:link.page>
+	</div>
+	<div class="visible-sm visible-xs">
+		<f:security.ifHasRole role="{settings.usergroupAdmin}">
+			<f:link.page pageUid="90"><f:image src="fileadmin/images/training/infomail.png" alt="InfoMails versenden" additionalAttributes="{title:'InfoMails versenden'}" /></f:link.page>
+			<f:link.action action="evaluate" pageUid="{settings.evalPid}"><f:image src="fileadmin/images/training/abrechnung.png" alt="Trainings abrechnen" additionalAttributes="{title:'Trainings abrechnen'}" /></f:link.action>
+		</f:security.ifHasRole>
+		<f:security.ifHasRole role="{settings.usergroupMember}">
+			<f:link.action action="new" pageUid="{settings.newPid}"><f:image src="fileadmin/images/training/plus.png" alt="Neues Training erstellen" additionalAttributes="{title:'Neues Training erstellen'}" /></f:link.action>
+		</f:security.ifHasRole>
+		<f:link.page pageUid="{settings.rulesPid}"><f:image src="fileadmin/images/training/paragraph.png" alt="Regeln zu Trainings" additionalAttributes="{title:'Regeln zu Trainings'}" /></f:link.page>
+		<f:link.page pageUid="{settings.helpPid}"><f:image src="fileadmin/images/training/fragezeichen.png" alt="Zeichenerklärung" additionalAttributes="{title:'Zeichenerklärung'}" /></f:link.page>
+	</div>
+</div>
+
+<p>&nbsp;</p>
+
+<f:if condition="{trainings}">
+	<f:then>
+		<table class="table" >
+			<f:for each="{trainings}" as="training">
+				<tr>
+					<td style="width:150px">
+						<f:render partial="Training/Icons" arguments="{training:training}" />
+					</td>
+					<td>
+						<f:if condition="{training.cancelled}">
+							<f:then>
+								<f:link.action action="show" pluginName="Tp" pageUid="{settings.singlePid}" arguments="{training:training}"><div class="lead" style="margin-bottom:10px">ABGESAGT: {training.title}</div></f:link.action>
+							</f:then>
+							<f:else>
+								<f:link.action action="show" pluginName="Tp" pageUid="{settings.singlePid}" arguments="{training:training}"><div class="lead" style="margin-bottom:10px">{training.title}</div></f:link.action><tp:objectAccess haystack="{answers}" needle="{training.uid}" /> Teilnehmer
+							</f:else>
+						</f:if>					
+					</td>
+					<td class="text-right hidden-xs">
+						<f:render partial="Training/Avatar" arguments="{training:training,style:'margin-left:20px',settings:settings}" />
+					</td>
+				</tr>
+			</f:for>
+		</table>
+	</f:then>
+	<f:else>
+		<f:if condition="{filter}==0">
+			<f:then>
+				<div class="alert alert-danger">Zurzeit sind keine Trainings ausgeschrieben</div>
+			</f:then>
+			<f:else>
+				<div class="alert alert-danger">Zurzeit sind keine Trainings dieser Sportart ausgeschrieben</div>
+			</f:else>
+		</f:if>
+	</f:else>
+</f:if>
+
+</f:section>

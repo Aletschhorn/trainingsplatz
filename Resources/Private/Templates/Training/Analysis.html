@@ -1,0 +1,65 @@
+<f:layout name="Default" />
+<f:section name="main">
+
+<div class="row">
+	<div class="col-lg-7 col-md-12">
+		<h2>Analyse der Trainings</h2>
+		<p>{f:count(subject:trainings)} Trainings im Jahr {year} ausgeschrieben, davon {f:count(subject:trainingsNotCancelled)} durchgeführt</p>
+	</div>
+	<div class="col-lg-5 col-md-12">
+		<ul class="pagination">
+			<li class="active"><a href="#">Trainings</a></li>
+			<li><f:link.action action="reports" arguments="{year:year}">Berichte</f:link.action></li>
+			<li><f:link.action action="ranking" arguments="{year:year}">Sportler des Jahres</f:link.action></li>
+		</ul>
+		<br />
+		<ul class="pagination" style="margin-top:0">
+			<f:for each="{navigation}" as="nav">
+				<li class="{f:if(condition:'{nav}=={year}',then:'active')}">
+					<f:link.action action="analysis" arguments="{year:nav}">{nav}</f:link.action>
+				</li>
+			</f:for>
+		</ul>
+	</div>
+</div>	
+<br />
+
+<f:if condition="{trainings}">
+	<f:then>
+		<table class="table">
+			<tr>
+				<th>Datum</th>
+				<th>Titel</th>
+				<th>Sportart</th>
+				<th>Intensität</th>
+				<th>Ausschreiber</th>
+				<th>SportCoach</th>
+			</tr>
+			<f:for each="{trainings}" as="training">
+				<tr>
+					<td>
+						<f:if condition="{training.cancelled}">
+							<f:then><del>{training.trainingDate->f:format.date(format:'d.m.Y')}</del> (abgesagt)</f:then>
+							<f:else>{training.trainingDate->f:format.date(format:'d.m.Y')}</f:else>
+						</f:if>
+					</td>
+					<td><f:link.action action="single" arguments="{training:training}">{training.title}</f:link.action></td>
+					<td>{training.sport.title}</td>
+					<td>{training.intensity.title}</td>
+					<td>{training.author.name}</td>
+					<td>
+						<f:if condition="{training.guided}">
+							<f:then>{training.leader.name}</f:then>
+							<f:else>---</f:else>
+						</f:if>
+					</td>
+				</tr>
+			</f:for>					
+		</table>
+	</f:then>
+	<f:else>
+		<p>(Keine Trainings gefunden)</p>
+	</f:else>
+</f:if>
+
+</f:section>

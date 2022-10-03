@@ -1,0 +1,31 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:spaceless>
+	<f:switch expression="{severity}">
+		<f:case value="-2">
+			<div class="alert alert-info" role="alert">
+				<f:format.html><span class="glyphicon glyphicon-info-sign"></span> <f:if condition="{title}"><b>{title}</b> </f:if>{message}</f:format.html>
+			</div>
+		</f:case>
+		<f:case value="-1">
+			<div class="alert alert-info" role="alert">
+				<f:format.html><span class="glyphicon glyphicon-info-sign"></span> <f:if condition="{title}"><b>{title}</b> </f:if>{message}</f:format.html>
+			</div>
+		</f:case>
+		<f:case value="0">
+			<div class="alert alert-success" role="alert">
+				<f:format.html><span class=" glyphicon glyphicon-ok"></span> <f:if condition="{title}"><b>{title}</b> </f:if>{message}</f:format.html>
+			</div>
+		</f:case>
+		<f:case value="1">
+			<div class="alert alert-warning" role="alert">
+				<f:format.html><span class="glyphicon glyphicon-exclamation-sign"></span> <f:if condition="{title}"><b>{title}</b> </f:if>{message}</f:format.html>
+			</div>
+		</f:case>
+		<f:case value="2">
+			<div class="alert alert-danger" role="alert">
+				<f:format.html><span class="glyphicon glyphicon-remove"></span> <f:if condition="{title}"><b>{title}</b> </f:if>{message}</f:format.html>
+			</div>
+		</f:case>
+	</f:switch>
+</f:spaceless>
+</html>

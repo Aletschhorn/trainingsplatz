@@ -1,0 +1,74 @@
+<div class="row">
+	<div class="form-group">
+		<label for="title" class="col-sm-2 col-xs-3 control-label">Titel</label>
+		<div class="col-sm-10 col-xs-9">
+			<f:form.textfield property="title" class="form-control" />
+		</div>
+	</div>
+	<div class="col-md-6 col-xs-12">
+		<div class="row">
+			<div class="form-group">
+				<label for="title" class="col-sm-4 col-xs-3 control-label">Sportart</label>
+				<div class="col-sm-8 col-xs-9">
+					<f:form.select property="sport" options="{sports}" optionLabelField="title" class="form-control" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 col-xs-12">
+		<div class="row">
+			<div class="form-group">
+				<label for="title" class="col-sm-4 col-xs-3 control-label">Intensität</label>
+				<div class="col-sm-8 col-xs-9">
+					<f:form.select property="intensity" options="{intensities}" optionLabelField="title" class="form-control" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 col-xs-12">
+		<div class="row">
+			<div class="form-group">
+				<label for="title" class="col-sm-4 col-xs-3 control-label">Treffpunkt</label>
+				<div class="col-sm-8 col-xs-9">
+					<f:form.textfield property="startText" class="form-control" placeholder="Beispiel: 18.30 Uhr Schifflände Uster" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 col-xs-12">
+		<div class="row">
+			<div class="form-group">
+				<label for="title" class="col-sm-4 col-xs-3 control-label">Distanz</label>
+				<div class="col-sm-8 col-xs-9">
+					<f:form.textfield property="distance" class="form-control" placeholder="Beispiel: 21 km" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 col-xs-12">
+		<div class="row">
+			<div class="form-group">
+				<label for="title" class="col-sm-4 col-xs-3 control-label">Dauer</label>
+				<div class="col-sm-8 col-xs-9">
+					<f:form.textfield property="duration" class="form-control" placeholder="Beispiel: ca. 2 h" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 col-xs-12">
+		<div class="row">
+			<div class="form-group">
+				<label for="title" class="col-sm-4 col-xs-3 control-label">Geschwindig.</label>
+				<div class="col-sm-8 col-xs-9">
+					<f:form.textfield property="distance" class="form-control" placeholder="Beispiel: 10 km/h" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="description" class="col-sm-2 col-xs-3 control-label">Beschreibung</label>
+		<div class="col-sm-10 col-xs-9">
+			<f:form.textarea property="description" rows="10" class="form-control" />
+		</div>
+	</div>
+</div>

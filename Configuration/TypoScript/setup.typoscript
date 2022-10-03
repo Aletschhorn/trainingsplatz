@@ -1,0 +1,36 @@
+plugin.tx_trainingsplatz {
+	view {
+		templateRootPaths.0 = {$plugin.tx_trainingsplatz.view.templateRootPath}
+		partialRootPaths.0 = {$plugin.tx_trainingsplatz.view.partialRootPath}
+		layoutRootPaths.0 = {$plugin.tx_trainingsplatz.view.layoutRootPath}
+	}
+	persistence {
+		storagePid = {$plugin.tx_trainingsplatz.persistence.storagePid}
+	}
+	settings {
+		mainPid = {$plugin.tx_trainingsplatz.settings.mainPid}
+		singlePid = {$plugin.tx_trainingsplatz.settings.singlePid}
+		newPid = {$plugin.tx_trainingsplatz.settings.newPid}
+		rulesPid = {$plugin.tx_trainingsplatz.settings.rulesPid}
+		helpPid = {$plugin.tx_trainingsplatz.settings.helpPid}
+		evalPid = {$plugin.tx_trainingsplatz.settings.evalPid}
+		storagePid = {$plugin.tx_trainingsplatz.persistence.storagePid}
+		loginPid = {$plugin.tx_trainingsplatz.settings.loginPid}		
+		userlistPid = {$plugin.tx_trainingsplatz.settings.userlistPid}		
+		competitionStart = {$plugin.tx_trainingsplatz.settings.competitionStart}
+		googleMapsKey = {$plugin.tx_trainingsplatz.settings.googleMapsKey}
+		routeColor = {$plugin.tx_trainingsplatz.settings.routeColor}
+		routeWidth = {$plugin.tx_trainingsplatz.settings.routeWidth}
+		meetingpointIcon = {$plugin.tx_trainingsplatz.settings.meetingpointIcon}
+		meetingpointIconSize = {$plugin.tx_trainingsplatz.settings.meetingpointIconSize}
+		meetingpointIconAnchor = {$plugin.tx_trainingsplatz.settings.meetingpointIconAnchor}
+		deleteCachePid = {$plugin.tx_trainingsplatz.settings.deleteCachePid}
+		suppressMails = {$plugin.tx_trainingsplatz.settings.suppressMails}
+		usergroupAdmin = {$plugin.tx_trainingsplatz.settings.usergroupAdmin}
+		usergroupSportcoach = {$plugin.tx_trainingsplatz.settings.usergroupSportcoach}
+		usergroupMember = {$plugin.tx_trainingsplatz.settings.usergroupMember}
+	}
+}
+
+module.tx_trainingsplatz.persistence.storagePid = {$plugin.tx_trainingsplatz.persistence.storagePid}
+module.tx_trainingsplatz.settings < plugin.tx_trainingsplatz.settings

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2015-11-05T22:41:04Z" product-name="trainingsplatz">
+		<header/>
+		<body>
+			<trans-unit id="creation_date.description">
+				<source>creationDate</source>
+			</trans-unit>
+			<trans-unit id="change_date.description">
+				<source>changeDate</source>
+			</trans-unit>
+			<trans-unit id="author.description">
+				<source>author</source>
+			</trans-unit>
+			<trans-unit id="email.description">
+				<source>email</source>
+			</trans-unit>
+			<trans-unit id="feuser.description">
+				<source>feuser</source>
+			</trans-unit>
+			<trans-unit id="owntraining.description">
+				<source>owntraining</source>
+			</trans-unit>
+			<trans-unit id="title.description">
+				<source>title</source>
+			</trans-unit>
+			<trans-unit id="description.description">
+				<source>description</source>
+			</trans-unit>
+			<trans-unit id="cancelled.description">
+				<source>cancelled</source>
+			</trans-unit>
+			<trans-unit id="training.description">
+				<source>training</source>
+			</trans-unit>
+			<trans-unit id="points.description">
+				<source>points</source>
+			</trans-unit>
+			<trans-unit id="compensation.description">
+				<source>compensation</source>
+			</trans-unit>
+			<trans-unit id="hash.description">
+				<source>hash</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

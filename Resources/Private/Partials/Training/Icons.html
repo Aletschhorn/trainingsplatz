@@ -1,0 +1,16 @@
+<div style="float:left; height:60px; width:140px">
+	<div style="float:left; margin-right: 10px;">
+		<f:if condition="{training.guided}">
+			<f:then>
+				<f:image image="{training.sport.pictureGuided.0}" alt="Sportart: {training.sport.title}" additionalAttributes="{title:'Sportart: {training.sport.title}, geleitetes Training'}" />
+			</f:then>
+			<f:else>
+				<f:image image="{training.sport.picture.0}" alt="Sportart: {training.sport.title}" additionalAttributes="{title:'Sportart: {training.sport.title}'}" />
+			</f:else>
+		</f:if>
+	</div>
+	<div style="float:left">
+		<div style="font-size:116.67%; font-weight:bold; line-height:100%; margin-bottom: 5px;">{training.trainingDate -> f:format.date(format:"d.m.y")}</div>
+		<div style=""><f:image image="{training.intensity.picture.0}" alt="Intentität: {training.intensity.title}" additionalAttributes="{title:'Intentität: {training.intensity.title}'}" /></div>
+	</div>
+</div>

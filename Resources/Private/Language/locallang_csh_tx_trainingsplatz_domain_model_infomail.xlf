@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2015-11-05T22:41:04Z" product-name="trainingsplatz">
+		<header/>
+		<body>
+			<trans-unit id="training.description">
+				<source>training</source>
+			</trans-unit>
+			<trans-unit id="status.description">
+				<source>status</source>
+			</trans-unit>
+			<trans-unit id="status_date.description">
+				<source>statusDate</source>
+			</trans-unit>
+			<trans-unit id="mail_subject.description">
+				<source>mailSubject</source>
+			</trans-unit>
+			<trans-unit id="mail_body.description">
+				<source>mailBody</source>
+			</trans-unit>
+			<trans-unit id="send_user.description">
+				<source>sendUser</source>
+			</trans-unit>
+			<trans-unit id="send_receiver.description">
+				<source>sendReceiver</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

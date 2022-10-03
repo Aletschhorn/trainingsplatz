@@ -1,0 +1,43 @@
+{namespace tp=DW\Trainingsplatz\ViewHelpers}
+
+<f:layout name="Default" />
+<f:section name="main">
+
+<f:flashMessages as="flashMessages">
+	<f:for each="{flashMessages}" as="flashMessage">
+		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
+	</f:for>
+</f:flashMessages>
+
+<h3>Statistische Auswertung der Trainings von {user.name} seit {startDate->f:format.date(format:'d.m.y')}</h3>
+
+<f:if condition="{list}">
+	<f:then>
+		<table class="table">
+			<tr>
+				<th>Datum</th>
+				<th>Training</th>
+				<th>Teilnehmende</th>
+			</tr>
+			<f:for each="{list}" as="line">
+				<tr>
+					<td>{line.training.trainingDate->f:format.date(format:'d.m.y')}</td>
+					<td>{line.training.title}</td>
+					<td>
+						<f:for each="{line.answers}" as="answer">
+							{answer.author}<br />
+						</f:for>
+					</td>
+				</tr>
+			</f:for>
+		</table>
+	</f:then>
+	<f:else>
+		<p>Keine ausgewerteten Trainings gefunden</p>
+	</f:else>
+</f:if>
+
+<f:link.action action="participation" class="btn btn-primary">Zurück zur Liste</f:link.action>
+
+</f:section>
+

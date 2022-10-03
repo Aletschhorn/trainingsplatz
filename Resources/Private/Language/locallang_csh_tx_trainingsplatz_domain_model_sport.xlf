@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2015-11-05T22:41:04Z" product-name="trainingsplatz">
+		<header/>
+		<body>
+			<trans-unit id="title.description">
+				<source>Name of this sport</source>
+			</trans-unit>
+			<trans-unit id="description.description">
+				<source>Description what this sport means</source>
+			</trans-unit>
+			<trans-unit id="picture.description">
+				<source>Icon used for normal trainings in training lists</source>
+			</trans-unit>
+			<trans-unit id="picture_guided.description">
+				<source>Icon used for guided trainings in training lists</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

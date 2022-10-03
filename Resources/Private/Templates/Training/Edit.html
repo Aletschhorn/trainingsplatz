@@ -1,0 +1,67 @@
+{namespace tp=DW\Trainingsplatz\ViewHelpers}
+
+<f:layout name="Default" />
+<f:section name="main">
+
+<f:if condition="{step}==1">
+	<h2>Schritt 1: Datum des Trainings</h2>
+</f:if>
+<f:if condition="{step}==2">
+	<h2>Schritt 2: Inhalt und Form des Trainings</h2>
+</f:if>
+<f:if condition="{step}==3">
+	<h2>Schritt 3: Treffpunkt</h2>
+</f:if>
+<f:if condition="{step}==4">
+	<h2>Schritt 4: Vorschau und Zusatzoptionen</h2>
+</f:if>
+
+<p>&nbsp;</p>
+
+<f:flashMessages as="flashMessages">
+	<f:for each="{flashMessages}" as="flashMessage">
+		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
+	</f:for>
+</f:flashMessages>
+
+<f:form action="update" name="training" object="{training}" class="form-horizontal">
+<f:form.hidden property="step" value="{step}" id="step" />
+
+<f:if condition="{step}==1">
+	<f:render partial="Training/Step1" arguments="{training:training}" />
+	<div class="col-sm-offset-0 col-xs-offset-0">
+		<f:link.action action="list" pageUid="{settings.mainPid}" class="btn btn-default">Abbrechen</f:link.action> &nbsp; 
+		<f:form.submit value="Weiter" class="btn btn-primary" />
+	</div>
+</f:if>
+
+<f:if condition="{step}==2">
+	<f:render partial="Training/Step2" arguments="{training:training,sports:sports,intensities:intensities,sportcoaches:sportcoaches,members:members}" />
+	<div class="col-sm-offset-2 col-xs-offset-0">
+		<f:link.action action="list" pageUid="{settings.mainPid}" class="btn btn-default">Abbrechen</f:link.action> &nbsp; 
+		<f:form.submit value="Zurück" class="btn btn-default" additionalAttributes="{onclick: 'document.getElementById(\'step\').value=0'}" /> &nbsp; 
+		<f:form.submit value="Weiter" class="btn btn-primary" />
+	</div>
+</f:if>
+
+<f:if condition="{step}==3">
+	<f:render partial="Training/Step3" arguments="{training:training,maps:maps}" />
+	<div class="col-sm-offset-0 col-xs-offset-0">
+		<f:link.action action="list" pageUid="{settings.mainPid}" class="btn btn-default">Abbrechen</f:link.action> &nbsp; 
+		<f:form.submit value="Zurück" class="btn btn-default" additionalAttributes="{onclick: 'document.getElementById(\'step\').value=1'}" /> &nbsp; 
+		<f:form.submit value="Vorschau" class="btn btn-primary" additionalAttributes="{onclick: 'saveMapData()'}" />
+	</div>
+</f:if>
+
+<f:if condition="{step}==4">
+	<f:render partial="Training/Step4" arguments="{training:training,sports:sports,intensities:intensities,seriesDates:seriesDates}" />
+	<div class="col-sm-offset-0 col-xs-offset-0">
+		<f:link.action action="list" pageUid="{settings.mainPid}" class="btn btn-default">Abbrechen</f:link.action> &nbsp; 
+		<f:form.submit value="Zurück" class="btn btn-default" additionalAttributes="{onclick: 'document.getElementById(\'step\').value=2'}" /> &nbsp; 
+		<f:form.submit value="Speichern" class="btn btn-primary" />
+	</div>
+</f:if>
+
+</f:form>
+
+</f:section>

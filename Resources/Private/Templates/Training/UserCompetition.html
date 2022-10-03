@@ -1,0 +1,69 @@
+{namespace tp=DW\Trainingsplatz\ViewHelpers}
+
+<f:layout name="Default" />
+<f:section name="main">
+
+<f:flashMessages as="flashMessages">
+	<f:for each="{flashMessages}" as="flashMessage">
+		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
+	</f:for>
+</f:flashMessages>
+
+<f:if condition="{answers}">
+	<f:then>
+		<h3>
+			<f:if condition="{startDate}">
+				<f:then>Deine Auswertung seit dem {startDate->f:format.date(format:'j.m.y')}:</f:then>
+				<f:else>Deine Auswertung:</f:else>
+			</f:if>
+			<span class="label label-default">{total} <f:if condition="{total}==1"><f:then>Punkt</f:then><f:else>Punkte</f:else></f:if></span>
+		</h3>
+		<table class="table">
+			<f:if condition="{extra}">
+				<tr>
+					<td colspan="3">
+						Aus früheren Trainings
+					</td>
+					<td class="success">
+						{extra} <f:if condition="{extra}==1"><f:then>Punkt</f:then><f:else>Punkte</f:else></f:if>
+					</td>
+				</tr>
+			</f:if>
+			<f:for each="{answers}" as="answer" reverse="1">
+				<tr>
+					<td>{answer.training.trainingDate->f:format.date(format:'d.m.y')}</td>
+					<td>{answer.training.title}</td>
+					<td>
+						<f:if condition="{answer.cancelled}">
+							<f:then><del>{answer.title}</del></f:then>
+							<f:else>{answer.title}</f:else>
+						</f:if>
+					</td>
+					<f:if condition="{answer.points}==0"><td>Noch nicht ausgewertet</td></f:if>
+					<f:if condition="{answer.points}==1"><td class="danger">Keinen Punkt</td></f:if>
+					<f:if condition="{answer.points}==2"><td class="success">Punkt erhalten</td></f:if>
+				</tr>
+			</f:for>
+		</table>
+	</f:then>
+	<f:else>
+		<f:if condition="{extra}">
+			<f:then>
+				<h3>
+					<f:if condition="{startDate}">
+						<f:then>Deine Auswertung seit dem {startDate->f:format.date(format:'j.m.y')}:</f:then>
+						<f:else>Deine Auswertung:</f:else>
+					</f:if>
+					<span class="label label-default">{extra} <f:if condition="{extra}==1"><f:then>Punkt</f:then><f:else>Punkte</f:else></f:if></span> aus früheren Trainings.
+				</h3>
+				<br />
+			</f:then>
+			<f:else>
+				<div class="alert alert-info">Momentan sind keine Daten verfügbar</div>
+			</f:else>
+		</f:if>
+	</f:else>
+</f:if>
+
+
+</f:section>

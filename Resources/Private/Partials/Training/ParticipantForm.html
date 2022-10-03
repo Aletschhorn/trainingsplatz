@@ -1,0 +1,76 @@
+<h3>Selber teilnehmen</h3>
+<f:if condition="{userAnswer}">
+	<f:then>
+		<div class="alert alert-success">Du hast dich am {userAnswer.creationDate->f:format.date(format:'d.m.y')} um {userAnswer.creationDate->f:format.date(format:'H:i')} Uhr für dieses Training eingetragen. <f:if condition="{userAnswer.cancelled}"><f:then>Am {userAnswer.changeDate->f:format.date(format:'d.m.y')} um {userAnswer.changeDate->f:format.date(format:'H:i')} Uhr hast du dich wieder abgemeldet.</f:then><f:else><f:if condition="{userAnswer.creationDate->f:format.date(format:'YmdHis')}!={userAnswer.changeDate->f:format.date(format:'YmdHis')}">Deine Antwort hast du am {userAnswer.changeDate->f:format.date(format:'d.m.y')} um {userAnswer.changeDate->f:format.date(format:'H:i')} Uhr letztmals geändert.</f:if></f:else></f:if></div>
+		<f:link.action action="show" pageUid="{settings.mainPid}#userAnswer" arguments="{training:training}" class="btn btn-default">Eintrag zeigen</f:link.action>
+		<f:if condition="{userAnswer.cancelled}">
+			<f:then>
+				&nbsp; <f:link.action action="reactivateAnswer" arguments="{answer:userAnswer}" class="btn btn-default">Doch wieder teilnehmen</f:link.action>
+			</f:then>
+			<f:else>
+				&nbsp; <f:link.action action="cancelAnswer" arguments="{answer:userAnswer}" class="btn btn-default" additionalAttributes="{onclick: 'return confirm(\'Willst du deine Teilnahme wirklich absagen?\')'}">Teilnahme absagen</f:link.action>
+			</f:else>
+		</f:if>
+	</f:then>
+	<f:else>
+		<f:if condition="{training.cancelled}==0">
+			<f:then>
+				<f:form action="addAnswer" name="answer" object="{answer}" class="form-horizontal">	
+					<f:form.hidden property="training" value="{training}" />
+					<div class="row">
+						<div class="form-group hidden">
+							<label for="title" class="col-sm-3 col-xs-3 control-label">Zusatz</label>
+							<div class="col-sm-9 col-xs-9">
+								<f:form.textfield name="zusatz" class="form-control" />
+							</div>
+						</div>
+					</div>
+					<f:security.ifHasRole role="{settings.usergroupMember}">
+						<f:then>
+							<p>Trage dich hier ein, wenn du teilnehmen willst:</p>
+							<f:render partial="Answer/FormFields" arguments="{feuser:feuser,answer:newAnswer}" />
+						</f:then>
+						<f:else>
+							<p>Trage dich hier ein, wenn du teilnehmen willst. <f:link.page pageUid="{settings.loginPid}">Melde dich an</f:link.page>, um Titel und Text bearbeiten zu können und deine Teilnahmen zu verwalten.</p>
+							<f:render partial="Answer/FormFieldsPublic" />
+						</f:else>
+					</f:security.ifHasRole>
+					<div class="col-sm-offset-3 col-xs-offset-3">
+						<f:form.submit value="Eintragen" class="btn btn-primary" />
+					</div>
+				</f:form>
+
+				<f:if condition="{countPublicAnswers}>0">
+                    <f:security.ifHasRole role="{settings.usergroupMember}">
+                        <f:else>
+                        	<br />
+                            <h3>Von Teilnahme abmelden</h3>
+                            <p>Wenn du dich bereits angemeldet hast, nun aber abmelden willst, trage hier deine Mail-Adresse ein. Du wirst dann ein Mail mit einem Abmelde-Link erhalten.<br />
+                            Mitglieder <f:link.page pageUid="{settings.loginPid}">melden sich einfach an</f:link.page>, um den Text der Anmeldung zu ändern oder um abzusagen.</p>
+                            
+                            
+                            <f:form action="cancelRequestAnswer" name="cancelAnswer" class="form-horizontal">
+                            	<f:form.hidden name="training" value="{training.uid}" />
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="title" class="col-sm-3 col-xs-3 control-label">E-Mail</label>
+                                        <div class="col-sm-9 col-xs-9">
+                                            <f:form.textfield name="email" class="form-control" maxlength="40" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-offset-3 col-xs-offset-3">
+                                    <f:form.submit value="Link anfordern" class="btn btn-primary" />
+                                </div>
+                            </f:form>
+                        </f:else>
+                    </f:security.ifHasRole>
+                </f:if>
+                
+			</f:then>
+			<f:else>
+				<p>Weil das Training abgesagt wurde, ist keine Teilnahme möglich.</p>
+			</f:else>
+		</f:if>
+	</f:else>
+</f:if>

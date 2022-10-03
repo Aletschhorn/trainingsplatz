@@ -1,0 +1,16 @@
+<h3>Selber teilnehmen</h3>
+<f:if condition="{userAnswer}">
+	<div class="alert alert-success">Du hast dich am {userAnswer.creationDate->f:format.date(format:'d.m.y')} um {userAnswer.creationDate->f:format.date(format:'H:i')} Uhr für dieses Training eingetragen. <f:if condition="{userAnswer.cancelled}"><f:then>Am {userAnswer.changeDate->f:format.date(format:'d.m.y')} um {userAnswer.changeDate->f:format.date(format:'H:i')} Uhr hast du dich wieder abgemeldet.</f:then><f:else><f:if condition="{userAnswer.creationDate}!={userAnswer.changeDate}">Deine Antwort hast du am {userAnswer.changeDate->f:format.date(format:'d.m.y')} um {userAnswer.changeDate->f:format.date(format:'H:i')} Uhr letztmals geändert.</f:if></f:else></f:if></div>
+
+	<a name="edit"></a>
+	<p>Deine Antwort ändern:</p>
+	<f:form action="modifyAnswer" name="answer" object="{userAnswer}" class="form-horizontal">	
+		<f:form.hidden property="training" value="{training}" />
+		<f:render partial="Answer/FormFields" arguments="{feuser:feuser,answer:userAnswer}" />
+		<div class="col-sm-offset-3 col-xs-offset-3">
+			<f:form.submit value="Speichern" class="btn btn-primary" /> &nbsp;
+			<f:link.action action="show" arguments="{training:training}" class="btn btn-default">Abbrechen</f:link.action>
+		</div>
+	</f:form>
+	
+</f:if>

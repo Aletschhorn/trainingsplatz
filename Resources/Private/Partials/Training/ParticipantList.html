@@ -1,0 +1,14 @@
+<h3>Training-Teilnehmer <f:if condition="{answers}">({correctedAnswers})</f:if></h3>
+<f:if condition="{answers}">
+	<f:then>
+		<f:for each="{answers}" as="answer">
+			<f:render partial="Answer/Box" arguments="{answer:answer,userAnswer:userAnswer,training:training}" />
+		</f:for>
+	</f:then>
+	<f:else>
+		<p>
+			Bisher keine Einträge für dieses Training.
+			<f:if condition="{training.cancelled}==0"><br />Sei der Erste, der sich dafür meldet.</f:if>
+		</p>
+	</f:else>
+</f:if>

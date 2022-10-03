@@ -1,0 +1,27 @@
+{namespace tp=DW\Trainingsplatz\ViewHelpers}
+
+<f:layout name="Default" />
+
+<f:section name="main">
+<f:flashMessages as="flashMessages">
+	<f:for each="{flashMessages}" as="flashMessage">
+		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
+	</f:for>
+</f:flashMessages>
+
+<div style="float:right">
+	<f:render partial="Training/Icons" arguments="{training:training}" />
+	<f:render partial="Training/Avatar" arguments="{training:training,style:'margin-left:20px',settings:settings}" />
+</div>
+
+<h2><f:if condition="{training.cancelled}">ABGESAGT: </f:if>{training.title}</h2>
+
+<p>Erstellt am {training.creationDate -> f:format.date(format:'d.m.Y H:i')} von {training.author.name}<f:if condition="{training.lastChange}">, zuletzt geändert am {training.lastChange -> f:format.date(format:'d.m.Y H:i')}</f:if>.</p>
+
+<br />
+<p>Alle Teilnehmer dieses Trainings sind bewertet. Soll das Training nun abgeschlossen werden?</p>
+
+<f:link.action action="evaluate" class="btn btn-default">Nein</f:link.action>
+&nbsp; <f:link.action action="close" arguments="{training:training}" class="btn btn-primary">Ja</f:link.action>
+
+</f:section>

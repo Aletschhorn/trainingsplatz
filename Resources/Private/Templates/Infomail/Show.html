@@ -1,0 +1,39 @@
+<f:layout name="Default" />
+<f:section name="main">
+
+<f:flashMessages as="flashMessages">
+	<f:for each="{flashMessages}" as="flashMessage">
+		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
+	</f:for>
+</f:flashMessages>
+
+<h2>Inhalt InfoMail</h2>
+
+<f:form action="send" name="infomail" object="{infomail}" class="form-horizontal">
+	<div class="form-group">
+		<label for="mailSubject" class="col-sm-2 col-xs-3 control-label">Betreff</label>
+		<div class="col-sm-10 col-xs-9">
+			<f:form.textfield property="mailSubject" maxlength="80" class="form-control" />
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="mailBody" class="col-sm-2 col-xs-3 control-label">Mail-Text</label>
+		<div class="col-sm-10 col-xs-9">
+			<f:form.textarea property="mailBody" rows="15" class="form-control" />
+		</div>
+	</div>
+
+
+	
+	<div class="col-sm-offset-2 col-xs-offset-3">
+		<f:link.action action="list" class="btn btn-default">Abbrechen</f:link.action> &nbsp;
+		<f:link.action action="deny" arguments="{infomail:infomail}" class="btn btn-default" additionalAttributes="{onclick: 
+		'return confirm(\'Soll der Infomail-Versand wirklich abgelehnt werden?\')'}">Ablehnen</f:link.action> &nbsp;
+		<f:form.submit class="btn btn-primary" value="Senden" />
+	</div>
+</f:form>
+
+<hr />
+<f:render partial="Training/Description" arguments="{training:infomail.training}" />
+
+</f:section>

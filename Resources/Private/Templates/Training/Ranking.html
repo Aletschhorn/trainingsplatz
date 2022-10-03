@@ -1,0 +1,47 @@
+{namespace tp=DW\Trainingsplatz\ViewHelpers}
+
+<f:layout name="Default" />
+<f:section name="main">
+
+<f:flashMessages as="flashMessages">
+	<f:for each="{flashMessages}" as="flashMessage">
+		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
+	</f:for>
+</f:flashMessages>
+
+<f:if condition="{ranks}">
+	<f:then>
+		<f:if condition="{limit}">
+			<f:then>
+				<h2>Top {limit} Sportler des Jahres</h2>
+			</f:then>
+			<f:else>
+				<f:if condition="{startDate}">
+					<f:then><h3>Aktuelle Rangliste für Trainings seit dem {startDate->f:format.date(format:'j.m.y')}</h3></f:then>
+					<f:else><h3>Aktuelle Rangliste</h3></f:else>
+				</f:if>
+			</f:else>
+		</f:if>
+		<table class="table">
+			<f:groupedFor each="{ranks}" as="rank" groupBy="points" groupKey="point">
+				<tr>
+					<td>
+						<p class="lead">{point}&nbsp;<f:if condition="{point}==1"><f:then>Punkt</f:then><f:else>Punkte</f:else></f:if></p>
+					</td>
+					<td>
+						<f:for each="{rank}" as="people" iteration="it">
+							<f:render partial="User/Avatar" arguments="{user:people.user}" />
+						</f:for>
+					</td>
+				</tr>
+			</f:groupedFor>
+		</table>
+	</f:then>
+	<f:else>
+		<h2>Sportler des Jahres</h2>
+		<div class="alert alert-danger">Momentan sind keine Daten verfügbar</div>
+	</f:else>
+</f:if>
+
+
+</f:section>

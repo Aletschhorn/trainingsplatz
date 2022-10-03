@@ -1,0 +1,145 @@
+
+
+<div class="row">
+	<div class="form-group">
+		<label for="title" class="col-md-2 col-xs-3 control-label">Titel</label>
+		<div class="col-md-10 col-xs-9">
+			<f:form.textfield property="title" maxlength="120" class="form-control" />
+		</div>
+	</div>
+	<div class="col-md-6 col-xs-12">
+		<div class="row">
+			<div class="form-group">
+				<label for="sport" class="col-md-4 col-xs-3 control-label">Sportart</label>
+				<div class="col-md-8 col-xs-9">
+					<f:form.select property="sport" options="{sports}" optionLabelField="title" id="sport" class="form-control" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 col-xs-12">
+		<div class="row">
+			<div class="form-group">
+				<label for="intensity" class="col-md-4 col-xs-3 control-label">Intensität</label>
+				<div class="col-md-8 col-xs-9">
+					<f:form.select property="intensity" options="{intensities}" optionLabelField="title" id="intensity" class="form-control" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<f:security.ifHasRole role="{settings.usergroupAdmin}">
+	<div class="row">
+		<div class="col-md-6 col-xs-12">
+			<div class="row">
+				<div class="form-group">
+					<label for="leader" class="col-md-4 col-xs-3 control-label">Erfasser</label>
+					<div class="col-md-8 col-xs-9">
+						<f:form.select property="author" options="{members}" optionLabelField="name" class="form-control" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</f:security.ifHasRole>
+
+<f:comment>
+    <f:security.ifHasRole role="{settings.usergroupSportcoach}">
+        <div class="row">
+            <div class="col-md-6 col-xs-12">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-8 col-xs-9 col-sm-offset-4 col-xs-offset-3">
+                            <div class="checkbox">
+                                <label>
+                                    <f:form.checkbox property="guided" value="1" id="guided" checked="{training.guided}==1" additionalAttributes="{onchange: 'if(this.checked) {document.getElementById(\'sportcoach\').disabled=0;} else {document.getElementById(\'sportcoach\').disabled=1;}'}" /> Training mit SportCoach
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <div class="row">
+                    <div class="form-group">
+                        <label for="leader" class="col-md-4 col-xs-3 control-label">SportCoach</label>
+                        <div class="col-md-8 col-xs-9">
+                            <f:if condition="{training.guided}">
+                                <f:then>
+                                    <f:form.select property="leader" id="sportcoach" options="{sportcoaches}" optionLabelField="name" class="form-control" />
+                                </f:then>
+                                <f:else>
+                                    <f:form.select property="leader" id="sportcoach" options="{sportcoaches}" optionLabelField="name" class="form-control" disabled="disabled" />
+                                </f:else>
+                            </f:if>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </f:security.ifHasRole>
+</f:comment>
+<div class="row">
+	<div class="col-md-6 col-xs-12">
+		<div class="row">
+			<div class="form-group">
+				<label for="startText" class="col-md-4 col-xs-3 control-label">Treffpunkt</label>
+				<div class="col-md-8 col-xs-9">
+					<f:form.textfield property="startText" class="form-control" placeholder="Beispiel: 18.30 Uhr Schifflände Uster" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 col-xs-12">
+		<div class="row">
+			<div class="form-group">
+				<label for="distance" class="col-md-4 col-xs-3 control-label">Distanz</label>
+				<div class="col-md-8 col-xs-9">
+					<f:form.textfield property="distance" class="form-control" placeholder="Beispiel: 21 km" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 col-xs-12">
+		<div class="row">
+			<div class="form-group">
+				<label for="duration" class="col-md-4 col-xs-3 control-label">Dauer</label>
+				<div class="col-md-8 col-xs-9">
+					<f:form.textfield property="duration" class="form-control" placeholder="Beispiel: ca. 2 h" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 col-xs-12">
+		<div class="row">
+			<div class="form-group">
+				<label for="speed" class="col-md-4 col-xs-3 control-label">Tempo</label>
+				<div class="col-md-8 col-xs-9">
+					<f:form.textfield property="speed" class="form-control" placeholder="Beispiele: 5 min/km, 20 km/h" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="description" class="col-md-2 col-xs-3 control-label">Beschreibung</label>
+		<div class="col-md-10 col-xs-9">
+			<p class="form-control-static"><span class="pull-right"><button type="button" id="getTemplate" class="btn btn-default">Vorlagetext einfügen</button></span>Die Beschreibung muss mindestens Informationen über Strecke, Voraussetzungen und notwendige Ausrüstung enthalten. Für die meisten Sportarten gibt es Vorlagetexte.</p>
+			<f:form.textarea property="description" rows="10" class="form-control" id="description" />
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$('#getTemplate').on('click', function() {
+		$.ajax({
+			url: '?trainingTemplate=' + document.getElementById('sport').value + '-' + document.getElementById('intensity').value + '-' + 0,
+			success: function(result) {
+				if (result == '') {
+					alert('Keinen Vorlagentext gefunden');
+				} else {
+					document.getElementById('description').value = result;
+				}
+			},
+		});
+	});
+</script>

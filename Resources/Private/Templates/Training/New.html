@@ -1,0 +1,23 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+
+<h2>Schritt 1: Datum des Trainings</h2>
+<p>&nbsp;</p>
+
+<f:flashMessages as="flashMessages">
+	<f:for each="{flashMessages}" as="flashMessage">
+		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
+	</f:for>
+</f:flashMessages>
+
+<f:render partial="FormErrors" arguments="{object:Training}" />
+
+<f:form action="create" name="training" object="{training}" class="form-horizontal">	
+<f:render partial="Training/Step1" arguments="{sports:sports,intensities:intensities}" />
+<div class="col-sm-offset-0 col-xs-offset-0">
+	<f:link.action action="list" pageUid="{settings.mainPid}" class="btn btn-default">Abbrechen</f:link.action> &nbsp; 
+	<f:form.submit value="Weiter" class="btn btn-primary" />
+</div>
+</f:form>
+</f:section>

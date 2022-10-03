@@ -1,0 +1,29 @@
+<f:if condition="{answer.feuser}">
+	<f:then>
+		<div class="pull-left">
+			<f:link.action action="show" arguments="{user:answer.feuser}" extensionName="femanager" pluginName="Pi1" controller="User" pageUid="97">
+				<f:if condition="{answer.feuser.image}">
+					<f:then>
+						<f:image image="{answer.feuser.image.0}" height="50c" width="50c" class="img-circle" style="margin-right:10px" />
+					</f:then>
+					<f:else>
+						<f:image src="/fileadmin/images/personen/avatar_mitglied.jpg" height="50c" width="50c" class="img-circle" style="margin-right:10px" />
+					</f:else>
+				</f:if>
+			</f:link.action>
+		</div>
+		{answer.feuser.firstname} {answer.feuser.lastname->f:format.crop(maxCharacters:1,append:'.')}
+	</f:then>
+	<f:else>
+		<div class="pull-left">
+			<f:image src="/fileadmin/images/personen/avatar_nichtmitglied.gif" height="50c" width="50c" class="img-circle" style="margin-right:10px" />
+		</div>
+		{answer.author}
+	</f:else>
+</f:if>
+<span style="float:right">{answer.changeDate->f:format.date(format:'d.m.y H:i')}</span>
+<h4><f:if condition="{answer.cancelled}"><f:then><strike>{answer.title}</strike></f:then><f:else>{answer.title}</f:else></f:if></h4>
+<p>{answer.description->f:format.crop(maxCharacters:300,append:'...')}</p>
+<f:if condition="{answer.cancelled}">
+	<p>TEILNAHME ABGESAGT</p>
+</f:if>

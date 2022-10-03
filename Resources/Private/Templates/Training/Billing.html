@@ -1,0 +1,123 @@
+{namespace tp=DW\Trainingsplatz\ViewHelpers}
+
+<f:layout name="Default" />
+
+<f:section name="main">
+<f:flashMessages as="flashMessages">
+	<f:for each="{flashMessages}" as="flashMessage">
+		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
+	</f:for>
+</f:flashMessages>
+
+<div style="float:right">
+	<f:render partial="Training/Icons" arguments="{training:training}" />
+	<f:render partial="Training/Avatar" arguments="{training:training,style:'margin-left:20px',settings:settings}" />
+</div>
+
+<h2><f:if condition="{training.cancelled}">ABGESAGT: </f:if>{training.title}</h2>
+
+<p>Erstellt am {training.creationDate -> f:format.date(format:'d.m.Y H:i')} von {training.author.name}<f:if condition="{training.lastChange}">, zuletzt geändert am {training.lastChange -> f:format.date(format:'d.m.Y H:i')}</f:if>.</p>
+
+<f:if condition="{answers}">
+	<f:then>
+		<h3>Training-Teilnehmer <f:if condition="{answers}">({correctedAnswers})</f:if></h3>
+		<f:form action="discount" name="billing" class="form-horizontal">
+			<f:form.hidden name="training" value="{training.uid}" />
+			<div class="row">
+				<div class="col-md-6 col-xs-12">
+					<f:for each="{answers}" as="answer" iteration="it">
+						<f:if condition="{it.index}>={break}">
+							</div><div class="col-md-6 col-xs-12">
+						</f:if>
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<f:render partial="Answer/Content" arguments="{answer:answer}" />
+								<f:if condition="{answer.feuser}">
+									<f:then>
+										<tp:inUsergroup user="{answer.feuser}" role="SportCoach">
+											<f:then>
+												<p><b>Sportler des Jahres</b><br />SportCoach: nicht teilnahmeberechtigt</p>
+												<f:form.hidden name="answer[{answer.uid}][points]" value="1" />
+											</f:then>
+											<f:else>
+												<f:if condition="{training.cancelled}">
+													<f:then>
+														<p><b>Sportler des Jahres</b><br />Training abgesagt: keine Punkte</p>
+														<f:form.hidden name="answer[{answer.uid}][points]" value="1" />
+													</f:then>
+													<f:else>
+														<b>Sportler des Jahres</b><br />
+														<label class="radio-inline">
+															<f:form.radio name="answer[{answer.uid}][points]" value="0" checked="{answer.points}==0" />Offen
+														</label>
+														<label class="radio-inline">
+															<f:form.radio name="answer[{answer.uid}][points]" value="1" checked="{answer.points}==1" />0 Punkte
+														</label>
+														<label class="radio-inline">
+															<f:form.radio name="answer[{answer.uid}][points]" value="2" checked="{answer.points}==2" />1 Punkt
+														</label>
+														<br clear="all" />
+													</f:else>
+												</f:if>
+											</f:else>
+										</tp:inUsergroup>
+									</f:then>
+									<f:else>
+										<p><b>Sportler des Jahres</b><br />Kein Mitglied: nicht teilnahmeberechtigt</p>
+										<f:form.hidden name="answer[{answer.uid}][points]" value="1" />
+									</f:else>
+								</f:if>
+								<f:if condition="1=1">
+								<f:comment>later change back to: condition="{training.guided}"</f:comment>
+									<f:then>
+										<f:if condition="{training.author}=={answer.feuser}">
+											<f:then>
+												<br clear="all" />
+												<p><b>Zählt für Guide-Entwicklung</b><br />Durchführender Guide: keine Entschädigung</p>
+												<f:form.hidden name="answer[{answer.uid}][compensation]" value="1" />
+											</f:then>
+											<f:else>
+												<br />
+												<b>Zählt für Guide-Entwicklung</b><br />
+												<label class="radio-inline">
+													<f:form.radio name="answer[{answer.uid}][compensation]" value="0" checked="{answer.compensation}==0" />Offen
+												</label>
+												<label class="radio-inline">
+													<f:form.radio name="answer[{answer.uid}][compensation]" value="1" checked="{answer.compensation}==1" />Nein
+												</label>
+												<label class="radio-inline">
+													<f:form.radio name="answer[{answer.uid}][compensation]" value="2" checked="{answer.compensation}==2" />Ja
+												</label>
+											</f:else>
+										</f:if>
+									</f:then>
+									<f:else>
+										<f:form.hidden name="answer[{answer.uid}][compensation]" value="1" />
+									</f:else>
+								</f:if>
+							</div>
+						</div>
+					</f:for>
+				</div>
+			</div>
+			<f:link.action action="evaluate" class="btn btn-default">Abbrechen</f:link.action>
+			&nbsp; <f:form.submit value="Speichern" class="btn btn-primary" />
+			<f:comment>
+				&nbsp; <f:link.action action="delete" arguments="{training:training}" class="btn btn-default" additionalAttributes="{onclick: 
+	'return confirm(\'Soll dieses Training wirklich gelöscht werden?\')'}">Löschen</f:link.action>
+			</f:comment>
+		</f:form>
+	</f:then>
+	<f:else>
+		<br />
+		<p>Keine Teilnehmer für dieses Training.<br />Es kann nun abgeschlossen werden.</p>
+		<f:link.action action="evaluate" class="btn btn-default">Abbrechen</f:link.action>
+		&nbsp; <f:link.action action="close" arguments="{training:training}" class="btn btn-primary">Abschliessen</f:link.action>
+		<f:comment>
+			&nbsp; <f:link.action action="delete" arguments="{training:training}" class="btn btn-default" additionalAttributes="{onclick: 
+'return confirm(\'Soll dieses Training wirklich gelöscht werden?\')'}">Löschen</f:link.action>
+		</f:comment>
+	</f:else>
+</f:if>
+
+</f:section>

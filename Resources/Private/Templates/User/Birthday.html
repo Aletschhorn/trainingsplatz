@@ -1,0 +1,36 @@
+{namespace tp=DW\Trainingsplatz\ViewHelpers}
+
+<f:layout name="Default" />
+<f:section name="main">
+
+<div class="row">
+	<div class="col-lg-6 col-md-12 col-sm-6 col-xs-12">
+		<h3>Heute, {todayDate->f:format.date(format:'j.')} <f:translate key="LLL:EXT:trainingsplatz/Resources/Private/Language/locallang.xlf:{todayDate->f:format.date(format:'M')}" /></h3>
+		
+		<f:if condition="{todayUser}">
+			<f:then>
+				<f:for each="{todayUser}" as="user">
+					<f:render partial="User/Avatar" arguments="{user:user}" />&nbsp;
+				</f:for>
+			</f:then>
+			<f:else>
+				<p>Keine Geburtstage</p>
+			</f:else>
+		</f:if>
+	</div>
+	<div class="col-lg-6 col-md-12 col-sm-6 col-xs-12">
+		<h3>Morgen, {tomorrowDate->f:format.date(format:'j.')} <f:translate key="LLL:EXT:trainingsplatz/Resources/Private/Language/locallang.xlf:{tomorrowDate->f:format.date(format:'M')}" /></h3>
+		<f:if condition="{tomorrowUser}">
+			<f:then>
+				<f:for each="{tomorrowUser}" as="user">
+					<f:render partial="User/Avatar" arguments="{user:user}" />&nbsp;
+				</f:for>
+			</f:then>
+			<f:else>
+				<p>Keine Geburtstage</p>
+			</f:else>
+		</f:if>
+	</div>
+</div>
+
+</f:section>

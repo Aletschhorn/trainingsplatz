@@ -1,0 +1,51 @@
+{namespace tp=DW\Trainingsplatz\ViewHelpers}
+
+<f:layout name="Default" />
+<f:section name="main">
+
+<f:flashMessages as="flashMessages">
+	<f:for each="{flashMessages}" as="flashMessage">
+		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
+	</f:for>
+</f:flashMessages>
+
+<f:if condition="{trainings}">
+	<f:then>
+		<table class="table" >
+			<f:for each="{trainings}" as="training">
+				<tr>
+					<td style="width:150px">
+						<f:render partial="Training/Icons" arguments="{training:training}" />
+					</td>
+					<td>
+						<f:if condition="{training.cancelled}">
+							<f:then>
+								<f:link.action action="billing" arguments="{training : training}"><div class="lead" style="margin-bottom:10px">ABGESAGT: {training.title}</div></f:link.action>
+							</f:then>
+							<f:else>
+								<f:link.action action="billing" arguments="{training : training}"><div class="lead" style="margin-bottom:10px">{training.title}</div></f:link.action><tp:objectAccess haystack="{answers}" needle="{training.uid}" /> Teilnehmer
+							</f:else>
+						</f:if>					
+					</td>
+					<td class="text-right">
+						<f:render partial="Training/Avatar" arguments="{training:training,style:'margin-left:20px',settings:settings}" />
+					</td>
+				</tr>
+			</f:for>
+		</table>
+	</f:then>
+	<f:else>
+		<f:if condition="{filter}==0">
+			<f:then>
+				<div class="alert alert-danger">Zurzeit sind keine Trainings ausgeschrieben</div>
+			</f:then>
+			<f:else>
+				<div class="alert alert-danger">Zurzeit sind keine Trainings dieser Sportart ausgeschrieben</div>
+			</f:else>
+		</f:if>
+	</f:else>
+</f:if>
+
+<f:link.action action="list" pageUid="{settings.mainPid}" class="btn btn-primary">Zur&uuml;ck zur Trainingsliste</f:link.action>
+
+</f:section>

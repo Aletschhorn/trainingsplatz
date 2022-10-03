@@ -1,0 +1,17 @@
+<f:if condition="{answer.uid}=={userAnswer.uid}">
+	<f:then>
+		<a name="userAnswer"></a>
+		<div class="panel panel-primary">
+			<div class="panel-body">
+				<f:render partial="Answer/Content" arguments="{answer:answer}" />
+			</div>
+		</div>
+	</f:then>
+	<f:else>
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<f:render partial="Answer/Content" arguments="{answer:answer}" />
+			</div>
+		</div>
+	</f:else>
+</f:if>

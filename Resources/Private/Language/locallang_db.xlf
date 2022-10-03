@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2015-11-05T22:41:04Z" product-name="trainingsplatz">
+		<header/>
+		<body>
+			<trans-unit id="tx_trainingsplatz_domain_model_training">
+				<source>Training</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.author">
+				<source>Author</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.leader">
+				<source>Leader</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.creation_date">
+				<source>Creation Date</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.last_change">
+				<source>Last Change</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.training_date">
+				<source>Training Date</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.guided">
+				<source>Guided</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.start_text">
+				<source>Start Text</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.start_option">
+				<source>Start Option</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.start_coordinates">
+				<source>Start Coordinates</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.duration">
+				<source>Duration</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.distance">
+				<source>Distance</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.speed">
+				<source>Speed</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.route">
+				<source>Route</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.picture">
+				<source>Picture</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.cancelled">
+				<source>Cancelled</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.intensity">
+				<source>Intensity</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.sport">
+				<source>Sport</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.map">
+				<source>Map</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.map_center">
+				<source>Map center</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.map_zoom">
+				<source>Map zoom</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.map_type">
+				<source>Map type</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.infomail">
+				<source>Send infomail to members</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.notification">
+				<source>Send notification to leader</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.public">
+				<source>Public</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.closed">
+				<source>Closed</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.series">
+				<source>Series</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.series_start">
+				<source>Series Start</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.series_end">
+				<source>Series End</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.series_period">
+				<source>Series Period</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.series_number">
+				<source>Series Number</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.series_weekday">
+				<source>Series Weekday</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.tab_content">
+				<source>Content</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.tab_map">
+				<source>Map</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_training.tab_series">
+				<source>Series</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_intensity">
+				<source>Intensity</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_intensity.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_intensity.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_intensity.picture">
+				<source>Picture</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_sport">
+				<source>Sport</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_sport.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_sport.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_sport.picture">
+				<source>Picture for normal training</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_sport.picture_guided">
+				<source>Picture for guided training</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_map">
+				<source>Map</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_map.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_map.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_map.route">
+				<source>Route</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_map.author">
+				<source>Author</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_map.center">
+				<source>Center</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_map.zoom">
+				<source>Zoom</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_map.sport">
+				<source>Sport</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_map.maptype">
+				<source>Map type</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_map.length">
+				<source>Length</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_map.milestones">
+				<source>Milestones</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_map.public">
+				<source>Public</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_map.last_change">
+				<source>Last change</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_answer">
+				<source>Answer</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_answer.creation_date">
+				<source>Creation Date</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_answer.change_date">
+				<source>Change Date</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_answer.author">
+				<source>Author</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_answer.email">
+				<source>E-mail address</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_answer.feuser">
+				<source>Frontend user</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_answer.owntraining">
+				<source>Own training</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_answer.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_answer.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_answer.cancelled">
+				<source>Cancelled</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_answer.training">
+				<source>Training</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_answer.points">
+				<source>Points</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_answer.compensation">
+				<source>Compensation</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_answer.hash">
+				<source>Hash</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_infomail">
+				<source>Infomail</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_infomail.training">
+				<source>Training</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_infomail.status">
+				<source>Status</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_infomail.status_date">
+				<source>Status date</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_infomail.mail_subject">
+				<source>Mail subject</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_infomail.mail_body">
+				<source>Mail body</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_infomail.send_user">
+				<source>Send user</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_infomail.send_receiver">
+				<source>Send receiver</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_motivation">
+				<source>Motivation</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_motivation.title">
+				<source>Title</source>
+			</trans-unit>
+
+			<trans-unit id="tx_trainingsplatz_domain_model_template">
+				<source>Training template text</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_template.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_template.sport">
+				<source>Sport</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_template.intensity">
+				<source>Intensity</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_template.guided">
+				<source>Guided</source>
+			</trans-unit>
+			<trans-unit id="tx_trainingsplatz_domain_model_template.templatetext">
+				<source>Template text</source>
+			</trans-unit>
+
+			<trans-unit id="fe_users.tabs.trainingsplatz">
+				<source>Trainingsplatz</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_membership">
+				<source>Membership</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_guide">
+				<source>Trainingsplatz Guide</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_infomail">
+				<source>Trainingsplatz InfoMails</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_newsletter">
+				<source>Trainingsplatz Newsletter</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_contest">
+				<source>Trainingsplatz Contest</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_contest_extra">
+				<source>Trainingsplatz Contest Extra Points</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_sports">
+				<source>Sports</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_motivation">
+				<source>Motivation</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_club1_name">
+				<source>Club 1 Name</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_club1_website">
+				<source>Club 1 Website</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_club2_name">
+				<source>Club 2 Name</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_club2_website">
+				<source>Club 2 Website</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_goal">
+				<source>My sportive goal</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_hobby">
+				<source>Further hobbies</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_music">
+				<source>Favourite music</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_food">
+				<source>Favourite dish</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_like">
+				<source>What I like</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_dislike">
+				<source>What I dislike</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_job">
+				<source>On my job I deal with</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_love">
+				<source>I adore</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_meaningsport">
+				<source>Sport means to me</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_motto">
+				<source>Motto of my life</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_sparetime">
+				<source>Favourite leisure activity</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_dream">
+				<source>I dream of</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_notdisclaim">
+				<source>I cannot disclaim</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_book">
+				<source>Favourite reading</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_weakness">
+				<source>My weaknesses</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_strength">
+				<source>My strengths</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_ability">
+				<source>Ability I'd like to have</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_drivecrazy">
+				<source>What drives me crazy</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_laugh">
+				<source>I may laugh about</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_spendmoney">
+				<source>I spend a lot of money for</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_description">
+				<source>I'd describe myself as</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_pain">
+				<source>I am afraid of</source>
+			</trans-unit>
+			<trans-unit id="fe_users.tx_trainingsplatz_private_luxury">
+				<source>Luxury means to me</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

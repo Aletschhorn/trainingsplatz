@@ -1,0 +1,106 @@
+{namespace tp=DW\Trainingsplatz\ViewHelpers}
+
+<div class="col-sm-offset-0 col-xs-offset-0">
+	<div class="row">
+    	<f:comment>
+		<div class="form-group">
+			<label for="route" class="col-sm-2 col-xs-3 control-label">Route</label>
+			<div class="col-sm-10 col-xs-9">
+				<f:form.select property="map" options="{maps}" optionLabelField="title" prependOptionLabel="(keine Route)" prependOptionValue="0" id="route" class="form-control" additionalAttributes="{onchange: 'changeRoute()'}" />
+			</div>
+		</div>
+        </f:comment>
+		<div class="form-group">
+			<label for="meetingpoint" class="col-sm-2 col-xs-3 control-label">Treffpunkt</label>
+			<div class="col-sm-10 col-xs-9">
+				<div class="radio-inline">
+					<f:form.radio property="startOption" checked="{training.startOption}==1" value="1" additionalAttributes="{onchange: 'changeMeetingPoint()'}" />Auf Karte einzeichnen
+				</div>
+                <f:comment>
+				<div class="radio-inline">
+					<f:form.radio property="startOption" checked="{training.startOption}==2" value="2" disabled="true" id="meetingpointAtStart" additionalAttributes="{onchange: 'changeMeetingPoint()'}" />Am Startpunkt der Strecke
+				</div>
+                </f:comment>
+				<div class="radio-inline">
+					<f:form.radio property="startOption" checked="{training.startOption}==0" value="0" id="meetingpointNone" additionalAttributes="{onchange: 'changeMeetingPoint()'}" />Nicht einezichnen
+				</div>
+			</div>
+		</div>
+	</div>
+	<f:form.hidden property="startCoordinates" />
+	<f:form.hidden property="mapType" />
+	<f:form.hidden property="mapCenter" />
+	<f:form.hidden property="mapZoom" />
+	<div id="Karte" style="width:100%; height:450px"></div>
+	<script type="text/javascript">	
+		function changeRoute () {
+			TPpunkte = Array ();
+			TPmeilenstein = Array ();
+			TPtreffvalue = document.forms['training'].elements['tx_trainingsplatz_tp[training][startOption]'].value;
+			document.getElementById('meetingpointAtStart').disabled = false;
+			switch (document.getElementById('route').value) {
+				<f:for each="{maps}" as="map">
+					case "{map.uid}":
+						TPmap.setCenter(new google.maps.LatLng {map.center});
+						TPmap.setZoom({map.zoom});
+						// TPmap.setMapTypeId({map.maptype});
+						TPshowMeilenstein = <f:if condition="{map.milestones}"><f:then>1</f:then><f:else>0</f:else></f:if>;
+						TPpunkte = Array (<tp:coordinates map="{map}" />);
+						if (TPtreffvalue == 2) {
+							TPtreffpunkt = TPpunkte[0];
+						} else {
+							TPtreffpunkt = "";
+						}
+						break;
+				</f:for>
+				case "0":
+					TPmap.setCenter(new google.maps.LatLng (47.3500361,8.7207699));
+					TPmap.setZoom(12);
+					TPmap.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+					TPshowMeilenstein = 1;
+					TPpunkte = Array ();
+					if (TPtreffvalue == 2) {
+						document.forms['training'].elements['tx_trainingsplatz_tp[training][startOption]'].value = 0;
+					}
+					document.getElementById("meetingpointAtStart").disabled = true;
+					break;
+			}
+			// milestone ();
+			zeichnen ();
+		}
+		function changeMeetingPoint () {
+			switch (document.forms['training'].elements['tx_trainingsplatz_tp[training][startOption]'].value) {
+				case "0":
+					TPtreffpunkt = "";
+					TPdrawTreffpunkt = 0;
+					break;
+				case "1":
+					TPdrawTreffpunkt = 1;
+					if (TPtreffpunkt) {
+						TPmarker.setPosition(TPtreffpunkt);
+					}
+					break;
+				case "2":
+					TPtreffpunkt = TPpunkte[0];
+					TPmarker.setPosition(TPtreffpunkt);
+					TPdrawTreffpunkt = 0;
+					break;
+			}
+			zeichnen ();
+		}
+		function saveMapData () {
+			document.forms['training'].elements['tx_trainingsplatz_tp[training][startCoordinates]'].value = TPtreffpunkt;
+			document.forms['training'].elements['tx_trainingsplatz_tp[training][mapZoom]'].value = TPmap.getZoom();
+			document.forms['training'].elements['tx_trainingsplatz_tp[training][mapCenter]'].value = TPmap.getCenter();
+			document.forms['training'].elements['tx_trainingsplatz_tp[training][mapType]'].value = TPmap.getMapTypeId();
+		}
+		<f:if condition="{training.startCoordinates}">TPtreffpunkt = new google.maps.LatLng {training.startCoordinates};</f:if>
+		<f:if condition="{training.mapCenter}">TPcenter = new google.maps.LatLng {training.mapCenter};</f:if>
+		<f:if condition="{training.mapZoom}">TPzoom = {training.mapZoom};</f:if>
+		initialize();
+		changeRoute(); 
+		changeMeetingPoint();
+		TPmap.setCenter(TPcenter);
+		TPmap.setZoom(TPzoom);
+	</script><br />
+</div>

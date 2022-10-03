@@ -1,0 +1,26 @@
+<f:if condition="{seriesDates->f:count()}>1">
+	<p>
+    	Das Training wird an diesen Daten ausgeschrieben:
+        <f:for each="{seriesDates}" as="date" iteration="it">
+        	<f:format.date format="d.m.Y">{date}</f:format.date><f:if condition="{it.isLast}"><f:then>.</f:then><f:else>, </f:else></f:if>
+        </f:for>
+    </p>
+</f:if>        
+
+<hr />
+<f:render partial="Training/Description" arguments="{training:training}" />
+
+<hr />
+
+<div class="checkbox">
+	<label>
+		<f:form.checkbox property="infomail" value="1" checked="{training.infomail}==1" /> InfoMail an Mitglieder versenden
+	</label>
+</div>
+<div class="checkbox">
+	<label>
+		<f:form.checkbox property="notification" value="1" checked="{training.notification}==1" /> Mich per E-Mail über Antworten informieren
+	</label>
+</div>
+
+<p>&nbsp;</p>

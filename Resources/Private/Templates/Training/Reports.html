@@ -1,0 +1,51 @@
+<f:layout name="Default" />
+<f:section name="main">
+
+<div class="row">
+	<div class="col-lg-7 col-md-12">
+		<h2>Analyse der Berichte</h2>
+		<p>Insgesamt {f:count(subject:reports)} Berichte</p>
+	</div>
+	<div class="col-lg-5 col-md-12">
+		<ul class="pagination">
+			<li><f:link.action action="analysis" arguments="{year:year}">Trainings</f:link.action></li>
+			<li class="active"><a href="#">Berichte</a></li>
+			<li><f:link.action action="ranking" arguments="{year:year}">Sportler des Jahres</f:link.action></li>
+		</ul>
+		<br />
+		<ul class="pagination" style="margin-top:0">
+			<f:for each="{navigation}" as="nav">
+				<li class="{f:if(condition:'{nav}=={year}',then:'active')}">
+					<f:link.action action="reports" arguments="{year:nav}">{nav}</f:link.action>
+				</li>
+			</f:for>
+		</ul>
+	</div>
+</div>	
+<br />
+
+
+
+<f:if condition="{reports}">
+	<f:then>
+		<table class="table">
+			<tr>
+				<th>Datum</th>
+				<th>Titel</th>
+				<th>Autor</th>
+			</tr>
+			<f:for each="{reports}" as="report">
+				<tr>
+					<td>{report.datetime->f:format.date(format:'d.m.Y')}</td>
+					<td>{report.title}</td>
+					<td>{report.author}</td>
+				</tr>
+			</f:for>					
+		</table>
+	</f:then>
+	<f:else>
+		<p>(Keine Berichte gefunden)</p>
+	</f:else>
+</f:if>
+
+</f:section>

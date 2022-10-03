@@ -1,0 +1,4 @@
+<h3>Training-Teilnehmer <f:if condition="{answers}">({correctedAnswers})</f:if></h3>
+<f:for each="{answers}" as="answer">
+	<f:render partial="Answer/BoxSimplified" arguments="{answer:answer,userAnswer:userAnswer,training:training}" />
+</f:for>

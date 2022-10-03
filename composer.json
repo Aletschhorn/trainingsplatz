@@ -1,0 +1,19 @@
+{
+   "name": "DW/trainingsplatz",
+   "type": "typo3-cms-extension",
+   "description": "Training platform",
+   "license": "GPL-2.0-or-later",
+   "require": {
+      "typo3/cms-core": "^9.5 || ^10.4"
+   },
+   "extra": {
+      "typo3/cms": {
+         "extension-key": "trainingsplatz"
+      }
+   },
+   "autoload": {
+      "psr-4": {
+         "DW\\Trainingsplatz\\": "Classes/"
+      }
+   }
+}

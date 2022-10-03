@@ -1,0 +1,57 @@
+plugin.tx_trainingsplatz {
+	view {
+		# cat=plugin.tx_trainingsplatz/file; type=string; label=Path to template root (FE)
+		templateRootPath = EXT:trainingsplatz/Resources/Private/Templates/
+		# cat=plugin.tx_trainingsplatz/file; type=string; label=Path to template partials (FE)
+		partialRootPath = EXT:trainingsplatz/Resources/Private/Partials/
+		# cat=plugin.tx_trainingsplatz/file; type=string; label=Path to template layouts (FE)
+		layoutRootPath = EXT:trainingsplatz/Resources/Private/Layouts/
+	}
+	persistence {
+		# cat=plugin.tx_trainingsplatz//q; type=string; label=Default storage PID
+		storagePid =
+	}
+	settings {
+		# cat=plugin.tx_trainingsplatz/others/a; type=int+; label=PID main list
+		mainPid =
+		# cat=plugin.tx_trainingsplatz/others/b; type=int+; label=PID single view
+		singlePid =
+		# cat=plugin.tx_trainingsplatz/others/c; type=int+; label=PID new training
+		newPid =
+		# cat=plugin.tx_trainingsplatz/others/d; type=int+; label=PID rules
+		rulesPid =
+		# cat=plugin.tx_trainingsplatz/others/e; type=int+; label=PID help
+		helpPid =
+		# cat=plugin.tx_trainingsplatz/others/f; type=int+; label=PID evaluation
+		evalPid =
+		# cat=plugin.tx_trainingsplatz/others/g; type=int+; label=PID of login page
+		loginPid =
+		# cat=plugin.tx_trainingsplatz/others/h; type=int+; label=PID of user list page
+		userlistPid =
+		# cat=plugin.tx_trainingsplatz/others/i; type=string; label=List of competition start dates (dd.mm.yyyy, dd.mm.yyyy), must be in increasing order
+		competitionStart =
+		# cat=plugin.tx_trainingsplatz/others/k; type=string; label=Google Maps Key
+		googleMapsKey =
+		# cat=plugin.tx_trainingsplatz/others/l; type=color; label=Color code for route marking on maps
+		routeColor = blue
+		# cat=plugin.tx_trainingsplatz/others/m; type=int+; label=Width in pixels for route marking on maps
+		routeWidth = 5
+		# cat=plugin.tx_trainingsplatz/others/n; type=file; label=Icon for meeting point on maps
+		meetingpointIcon = EXT:trainingsplatz/Resources/Public/Icons/meetingpoint.png
+		# cat=plugin.tx_trainingsplatz/others/o; type=string; label=Size in pixels of meeting point icon, format width,height
+		meetingpointIconSize = 20,34
+		# cat=plugin.tx_trainingsplatz/others/p; type=string; label=Anchor of meeting point icon in format x,y
+		meetingpointIconAnchor = 10,34
+		# cat=plugin.tx_trainingsplatz/others/r; type=string; label=PID of pages which cache to delete after any edit (comma-separated)
+		deleteCachePid = 
+		# cat=plugin.tx_trainingsplatz/others/s; type=boolean; label=Suppress sending e-mails
+		suppressMails = 0
+		# cat=plugin.tx_trainingsplatz/others/u; type=int+; label=UID of FE usergroup Admin
+		usergroupAdmin = 
+		# cat=plugin.tx_trainingsplatz/others/v; type=int+; label=UID of FE usergroup SportCoach
+		usergroupSportcoach = 
+		# cat=plugin.tx_trainingsplatz/others/w; type=int+; label=UID of FE usergroup Member
+		usergroupMember = 
+		
+	}
+}

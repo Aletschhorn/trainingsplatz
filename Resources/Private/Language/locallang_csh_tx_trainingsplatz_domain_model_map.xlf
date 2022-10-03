@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2015-11-05T22:41:04Z" product-name="trainingsplatz">
+		<header/>
+		<body>
+			<trans-unit id="title.description">
+				<source>title</source>
+			</trans-unit>
+			<trans-unit id="description.description">
+				<source>description</source>
+			</trans-unit>
+			<trans-unit id="route.description">
+				<source>route</source>
+			</trans-unit>
+			<trans-unit id="author.description">
+				<source>author</source>
+			</trans-unit>
+			<trans-unit id="center.description">
+				<source>center</source>
+			</trans-unit>
+			<trans-unit id="zoom.description">
+				<source>zoom</source>
+			</trans-unit>
+			<trans-unit id="sport.description">
+				<source>sport</source>
+			</trans-unit>
+			<trans-unit id="maptype.description">
+				<source>maptype</source>
+			</trans-unit>
+			<trans-unit id="length.description">
+				<source>length</source>
+			</trans-unit>
+			<trans-unit id="milestones.description">
+				<source>milestones</source>
+			</trans-unit>
+			<trans-unit id="public.description">
+				<source>public</source>
+			</trans-unit>
+			<trans-unit id="last_change.description">
+				<source>last_change</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

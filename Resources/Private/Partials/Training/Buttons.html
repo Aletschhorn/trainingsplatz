@@ -1,0 +1,62 @@
+<f:link.action pageUid="{settings.mainPid}" action="list" arguments="{filter:filter}" class="btn btn-primary">Zur&uuml;ck zur Liste</f:link.action>
+<f:security.ifHasRole role="{settings.usergroupAdmin}">
+	<f:then>
+		<f:if condition="{training.cancelled}">
+			<f:then>
+				&nbsp; <f:link.action action="activate" arguments="{training:training}" class="btn btn-default">Reaktivieren</f:link.action>
+			</f:then>
+			<f:else>
+				&nbsp; <f:link.action action="edit" arguments="{training:training,step:1}" class="btn btn-default">Ändern</f:link.action>
+				&nbsp; <f:link.action action="cancel" arguments="{training:training}" class="btn btn-default" additionalAttributes="{onclick: 
+'return confirm(\'Soll dieses Training wirklich abgesagt werden? Die eingetragenen Teilnehmer werden per Mail informiert.\')'}">Absagen</f:link.action>
+			</f:else>
+		</f:if>
+		&nbsp; <f:link.action action="delete" arguments="{training:training}" class="btn btn-default" additionalAttributes="{onclick:'return confirm(\'Soll dieses Training wirklich gelöscht werden?\')'}">Löschen</f:link.action>
+		<f:if condition="{answers}">
+			<f:then>
+				&nbsp; <f:link.action action="message" arguments="{training:training}" class="btn btn-default">Mail an Teilnehmer</f:link.action>
+			</f:then>
+			<f:else>
+				&nbsp; <button type="button" class="btn btn-default" disabled="disabled">Mail an Teilnehmer</button>
+			</f:else>
+		</f:if>
+	</f:then>
+	<f:else>
+		<f:if condition="{training.author}=={feuser}">
+			<f:then>
+				<f:if condition="{training.cancelled}==0">
+					&nbsp; <f:link.action action="edit" arguments="{training:training,step:1}" class="btn btn-default">Ändern</f:link.action>
+					&nbsp; <f:link.action action="cancel" arguments="{training:training}" class="btn btn-default" additionalAttributes="{onclick: 
+'return confirm(\'Soll dieses Training wirklich abgesagt werden?\')'}">Absagen</f:link.action>
+				</f:if>
+				<f:if condition="{answers}">
+					<f:then>
+						&nbsp; <f:link.action action="message" arguments="{training:training}" class="btn btn-default">Mail an Teilnehmer</f:link.action>
+					</f:then>
+					<f:else>
+						&nbsp; <button type="button" class="btn btn-default" disabled="disabled">Mail an Teilnehmer</button>
+					</f:else>
+				</f:if>
+			</f:then>
+			<f:else>
+				<f:if condition="{training.guided}">
+					<f:if condition="{training.leader}=={feuser}">
+						<f:if condition="{training.cancelled}==0">
+							&nbsp; <f:link.action action="edit" arguments="{training:training,step:1}" class="btn btn-default">Ändern</f:link.action>
+							&nbsp; <f:link.action action="cancel" arguments="{training:training}" class="btn btn-default" additionalAttributes="{onclick: 
+'return confirm(\'Soll dieses Training wirklich abgesagt werden?\')'}">Absagen</f:link.action>
+						</f:if>
+						<f:if condition="{answers}">
+							<f:then>
+								&nbsp; <f:link.action action="message" arguments="{training:training}" class="btn btn-default">Mail an Teilnehmer</f:link.action>
+							</f:then>
+							<f:else>
+								&nbsp; <button type="button" class="btn btn-default" disabled="disabled">Mail an Teilnehmer</button>
+							</f:else>
+						</f:if>
+					</f:if>
+				</f:if>
+			</f:else>
+		</f:if>
+	</f:else>
+</f:security.ifHasRole>
