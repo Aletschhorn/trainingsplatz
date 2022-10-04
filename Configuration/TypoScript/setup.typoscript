@@ -24,7 +24,6 @@ plugin.tx_trainingsplatz {
 		meetingpointIcon = {$plugin.tx_trainingsplatz.settings.meetingpointIcon}
 		meetingpointIconSize = {$plugin.tx_trainingsplatz.settings.meetingpointIconSize}
 		meetingpointIconAnchor = {$plugin.tx_trainingsplatz.settings.meetingpointIconAnchor}
-		deleteCachePid = {$plugin.tx_trainingsplatz.settings.deleteCachePid}
 		suppressMails = {$plugin.tx_trainingsplatz.settings.suppressMails}
 		usergroupAdmin = {$plugin.tx_trainingsplatz.settings.usergroupAdmin}
 		usergroupSportcoach = {$plugin.tx_trainingsplatz.settings.usergroupSportcoach}

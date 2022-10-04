@@ -42,8 +42,6 @@ plugin.tx_trainingsplatz {
 		meetingpointIconSize = 20,34
 		# cat=plugin.tx_trainingsplatz/others/p; type=string; label=Anchor of meeting point icon in format x,y
 		meetingpointIconAnchor = 10,34
-		# cat=plugin.tx_trainingsplatz/others/r; type=string; label=PID of pages which cache to delete after any edit (comma-separated)
-		deleteCachePid = 
 		# cat=plugin.tx_trainingsplatz/others/s; type=boolean; label=Suppress sending e-mails
 		suppressMails = 0
 		# cat=plugin.tx_trainingsplatz/others/u; type=int+; label=UID of FE usergroup Admin

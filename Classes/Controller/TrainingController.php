@@ -437,10 +437,6 @@ class TrainingController extends ActionController {
 				$persistenceManager->persistAll();
 			}
 			
-			if ($this->settings['deleteCachePid']) {
-				$this->clearSpecificCache($this->settings['deleteCachePid']);
-			}
-			
 			// InfoMail preparation
 			if ($training->isInfomail()) {
 				if ($training->isGuided()) { 
@@ -500,10 +496,6 @@ class TrainingController extends ActionController {
 			$training->setCancelled(true);
 			$this->trainingRepository->update($training);
 			
-			if ($this->settings['deleteCachePid']) {
-				$this->clearSpecificCache($this->settings['deleteCachePid']);
-			}
-	
 			if (! $this->settings['suppressMails']) {
 				$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Das Training "'.$training->getTitle().'" vom '.$training->getTrainingDate()->format('j.m.y').' muss leider abgesagt werden.'.chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch';
 				$answers = $this->answerRepository->findPerTraining($training);
@@ -544,10 +536,6 @@ class TrainingController extends ActionController {
 		$training->setCancelled(false);
 		$this->trainingRepository->update($training);
 
-		if ($this->settings['deleteCachePid']) {
-			$this->clearSpecificCache($this->settings['deleteCachePid']);
-		}
-
 		$this->addFlashMessage('Training wurde wieder aktiviert');
 		return $this->redirect('show','Training','trainingsplatz',array('training' => $training->getUid()));
 	}
@@ -555,11 +543,6 @@ class TrainingController extends ActionController {
 
 	public function deleteAction(Training $training): ResponseInterface {
 		$this->trainingRepository->remove($training);
-
-		if ($this->settings['deleteCachePid']) {
-			$this->clearSpecificCache($this->settings['deleteCachePid']);
-		}
-
 		$this->addFlashMessage('Training wurde gelöscht');
 		return $this->redirect('list');
 	}
@@ -608,9 +591,6 @@ class TrainingController extends ActionController {
 			if ($answer->getTraining()->isNotification()) {
 				$this->sendNotification($answer, 1);
 			}
-			if ($this->settings['deleteCachePid']) {
-				$this->clearSpecificCache($this->settings['deleteCachePid']);
-			}
 			return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
 		}
 	}
@@ -653,9 +633,6 @@ class TrainingController extends ActionController {
 			if ($answer->getTraining()->isNotification()) {
 				$this->sendNotification($answer, 2);
 			}
-			if ($this->settings['deleteCachePid']) {
-				$this->clearSpecificCache($this->settings['deleteCachePid']);
-			}
 			return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
 		}
 	}
@@ -671,9 +648,6 @@ class TrainingController extends ActionController {
 			$this->sendNotification($answer, 3);
 		}
 		$this->addFlashMessage('Teilnahme abgesagt', '', AbstractMessage::OK);
-		if ($this->settings['deleteCachePid']) {
-			$this->clearSpecificCache($this->settings['deleteCachePid']);
-		}
 		return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
 	}
 
@@ -687,9 +661,6 @@ class TrainingController extends ActionController {
 			$this->sendNotification($answer, 4);
 		}
 		$this->addFlashMessage('Teilnahme wieder aktiviert', '', AbstractMessage::OK);
-		if ($this->settings['deleteCachePid']) {
-			$this->clearSpecificCache($this->settings['deleteCachePid']);
-		}
 		return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
 	}
 
@@ -920,9 +891,6 @@ class TrainingController extends ActionController {
 				}
 			}
 		}
-		if ($this->settings['deleteCachePid']) {
-			$this->clearSpecificCache($this->settings['deleteCachePid']);
-		}
 		if ($finish) {
 			return $this->redirect('finalize','Training','trainingsplatz',array('training' => $arguments['training']));
 		} else {
@@ -941,9 +909,6 @@ class TrainingController extends ActionController {
 	public function closeAction(Training $training): ResponseInterface {
 		$training->setClosed(true);
 		$this->trainingRepository->update($training);
-		if ($this->settings['deleteCachePid']) {
-			$this->clearSpecificCache($this->settings['deleteCachePid']);
-		}
 		$this->addFlashMessage('Training wurde abgeschlossen');
 		return $this->redirect('evaluate');
 	}
@@ -1358,15 +1323,4 @@ class TrainingController extends ActionController {
 			return ['start' => NULL, 'end' => NULL];
 		}
 	}
-
-	/**
-	* clearSpecificCache
-	*
-	* $pid => Comma-separated list of PIDs
-	*/
-    protected function clearSpecificCache(string $pid) {
-		$pageIds = explode(',',$pid);
-		$this->cacheService->clearPageCache($pageIds);
-    }
-
 }

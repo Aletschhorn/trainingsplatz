@@ -76,9 +76,6 @@ class InfomailController extends ActionController {
 				$this->infomailRepository->add($newInfomail);
 				$persistenceManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 				$persistenceManager->persistAll();
-				if ($this->settings['deleteCachePid']) {
-					$this->clearSpecificCache($this->settings['deleteCachePid']);
-				}
 				return $this->redirect('show','Infomail','trainingsplatz',array('infomail' => $newInfomail));
 			}
 		}
@@ -98,9 +95,6 @@ class InfomailController extends ActionController {
 		
 				$this->infomailRepository->update($infomail);
 				$this->addFlashMessage('InfoMail für den Versand vorbereitet.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
-				if ($this->settings['deleteCachePid']) {
-					$this->clearSpecificCache($this->settings['deleteCachePid']);
-				}
 			}
 		}
 		return $this->redirect('list');
@@ -124,9 +118,6 @@ class InfomailController extends ActionController {
 				$infomail->setSendUser($senduser);
 				$this->infomailRepository->update($infomail);
 				$this->addFlashMessage('Der InfoMail-Antrag wurde entfernt', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
-				if ($this->settings['deleteCachePid']) {
-					$this->clearSpecificCache($this->settings['deleteCachePid']);
-				}
 			}
 		}
 		return $this->redirect('list');
@@ -147,9 +138,6 @@ class InfomailController extends ActionController {
 					$this->addFlashMessage('Das InfoMail wurde zu den pendenten InfoMails zurückverschoben.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
 				} else {
 					$this->addFlashMessage('Der Status des InfoMails wurde inzwischen geändert; der Versand konnte nicht gestoppt werden.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
-				}
-				if ($this->settings['deleteCachePid']) {
-					$this->clearSpecificCache($this->settings['deleteCachePid']);
 				}
 			}
 		}
@@ -174,11 +162,4 @@ class InfomailController extends ActionController {
 		self::getAllUsergroups($usergroups, $usergroupArray);
 		return $usergroupArray;
 	}	
-
-
-    protected function clearSpecificCache(string $pid) {
-		$pageIds = explode(',',$pid);
-		$this->cacheService->clearPageCache($pageIds);
-    }
-
 }
