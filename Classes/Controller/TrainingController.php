@@ -901,7 +901,7 @@ class TrainingController extends ActionController {
 
 
 	public function finalizeAction(Training $training): ResponseInterface {
-		$this->view->assign('training' => $training);
+		$this->view->assign('training', $training);
 		return $this->htmlResponse();
 	}
 
