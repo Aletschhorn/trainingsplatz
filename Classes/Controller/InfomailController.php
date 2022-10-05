@@ -27,7 +27,7 @@ class InfomailController extends ActionController {
 	}
 	
 
-	public function listAction(): ResponseInterface {
+	public function listAction() {
 		$pending = $this->infomailRepository->findFutureByStatus(0);
 		$sent = $this->infomailRepository->findFutureByStatus(1);
 		$queued = $this->infomailRepository->findFutureByStatus(3);
@@ -38,29 +38,26 @@ class InfomailController extends ActionController {
 			'queued' => $queued,
 			'inprogress' => $inprogress,
 		]);
-		return $this->htmlResponse();
 	}
 
 
-	public function showAction(Infomail $infomail): ResponseInterface {
+	public function showAction(Infomail $infomail) {
 		$js = '<script src="//maps.googleapis.com/maps/api/js?key='.$this->settings['googleMapsKey'].'" type="text/javascript"></script>'.chr(10).'<script src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/elabel.js" type="text/javascript"></script>'.chr(10).'<script type="text/javascript">'.chr(10).'var streckenfarbe = \''.$this->settings['routeColor'].'\'; '.chr(10).'var streckenbreite = '.$this->settings['routeWidth'].'; '.chr(10).'var tpicon = new GIcon(); '.chr(10).'tpicon.image = \''.$this->settings['meetingpointIcon'].'\'; '.chr(10).'tpicon.iconSize = new GSize('.$this->settings['meetingpointIconSize'].'); '.chr(10).'tpicon.iconAnchor = new GPoint('.$this->settings['meetingpointIconAnchor'].'); '.chr(10).'</script>'.chr(10).'<script type="text/javascript" src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/mapcontrol_newtraining.js"></script>';
 	    $this->response->addAdditionalHeaderData($js);
 
 		$this->view->assign('infomail', $infomail);
-		return $this->htmlResponse();
 	}
 
 
-	public function reviewAction(Infomail $infomail): ResponseInterface {
+	public function reviewAction(Infomail $infomail) {
 		$js = '<script src="//maps.googleapis.com/maps/api/js?key='.$this->settings['googleMapsKey'].'" type="text/javascript"></script>'.chr(10).'<script src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/elabel.js" type="text/javascript"></script>'.chr(10).'<script type="text/javascript">'.chr(10).'var streckenfarbe = \''.$this->settings['routeColor'].'\'; '.chr(10).'var streckenbreite = '.$this->settings['routeWidth'].'; '.chr(10).'var tpicon = new GIcon(); '.chr(10).'tpicon.image = \''.$this->settings['meetingpointIcon'].'\'; '.chr(10).'tpicon.iconSize = new GSize('.$this->settings['meetingpointIconSize'].'); '.chr(10).'tpicon.iconAnchor = new GPoint('.$this->settings['meetingpointIconAnchor'].'); '.chr(10).'</script>'.chr(10).'<script type="text/javascript" src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/mapcontrol_newtraining.js"></script>';
 	    $this->response->addAdditionalHeaderData($js);
 
 		$this->view->assign('infomail', $infomail);
-		return $this->htmlResponse();
 	}
 
 
-	public function copyAction(Infomail $infomail): ResponseInterface {
+	public function copyAction(Infomail $infomail) {
 		$senduser = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
 		if ($senduser) {
 			if (in_array($this->settings['usergroupAdmin'], self::getUsergroupArray($senduser))) {
@@ -76,14 +73,14 @@ class InfomailController extends ActionController {
 				$this->infomailRepository->add($newInfomail);
 				$persistenceManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 				$persistenceManager->persistAll();
-				return $this->redirect('show','Infomail','trainingsplatz',array('infomail' => $newInfomail));
+				$this->redirect('show','Infomail','trainingsplatz',array('infomail' => $newInfomail));
 			}
 		}
-		return $this->redirect('list');
+		$this->redirect('list');
 	}
 
 
-	public function sendAction(Infomail $infomail): ResponseInterface {
+	public function sendAction(Infomail $infomail) {
 		$senduser = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
 		if ($senduser) {
 			if (in_array($this->settings['usergroupAdmin'], self::getUsergroupArray($senduser))) {
@@ -97,17 +94,16 @@ class InfomailController extends ActionController {
 				$this->addFlashMessage('InfoMail für den Versand vorbereitet.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
 			}
 		}
-		return $this->redirect('list');
-	}
-
-
-	public function deleteAction(Infomail $infomail): ResponseInterface {
 		$this->redirect('list');
-		return $this->htmlResponse();
 	}
 
 
-	public function denyAction(Infomail $infomail): ResponseInterface {
+	public function deleteAction(Infomail $infomail) {
+		$this->redirect('list');
+	}
+
+
+	public function denyAction(Infomail $infomail) {
 		$senduser = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
 		if ($senduser) {
 			if (in_array($this->settings['usergroupAdmin'], self::getUsergroupArray($senduser))) {
@@ -120,11 +116,11 @@ class InfomailController extends ActionController {
 				$this->addFlashMessage('Der InfoMail-Antrag wurde entfernt', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
 			}
 		}
-		return $this->redirect('list');
+		$this->redirect('list');
 	}
 
 
-	public function cancelAction(Infomail $infomail): ResponseInterface {
+	public function cancelAction(Infomail $infomail) {
 		$senduser = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
 		if ($senduser) {
 			if (in_array($this->settings['usergroupAdmin'], self::getUsergroupArray($senduser))) {
@@ -141,7 +137,7 @@ class InfomailController extends ActionController {
 				}
 			}
 		}
-		return $this->redirect('list');
+		$this->redirect('list');
 	}
 
 

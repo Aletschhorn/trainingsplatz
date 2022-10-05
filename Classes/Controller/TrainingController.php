@@ -65,7 +65,7 @@ class TrainingController extends ActionController {
 	}
 	
 
-	public function shortAction(): ResponseInterface {
+	public function shortAction() {
 		$limit = intval($this->settings['limitation']);
 		if ($this->request->hasArgument('filter')) { 
 			$filter = intval($this->request->getArgument('filter')); 
@@ -91,11 +91,10 @@ class TrainingController extends ActionController {
 			'limit' => $limit,
 			'settings' => $this->settings,
 		]);
-		return $this->htmlResponse();
 	}
 
 
-	public function listAction(): ResponseInterface {
+	public function listAction() {
 		if ($this->request->hasArgument('filter')) { 
 			$filter = intval($this->request->getArgument('filter')); 
 		} else {
@@ -118,11 +117,10 @@ class TrainingController extends ActionController {
 			'filter' => $filter,
 			'settings' => $this->settings,
 		]);
-		return $this->htmlResponse();
 	}
 
 
-	public function showAction(Training $training): ResponseInterface {
+	public function showAction(Training $training) {
 		$filter = intval($GLOBALS['TSFE']->fe_user->getKey('ses','tpFilter'));
 		$answers = $this->answerRepository->findPerTraining($training);
 		$countPublicAnswers = $this->answerRepository->countPerTrainingAndNotMember($training);
@@ -159,11 +157,10 @@ class TrainingController extends ActionController {
 			'filter' => $filter,
 			'settings' => $this->settings,
 		]);
-		return $this->htmlResponse();
 	}
 
 
-	public function singleAction(Training $training): ResponseInterface {
+	public function singleAction(Training $training) {
 		$answers = $this->answerRepository->findPerTraining($training);
 		$correctedAnswers = $this->answerRepository->findPerTrainingCorrected($training);
 
@@ -185,7 +182,6 @@ class TrainingController extends ActionController {
 			'correctedAnswers' => $correctedAnswers,
 			'settings' => $this->settings,
 		]);
-		return $this->htmlResponse();
 	}
 
 
@@ -201,7 +197,7 @@ class TrainingController extends ActionController {
 	}
 
 
-	public function newAction(): ResponseInterface {
+	public function newAction() {
 		$sports = $this->sportRepository->findAll();
 		$intensities = $this->intensityRepository->findAll();
 		$coaches = $this->userRepository->findByUsergroup($this->settings['usergroupSportcoach']);
@@ -209,7 +205,6 @@ class TrainingController extends ActionController {
 			'training' => new Training,
 			'settings' => $this->settings
 		]);
-		return $this->htmlResponse();
 	}
 
 
@@ -222,7 +217,7 @@ class TrainingController extends ActionController {
 	}
 
 
-	public function createAction(Training $training): ResponseInterface {
+	public function createAction(Training $training) {
 		$now = new \DateTime();
 		$training->setCreationDate($now);
 		$user = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
@@ -279,9 +274,9 @@ class TrainingController extends ActionController {
 		$persistenceManager->persistAll();
 
 		if ($failure) {
-			return $this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => 1));
+			$this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => 1));
 		} else {
-			return $this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => 2));
+			$this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => 2));
 		}
 	}
 
@@ -318,7 +313,6 @@ class TrainingController extends ActionController {
 			'step' => $step,
 			'settings' => $this->settings,
 		]);
-		return $this->htmlResponse();
 	}
 
 
@@ -331,7 +325,7 @@ class TrainingController extends ActionController {
 	}
 
 
-	public function updateAction(Training $training): ResponseInterface {
+	public function updateAction(Training $training) {
 		$now = new \DateTime();
 		if ($training->isPublic()) {
 			$training->setLastChange($now);
@@ -346,32 +340,32 @@ class TrainingController extends ActionController {
 			if ($training->getSeries() == 0) {
 				if ($training->getTrainingDate() == NULL) {
 					$this->addFlashMessage('Trainingsdatum ist ungültig', '', AbstractMessage::ERROR);
-					return $this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
+					$this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
 				} else {
 					$training->setTrainingDate($this->adjustYear($training->getTrainingDate()));
 					if ($training->getTrainingDate()->format('U') < $today->format('U')) {
 						$this->addFlashMessage('Trainingsdatum liegt in der Vergangenheit', '', AbstractMessage::ERROR);
-						return $this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
+						$this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
 					}
 				}
 			} else {
 				if ($training->getSeriesStart() == NULL or $training->getSeriesEnd() == NULL) {
 					$this->addFlashMessage('Trainingsdaten der Serie sind ungültig', '', AbstractMessage::ERROR);
-					return $this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
+					$this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
 				} else {
 					$training->setSeriesStart($this->adjustYear($training->getSeriesStart()));
 					$training->setSeriesEnd($this->adjustYear($training->getSeriesEnd()));
 					if ($training->getSeriesStart()->format('U') < $today->format('U')) {
 						$this->addFlashMessage('Startdatum der Serie liegt in der Vergangenheit', '', AbstractMessage::ERROR);
-						return $this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
+						$this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
 					} elseif ($training->getSeriesStart()->format('U') > $training->getSeriesEnd()->format('U')) {
 						$this->addFlashMessage('Startdatum ist nach dem Enddatum der Serie', '', AbstractMessage::ERROR);
-						return $this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
+						$this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
 					} else {
 						$seriesDates = $this->getSeriesDates($training);
 						if (count($seriesDates) == 0) {
 							$this->addFlashMessage('Kein Trainingsdatum zwischen Start- und Enddatum möglich', '', AbstractMessage::ERROR);
-							return $this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
+							$this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
 						} else {
 							foreach ($seriesDates as $seriesDate) {
 								$seriesDatesFormated[] = date('d.m.Y',$seriesDate->format('U'));
@@ -388,7 +382,7 @@ class TrainingController extends ActionController {
 		if ($step == 2) {
 			if (! $training->getTitle() or ! $training->getDescription()) {
 				$this->addFlashMessage('Titel und Beschreibung müssen ausgefüllt sein', '', AbstractMessage::ERROR);
-				return $this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
+				$this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
 			}
 		}
 		
@@ -476,16 +470,16 @@ class TrainingController extends ActionController {
 					$mail->send();
 				}
 			}
-			return $this->redirect('show','Training','trainingsplatz',array('training' => $training),$this->settings['mainPid']);
+			$this->redirect('show','Training','trainingsplatz',array('training' => $training),$this->settings['mainPid']);
 		} else {
 			$this->trainingRepository->update($training);
 			$step++;
-			return $this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
+			$this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
 		}
 	}
 
 
-	public function cancelAction(Training $training): ResponseInterface {
+	public function cancelAction(Training $training) {
 		$now = new \DateTime('now',$this->timezone);
 		$difference = $training->getTrainingDate()->diff($now);
 		
@@ -526,31 +520,31 @@ class TrainingController extends ActionController {
 			
 			$this->addFlashMessage('Training wurde abgesagt und die eingetragenen Teilnehmer per Mail informiert', '', AbstractMessage::OK);
 		}
-		return $this->redirect('show','Training','trainingsplatz',array('training' => $training->getUid()));
+		$this->redirect('show','Training','trainingsplatz',array('training' => $training->getUid()));
 	}
 
 
-	public function activateAction(Training $training): ResponseInterface {
+	public function activateAction(Training $training) {
 		$now = new \DateTime('now',$this->timezone);
 		$training->setLastChange($now);
 		$training->setCancelled(false);
 		$this->trainingRepository->update($training);
 
 		$this->addFlashMessage('Training wurde wieder aktiviert');
-		return $this->redirect('show','Training','trainingsplatz',array('training' => $training->getUid()));
+		$this->redirect('show','Training','trainingsplatz',array('training' => $training->getUid()));
 	}
 
 
-	public function deleteAction(Training $training): ResponseInterface {
+	public function deleteAction(Training $training) {
 		$this->trainingRepository->remove($training);
 		$this->addFlashMessage('Training wurde gelöscht');
-		return $this->redirect('list');
+		$this->redirect('list');
 	}
 
 	/**
 	 * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("answer")	 
 	 */
-	public function addAnswerAction(?Answer $answer = NULL): ResponseInterface {
+	public function addAnswerAction(?Answer $answer = NULL) {
 		// Validate some fields
 		$error = false;
 		if ($this->request->getArgument('zusatz') <> "") {
@@ -577,7 +571,7 @@ class TrainingController extends ActionController {
 		}
 		
 		if ($error) {
-			return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');			
+			$this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');			
 		} else {
 			$now = new \DateTime('now',$this->timezone);
 			$answer->setCreationDate($now);
@@ -591,12 +585,12 @@ class TrainingController extends ActionController {
 			if ($answer->getTraining()->isNotification()) {
 				$this->sendNotification($answer, 1);
 			}
-			return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
+			$this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
 		}
 	}
 
 
-	public function editAnswerAction(Answer $answer): ResponseInterface {
+	public function editAnswerAction(Answer $answer) {
 
 		$training = $answer->getTraining();
 		$answers = $this->answerRepository->findPerTraining($training);
@@ -613,11 +607,11 @@ class TrainingController extends ActionController {
 			'userAnswer' => $answer,
 			'correctedAnswers' => $correctedAnswers,
 		]);
-		return $this->htmlResponse();
+		$this->htmlResponse();
 	}
 
 
-	public function modifyAnswerAction(Answer $answer): ResponseInterface {
+	public function modifyAnswerAction(Answer $answer) {
 		// Validate some fields
 		$error = false;
 		if ($answer->getTitle() == "" or $answer->getDescription() == "") {
@@ -633,12 +627,12 @@ class TrainingController extends ActionController {
 			if ($answer->getTraining()->isNotification()) {
 				$this->sendNotification($answer, 2);
 			}
-			return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
+			$this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
 		}
 	}
 
 
-	public function cancelAnswerAction(Answer $answer): ResponseInterface {
+	public function cancelAnswerAction(Answer $answer) {
 		$now = new \DateTime('now',$this->timezone);
 		$answer->setChangeDate($now);
 		$answer->setCancelled(true);
@@ -648,11 +642,11 @@ class TrainingController extends ActionController {
 			$this->sendNotification($answer, 3);
 		}
 		$this->addFlashMessage('Teilnahme abgesagt', '', AbstractMessage::OK);
-		return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
+		$this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
 	}
 
 
-	public function reactivateAnswerAction(Answer $answer): ResponseInterface {
+	public function reactivateAnswerAction(Answer $answer) {
 		$now = new \DateTime('now',$this->timezone);
 		$answer->setChangeDate($now);
 		$answer->setCancelled(false);
@@ -661,11 +655,11 @@ class TrainingController extends ActionController {
 			$this->sendNotification($answer, 4);
 		}
 		$this->addFlashMessage('Teilnahme wieder aktiviert', '', AbstractMessage::OK);
-		return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
+		$this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
 	}
 
 
-	public function cancelRequestAnswerAction(): ResponseInterface {
+	public function cancelRequestAnswerAction() {
 		if ($this->request->hasArgument('training')) {
 			$persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
 			$training = $this->trainingRepository->findByUid($this->request->getArgument('training'));
@@ -702,16 +696,16 @@ class TrainingController extends ActionController {
 				} else {
 					$this->addFlashMessage('Die anggegebene Mailadresse wurde in keiner der Teilnahme-Einträgen gefunden.', '', AbstractMessage::WARNING);
 				}
-				return $this->redirect('show','Training','trainingsplatz',['training' => $training]);
+				$this->redirect('show','Training','trainingsplatz',['training' => $training]);
 			}
 			$this->addFlashMessage('Die anggegebene Mailadresse wurde in keiner der Teilnahme-Einträgen gefunden.', '', AbstractMessage::WARNING);
-			return $this->redirect('show','Training','trainingsplatz',['training' => $training]);
+			$this->redirect('show','Training','trainingsplatz',['training' => $training]);
 		}
-		return $this->redirect('list');
+		$this->redirect('list');
 	}
 
 
-	public function cancelPublicAnswerAction(): ResponseInterface {
+	public function cancelPublicAnswerAction() {
 		if ($this->request->hasArgument('answer') and $this->request->hasArgument('hash')) {
 			$answer = $this->answerRepository->findByUid($this->request->getArgument('answer'));
 			if ($answer->getHash() == $this->request->getArgument('hash')) {
@@ -725,17 +719,17 @@ class TrainingController extends ActionController {
 				$this->redirect('show','Training','trainingsplatz',['training' => $training]);
 			}
 		}
-		return $this->redirect('list');
+		$this->redirect('list');
 	}
 
 
-	public function messageAction(Training $training): ResponseInterface {
+	public function messageAction(Training $training) {
 		$this->view->assign('training', $training);
-		return $this->htmlResponse();
+		$this->htmlResponse();
 	}
 
 
-	public function messageSendAction(): ResponseInterface {
+	public function messageSendAction() {
 		$arguments = $this->request->getArguments();
 		if ($arguments['training']) {
 			$training = $this->trainingRepository->findByUid(intval($arguments['training']));
@@ -814,20 +808,20 @@ class TrainingController extends ActionController {
 						}
 						
 						$this->addFlashMessage('E-Mail wurde versendet, eine Kopie davon auch an dich','', AbstractMessage::OK);
-						return $this->redirect('show','Training','trainingsplatz',array('training' => $training));
+						$this->redirect('show','Training','trainingsplatz',array('training' => $training));
 					} else {
 						$this->addFlashMessage('Betreff und Inhalt dürfen nicht leer sein','', AbstractMessage::WARNING);
-						return $this->redirect('message','Training','trainingsplatz',array('training' => $training));
+						$this->redirect('message','Training','trainingsplatz',array('training' => $training));
 					}
 				}
 			}
 		}
 		$this->addFlashMessage('E-Mail konnte nicht versendet werden','', AbstractMessage::WARNING);
-		return $this->redirect('list');
+		$this->redirect('list');
 	}
 
 
-	public function evaluateAction(): ResponseInterface {
+	public function evaluateAction() {
 		$trainings = $this->trainingRepository->findPast();
 		$answers = array ();
 		foreach ($trainings as $training) {
@@ -840,11 +834,10 @@ class TrainingController extends ActionController {
 			'sports' => $sports,
 			'settings' => $this->settings,
 		]);
-		return $this->htmlResponse();
 	}
 
 
-	public function billingAction(Training $training): ResponseInterface {
+	public function billingAction(Training $training) {
 		// Check if author of training did not write an answer to create automatically answer for that person
 		// if training is guided, a SportCoach was leader who never participates the competition
 		if ($training->isGuided() == false) {
@@ -873,11 +866,10 @@ class TrainingController extends ActionController {
 			'correctedAnswers' => $correctedAnswers,
 			'break' => intval(ceil(count($answers)/2)),
 		]);
-		return $this->htmlResponse();
 	}
 
 
-	public function discountAction(): ResponseInterface {
+	public function discountAction() {
 		$finish = true;
 		$arguments = $this->request->getArguments();
 		foreach ($arguments['answer'] as $id => $value) {
@@ -892,32 +884,31 @@ class TrainingController extends ActionController {
 			}
 		}
 		if ($finish) {
-			return $this->redirect('finalize','Training','trainingsplatz',array('training' => $arguments['training']));
+			$this->redirect('finalize','Training','trainingsplatz',array('training' => $arguments['training']));
 		} else {
 			$this->addFlashMessage('Punkte für dieses Training wurden gespeichert');
-			return $this->redirect('evaluate');
+			$this->redirect('evaluate');
 		}
 	}
 
 
-	public function finalizeAction(Training $training): ResponseInterface {
+	public function finalizeAction(Training $training) {
 		$this->view->assign('training', $training);
-		return $this->htmlResponse();
 	}
 
 
-	public function closeAction(Training $training): ResponseInterface {
+	public function closeAction(Training $training) {
 		$training->setClosed(true);
 		$this->trainingRepository->update($training);
 		$this->addFlashMessage('Training wurde abgeschlossen');
-		return $this->redirect('evaluate');
+		$this->redirect('evaluate');
 	}
 
 
 	/**
 	 * action ranking (Sportler des Jahres, all members)
 	 */
-	public function rankingAction(): ResponseInterface {
+	public function rankingAction() {
 		if ($this->request->hasArgument('year')) {
 			$year = intval($this->request->getArgument('year'));
 			if ($year < 2016 or $year > date('Y')) {
@@ -971,13 +962,12 @@ class TrainingController extends ActionController {
 			'extra' => $extra,
 			'navigation' => $navigation,
 		]);
-		return $this->htmlResponse();
 	}
 
 	/**
 	 * action userCompetition (Sportler des Jahres, single member)
 	 */
-	public function userCompetitionAction(): ResponseInterface {
+	public function userCompetitionAction() {
 		$dates = $this->getRankingDateRange();
 		$feuserId = $GLOBALS['TSFE']->fe_user->user['uid'];
 		if ($feuserId > 0) {
@@ -994,11 +984,10 @@ class TrainingController extends ActionController {
 			'extra' => $extra,
 			'startDate' => $dates['start'],
 		]);
-		return $this->htmlResponse();
 	}
 
 
-	public function participationAction(): ResponseInterface {
+	public function participationAction() {
 		if ($this->request->hasArgument('year')) {
 			$year = $this->request->getArgument('year');
 		}
@@ -1039,11 +1028,10 @@ class TrainingController extends ActionController {
 			'ok' => $ok,
 			'navigation' => $navigation,
 		]);
-		return $this->htmlResponse();
 	}
 
 
-	public function userParticipationAction(): ResponseInterface {
+	public function userParticipationAction() {
 		$dates = $this->getRankingDateRange();
 		if ($this->request->hasArgument('user')) {
 			$userId = $this->request->getArgument('user');
@@ -1079,11 +1067,10 @@ class TrainingController extends ActionController {
 			'startDate' => $dates['start'],
 			'count' => $count,
 		]);
-		return $this->htmlResponse();
 	}
 
 
-	public function analysisAction(): ResponseInterface {
+	public function analysisAction() {
 		if ($this->request->hasArgument('year')) {
 			$year = $this->request->getArgument('year');
 		}
@@ -1104,11 +1091,10 @@ class TrainingController extends ActionController {
 			'year' => $year,
 			'navigation' => $navigation,
 		]);
-		return $this->htmlResponse();
 	}
 
 
-	public function reportsAction(): ResponseInterface {
+	public function reportsAction() {
 		if ($this->request->hasArgument('year')) {
 			$year = $this->request->getArgument('year');
 		}
@@ -1132,7 +1118,6 @@ class TrainingController extends ActionController {
 			'year' => $year,
 			'navigation' => $navigation,
 		]);
-		return $this->htmlResponse();
 	}
 
 
