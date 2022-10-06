@@ -1,31 +1,6 @@
 <?php
 namespace DW\Trainingsplatz\Controller;
 
-/***************************************************************
- *
- *  Copyright notice
- *
- *  (c) 2015
- *
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
-
 use In2code\Femanager\Domain\Repository\UserRepository;
 
 /**
@@ -33,64 +8,29 @@ use In2code\Femanager\Domain\Repository\UserRepository;
  */
 class UserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 
-	/**
-	 * userRepository
-	 *
-	 * @var UserRepository
-	 */
-	protected $userRepository;
+	private $userRepository;	
 	
-	/**
-	 * @param UserRepository $userRepository
-	 */
-	public function __construct (
-			UserRepository $userRepository
-	) {
+	public function __construct (UserRepository $userRepository) {
 		$this->userRepository = $userRepository;
 	}
 	
-	/**
-	 * action birthday
-	 *
-	 * @return void
-	 */
+
 	public function birthdayAction() {
 		$usergroups = explode (',', $this->settings['usergroups']);
 		$todayDate = new \DateTime ('now');
 		$tomorrowDate = new \DateTime ('tomorrow');
 		$todayUser = $this->userRepository->findBirthdayToday(0, $usergroups);
 		$tomorrowUser = $this->userRepository->findBirthdayToday(1, $usergroups);
-		$this->view->assignMultiple(array(
+		$this->view->assignMultiple([
 			'todayUser' => $todayUser,
 			'tomorrowUser' => $tomorrowUser,
 			'todayDate' => $todayDate,
 			'tomorrowDate' => $tomorrowDate,
 			'settings' => $this->settings,
-		));
+		]);
 	}
 
-	/**
-	 * action reactivation
-	 *
-	 * @return void
-	 */
-	public function reactivationAction() {
-		$userId = $GLOBALS['TSFE']->fe_user->user['uid'];
-		if ($userId) {
-			$feuser = $this->userRepository->findByUid($userId);
-		}
 
-		$this->view->assignMultiple(array(
-			'user' => $feuser,
-			'userId' => $userId,
-		));
-	}
-
-	/**
-	 * action message
-	 *
-	 * @return void
-	 */
 	public function messageAction() {
 		if ($this->request->hasArgument('member')) {
 			$memberId = intval($this->request->getArgument('member'));
@@ -101,18 +41,14 @@ class UserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 			$sent = intval($this->request->getArgument('sent'));
 		}
 		
-		$this->view->assignMultiple(array(
+		$this->view->assignMultiple([
 			'member' => $member,
 			'sent' => $sent,
 			'settings' => $this->settings,
-		));
+		]);
 	}
 
-	/**
-	 * action messageSend
-	 *
-	 * @return void
-	 */
+
 	public function messageSendAction() {
 		$arguments = $this->request->getArguments();
 		if ($arguments['member']) {

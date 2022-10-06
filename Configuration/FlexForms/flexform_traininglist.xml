@@ -1,0 +1,64 @@
+<T3DataStructure>
+	<meta>
+		<langDisable>1</langDisable>
+	</meta>
+	<sheets>
+		<sDEF>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>Settings</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<settings.format>
+						<TCEforms>
+							<label>Format for training items</label>
+							<config>
+								<type>select</type>
+								<renderType>selectSingle</renderType>
+								<items type="array">
+									<numIndex index="1" type="array">
+										<numIndex index="0">Complete information</numIndex>
+										<numIndex index="1">0</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">Compact format</numIndex>
+										<numIndex index="1">1</numIndex>
+									</numIndex>
+								</items>
+							</config>
+						</TCEforms>
+					</settings.format>
+					<settings.limitation>
+						<TCEforms>
+							<label>Max. number of items to be shown (0 = all)</label>
+							<config>
+								<type>input</type>
+								<size>5</size>
+								<eval>int</eval>
+							</config>
+						</TCEforms>
+					</settings.limitation>
+					<settings.includeCancelled>
+						<TCEforms>
+							<label>Include cancelled trainings</label>
+							<config>
+								<type>check</type>
+								<renderType>checkboxToggle</renderType>
+							</config>
+						</TCEforms>
+					</settings.includeCancelled>
+					<settings.showNavigation>
+						<TCEforms>
+							<label>Show navigation</label>
+							<config>
+								<type>check</type>
+								<renderType>checkboxToggle</renderType>
+							</config>
+						</TCEforms>
+					</settings.showNavigation>
+				</el>
+			</ROOT>
+		</sDEF>
+	</sheets>
+</T3DataStructure>

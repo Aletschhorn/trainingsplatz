@@ -1,0 +1,24 @@
+{namespace tp=DW\Trainingsplatz\ViewHelpers}
+
+<table class="table" >
+    <f:for each="{trainings}" as="training">
+        <tr>
+            <td style="width:150px">
+                <f:render partial="Training/Icons" arguments="{training:training}" />
+            </td>
+            <td>
+                <f:if condition="{training.cancelled}">
+                    <f:then>
+                        <f:link.action action="show" pluginName="TrainingList" pageUid="{settings.singlePid}" arguments="{training:training}"><div class="lead" style="margin-bottom:10px">ABGESAGT: {training.title}</div></f:link.action>
+                    </f:then>
+                    <f:else>
+                        <f:link.action action="show" pluginName="TrainingList" pageUid="{settings.singlePid}" arguments="{training:training}"><div class="lead" style="margin-bottom:10px">{training.title}</div></f:link.action><tp:objectAccess haystack="{answers}" needle="{training.uid}" /> Teilnehmer
+                    </f:else>
+                </f:if>					
+            </td>
+            <td class="text-right hidden-xs">
+                <f:render partial="Training/Avatar" arguments="{training:training,style:'margin-left:20px',settings:settings}" />
+            </td>
+        </tr>
+    </f:for>
+</table>

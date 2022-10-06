@@ -5,23 +5,46 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 call_user_func(
     function () {
+		ExtensionUtility::registerPlugin(
+			'trainingsplatz',
+			'TrainingList',
+			'Training List'
+		);
 
 		ExtensionUtility::registerPlugin(
 			'trainingsplatz',
-			'Tp',
-			'Trainingsplatz'
+			'TrainingEvaluation',
+			'Training Evaluation'
 		);
-		
+
 		ExtensionUtility::registerPlugin(
 			'trainingsplatz',
-			'Tpadmin',
+			'TrainingParticipation',
+			'Training Participation'
+		);
+
+		ExtensionUtility::registerPlugin(
+			'trainingsplatz',
+			'TrainingParticipationUser',
+			'Training Participation User View'
+		);
+
+		ExtensionUtility::registerPlugin(
+			'trainingsplatz',
+			'CompetitionRanking',
+			'Competition Ranking'
+		);
+
+		ExtensionUtility::registerPlugin(
+			'trainingsplatz',
+			'CompetitionUser',
+			'Competition User View'
+		);
+
+		ExtensionUtility::registerPlugin(
+			'trainingsplatz',
+			'Admin',
 			'Trainingsplatz Admin Tools'
-		);
-		
-		ExtensionUtility::registerPlugin(
-			'trainingsplatz',
-			'Map',
-			'Route Maps'
 		);
 		
 		ExtensionUtility::registerPlugin(
@@ -32,22 +55,22 @@ call_user_func(
 		
 		ExtensionUtility::registerPlugin(
 			'trainingsplatz',
-			'User',
-			'fs.ch User Functions'
+			'Birthday',
+			'Member Birthdays'
 		);
 		
+		ExtensionUtility::registerPlugin(
+			'trainingsplatz',
+			'Messaging',
+			'Member Messaging'
+		);
 		
-		// register flexform
-		$pluginSignature = 'trainingsplatz_tp'; 
-		$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'select_key'; 
-		$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
-		ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:trainingsplatz/Configuration/FlexForms/Training.xml'); 
-		
-		$pluginSignature = 'trainingsplatz_user';
-		$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'select_key'; 
-		$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
-		ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:trainingsplatz/Configuration/FlexForms/User.xml'); 
-
+		// register flexforms
+		foreach (['traininglist', 'competitionranking', 'birthday'] as $plugin) {
+			$pluginSignature = 'trainingsplatz_'.$plugin;
+			$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
+			ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:trainingsplatz/Configuration/FlexForms/flexform_'.$plugin.'.xml'); 
+		}
     }
 );
 ?>

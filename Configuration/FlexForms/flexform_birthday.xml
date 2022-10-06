@@ -1,0 +1,29 @@
+<T3DataStructure>
+	<meta>
+		<langDisable>1</langDisable>
+	</meta>
+	<sheets>
+		<sDEF>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>Settings</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<settings.usergroups>
+						<TCEforms>
+							<label>Included usergroups</label>
+							<config>
+								<type>select</type>
+								<renderType>selectMultipleSideBySide</renderType>
+								<foreign_table>fe_groups</foreign_table>
+								<minitems>1</minitems>
+								<maxitems>100</maxitems>
+							</config>
+						</TCEforms>
+					</settings.usergroups>
+				</el>
+			</ROOT>
+		</sDEF>
+	</sheets>
+</T3DataStructure>

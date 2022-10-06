@@ -21,10 +21,10 @@ $EM_CONF[$_EXTKEY] = [
 	'uploadfolder' => '0',
 	'createDirs' => '',
 	'clearCacheOnLoad' => 0,
-	'version' => '3.4.1',
+	'version' => '3.5.0',
 	'constraints' => [
 		'depends' => [
-			'typo3' => '9.5.0-11.5.99',
+			'typo3' => '10.4.0-11.5.99',
 		],
 		'conflicts' => [
 		],
@@ -197,5 +197,11 @@ $EM_CONF[$_EXTKEY] = [
  * Version 3.4.1
  * -------------
  * Re-enabled usage of flexforms
+ *
+ * Version 3.5.0
+ * -------------
+ * Get rid of switchable actions in plugin flexforms
+ * Get rid of cache clearing in extension (to be done with PageTS instead)
+ * Tidying up controller files
  *
 **/

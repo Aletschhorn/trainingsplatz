@@ -25,21 +25,21 @@ use GeorgRinger\News\Domain\Repository\NewsRepository;
  */
 class TrainingController extends ActionController {
 
-	protected $trainingRepository;
+	private $trainingRepository;
 
-	protected $answerRepository;
+	private $answerRepository;
 
-	protected $sportRepository;
+	private $sportRepository;
 	
-	protected $intensityRepository;
+	private $intensityRepository;
 
-	protected $mapRepository;
+	private $mapRepository;
 	
-	protected $infomailRepository;
+	private $infomailRepository;
 	
-	protected $userRepository;
+	private $userRepository;
 	
-    protected $newsRepository;
+    private $newsRepository;
 	
 	protected $timezone;
 
@@ -65,36 +65,10 @@ class TrainingController extends ActionController {
 	}
 	
 
-	public function shortAction() {
-		$limit = intval($this->settings['limitation']);
-		if ($this->request->hasArgument('filter')) { 
-			$filter = intval($this->request->getArgument('filter')); 
-		} else {
-			$filter = 0;
-		}
-		$GLOBALS['TSFE']->fe_user->setKey('ses','tpFilter',$filter);
-		if ($filter > 0) {
-			$trainings = $this->trainingRepository->findFutureFiltered($filter, $limit, 0);
-		} else {
-			$trainings = $this->trainingRepository->findFuture($limit, 0);
-		}
-		$answers = array ();
-		foreach ($trainings as $training) {
-			$answers[$training->getUid()] = $this->answerRepository->findPerTrainingCorrected($training);
-		}
-		$sports = $this->sportRepository->findAll();
-		$this->view->assignMultiple([
-			'trainings' => $trainings,
-			'answers' => $answers,
-			'sports' => $sports,
-			'filter' => $filter,
-			'limit' => $limit,
-			'settings' => $this->settings,
-		]);
-	}
-
-
 	public function listAction() {
+		$limit = intval($this->settings['limitation']);
+		$includeCancelled = intval($this->settings['includeCancelled']);
+
 		if ($this->request->hasArgument('filter')) { 
 			$filter = intval($this->request->getArgument('filter')); 
 		} else {
@@ -102,14 +76,16 @@ class TrainingController extends ActionController {
 		}
 		$GLOBALS['TSFE']->fe_user->setKey('ses','tpFilter',$filter);
 		if ($filter > 0) {
-			$trainings = $this->trainingRepository->findFutureFiltered($filter);
+			$trainings = $this->trainingRepository->findFutureFiltered($filter, $limit, $includeCancelled);
 		} else {
-			$trainings = $this->trainingRepository->findFuture();
+			$trainings = $this->trainingRepository->findFuture($limit, $includeCancelled);
 		}
-		$answers = array ();
+
+		$answers = [];
 		foreach ($trainings as $training) {
 			$answers[$training->getUid()] = $this->answerRepository->findPerTrainingCorrected($training);
 		}
+
 		$this->view->assignMultiple([
 			'trainings' => $trainings,
 			'answers' => $answers,
@@ -283,7 +259,7 @@ class TrainingController extends ActionController {
 	/**
 	 * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("training")	 
 	 */
-	public function editAction(Training $training, int $step=2): ResponseInterface {
+	public function editAction(Training $training, int $step=2) {
 		if ($step >= 3) {
 			$js = '<script src="//maps.googleapis.com/maps/api/js?key='.$this->settings['googleMapsKey'].'" type="text/javascript"></script>'.chr(10).
 			'<script src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/elabel.js" type="text/javascript"></script>'.chr(10).
@@ -1005,9 +981,11 @@ class TrainingController extends ActionController {
 			if ($comp->getTraining()->isGuided() and $comp->getTraining()->getLeader()) {
 				$user = $comp->getTraining()->getLeader();
 			}
-			$results[$user->getUid()]['user'] = $user;
-			$results[$user->getUid()]['trainings'][] = $comp->getTraining();
-			$results[$user->getUid()]['answers'][] = $comp;
+			if ($user) {
+				$results[$user->getUid()]['user'] = $user;
+				$results[$user->getUid()]['trainings'][] = $comp->getTraining();
+				$results[$user->getUid()]['answers'][] = $comp;
+			}
 		}
 		if ($results) {
 			foreach ($results as $uid => $result) {
