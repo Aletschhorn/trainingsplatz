@@ -3,27 +3,14 @@ namespace DW\Trainingsplatz\Controller;
 
 use DW\Trainingsplatz\Domain\Repository\MotivationRepository;
 use DW\Trainingsplatz\Domain\Repository\SportRepository;
+use In2code\Femanager\Domain\Model\User;
 
 class NewController extends \In2code\Femanager\Controller\NewController {
 
-	/**
-	 * motivationRepository
-	 *
-	 * @var MotivationRepository
-	 */
 	protected $motivationRepository;
 	
-	/**
-	 * sportRepository
-	 *
-	 * @var SportRepository
-	 */
 	protected $sportRepository;
 	
-	/**
-	 * @param MotivationRepository $motivationRepository
-	 * @param SportRepository $sportRepository
-	 */
 	public function __construct (
 			MotivationRepository $motivationRepository,
 			SportRepository $sportRepository
@@ -36,10 +23,8 @@ class NewController extends \In2code\Femanager\Controller\NewController {
     /**
      * action new
      *
-	 * @param In2code\Femanager\Domain\Model\User $user
-     * @return void
      */
-    public function newAction($user = NULL) {
+    public function newAction(User $user = NULL): ResponseInterface {
 		$motivations = $this->motivationRepository->findAll();
 		$this->view->assign('motivations', $motivations);
 		parent::newAction();
@@ -48,7 +33,6 @@ class NewController extends \In2code\Femanager\Controller\NewController {
 	/**
 	* action initializeCreate
 	*
-	* @return void
 	*/
 	public function initializeCreateAction() {
         $userValues = $this->request->getArgument('user');
@@ -73,12 +57,11 @@ class NewController extends \In2code\Femanager\Controller\NewController {
 	/**
 	* action create
 	*
-    * @param In2code\Femanager\Domain\Model\User $user
     * @TYPO3\CMS\Extbase\Annotation\Validate("In2code\Femanager\Domain\Validator\ServersideValidator", param="user")
     * @TYPO3\CMS\Extbase\Annotation\Validate("In2code\Femanager\Domain\Validator\PasswordValidator", param="user")
 	* @return void
 	*/
-	public function createAction($user): void {
+	public function createAction(User $user) {
 		// Default values
 		$user->setTxTrainingsplatzInfomail(1);
 		$user->setTxTrainingsplatzNewsletter(1);
