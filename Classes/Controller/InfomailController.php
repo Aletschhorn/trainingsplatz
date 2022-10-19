@@ -14,9 +14,9 @@ use In2code\Femanager\Domain\Repository\UserRepository;
 
 class InfomailController extends ActionController {
 
-	protected $infomailRepository;
+	private $infomailRepository;
 
-	protected $userRepository;
+	private $userRepository;
 	
 	public function __construct (
 			InfomailRepository $infomailRepository,
@@ -27,7 +27,7 @@ class InfomailController extends ActionController {
 	}
 	
 
-	public function listAction() {
+	public function listAction(): ResponseInterface {
 		$pending = $this->infomailRepository->findFutureByStatus(0);
 		$sent = $this->infomailRepository->findFutureByStatus(1);
 		$queued = $this->infomailRepository->findFutureByStatus(3);
@@ -38,26 +38,29 @@ class InfomailController extends ActionController {
 			'queued' => $queued,
 			'inprogress' => $inprogress,
 		]);
+		return $this->htmlResponse();
 	}
 
 
-	public function showAction(Infomail $infomail) {
+	public function showAction(Infomail $infomail): ResponseInterface {
 		$js = '<script src="//maps.googleapis.com/maps/api/js?key='.$this->settings['googleMapsKey'].'" type="text/javascript"></script>'.chr(10).'<script src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/elabel.js" type="text/javascript"></script>'.chr(10).'<script type="text/javascript">'.chr(10).'var streckenfarbe = \''.$this->settings['routeColor'].'\'; '.chr(10).'var streckenbreite = '.$this->settings['routeWidth'].'; '.chr(10).'var tpicon = new GIcon(); '.chr(10).'tpicon.image = \''.$this->settings['meetingpointIcon'].'\'; '.chr(10).'tpicon.iconSize = new GSize('.$this->settings['meetingpointIconSize'].'); '.chr(10).'tpicon.iconAnchor = new GPoint('.$this->settings['meetingpointIconAnchor'].'); '.chr(10).'</script>'.chr(10).'<script type="text/javascript" src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/mapcontrol_newtraining.js"></script>';
 	    $this->response->addAdditionalHeaderData($js);
 
 		$this->view->assign('infomail', $infomail);
+		return $this->htmlResponse();
 	}
 
 
-	public function reviewAction(Infomail $infomail) {
+	public function reviewAction(Infomail $infomail): ResponseInterface {
 		$js = '<script src="//maps.googleapis.com/maps/api/js?key='.$this->settings['googleMapsKey'].'" type="text/javascript"></script>'.chr(10).'<script src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/elabel.js" type="text/javascript"></script>'.chr(10).'<script type="text/javascript">'.chr(10).'var streckenfarbe = \''.$this->settings['routeColor'].'\'; '.chr(10).'var streckenbreite = '.$this->settings['routeWidth'].'; '.chr(10).'var tpicon = new GIcon(); '.chr(10).'tpicon.image = \''.$this->settings['meetingpointIcon'].'\'; '.chr(10).'tpicon.iconSize = new GSize('.$this->settings['meetingpointIconSize'].'); '.chr(10).'tpicon.iconAnchor = new GPoint('.$this->settings['meetingpointIconAnchor'].'); '.chr(10).'</script>'.chr(10).'<script type="text/javascript" src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/mapcontrol_newtraining.js"></script>';
 	    $this->response->addAdditionalHeaderData($js);
 
 		$this->view->assign('infomail', $infomail);
+		return $this->htmlResponse();
 	}
 
 
-	public function copyAction(Infomail $infomail) {
+	public function copyAction(Infomail $infomail): ResponseInterface {
 		$senduser = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
 		if ($senduser) {
 			if (in_array($this->settings['usergroupAdmin'], self::getUsergroupArray($senduser))) {
@@ -80,7 +83,7 @@ class InfomailController extends ActionController {
 	}
 
 
-	public function sendAction(Infomail $infomail) {
+	public function sendAction(Infomail $infomail): ResponseInterface {
 		$senduser = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
 		if ($senduser) {
 			if (in_array($this->settings['usergroupAdmin'], self::getUsergroupArray($senduser))) {
@@ -98,12 +101,12 @@ class InfomailController extends ActionController {
 	}
 
 
-	public function deleteAction(Infomail $infomail) {
+	public function deleteAction(Infomail $infomail): ResponseInterface {
 		$this->redirect('list');
 	}
 
 
-	public function denyAction(Infomail $infomail) {
+	public function denyAction(Infomail $infomail): ResponseInterface {
 		$senduser = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
 		if ($senduser) {
 			if (in_array($this->settings['usergroupAdmin'], self::getUsergroupArray($senduser))) {
@@ -120,7 +123,7 @@ class InfomailController extends ActionController {
 	}
 
 
-	public function cancelAction(Infomail $infomail) {
+	public function cancelAction(Infomail $infomail): ResponseInterface {
 		$senduser = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
 		if ($senduser) {
 			if (in_array($this->settings['usergroupAdmin'], self::getUsergroupArray($senduser))) {
