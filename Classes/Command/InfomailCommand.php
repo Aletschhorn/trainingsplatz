@@ -9,7 +9,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use DW\Trainingsplatz\Domain\Repository\InfomailRepository;
 use In2code\Femanager\Domain\Repository\UserRepository;
@@ -18,6 +17,19 @@ use In2code\Femanager\Domain\Repository\UserRepository;
  * InfomailCommand
  */
 class InfomailCommand extends Command {
+	
+	
+	private ?InfomailRepository $infomailRepository = NULL;
+	private ?UserRepository $userRepository = NULL;
+
+    public function injectInfomailRepository(InfomailRepository $infomailRepository) {
+        $this->infomailRepository = $infomailRepository;
+    }
+	
+    public function injectUserRepository(UserRepository $userRepository) {
+        $this->userRepository = $userRepository;
+    }
+	 
 
     /**
      * Configure the command
@@ -36,11 +48,6 @@ class InfomailCommand extends Command {
      * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output) {
-
-		$persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
-		$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-		$infomailRepository = $objectManager->get(InfomailRepository::class);
-		$userRepository = $objectManager->get(UserRepository::class);
 		$limit = intval($input->getArgument('limit'));
 		$suppressMails = intval($input->getArgument('suppress'));
 		if ($limit == 0) {
@@ -48,7 +55,7 @@ class InfomailCommand extends Command {
 		}
 		$UTC = new \DateTimeZone('UTC');
 		
-		$infomail = $infomailRepository->findFutureByStatus(4)->getFirst();
+		$infomail = $this->infomailRepository->findFutureByStatus(4)->getFirst();
 		if ($infomail) {
 			$mail = GeneralUtility::makeInstance(MailMessage::class);
 			$mail->from(new Address('info@freizeitsportler.ch', 'freizeitsportler.ch'));
@@ -56,7 +63,7 @@ class InfomailCommand extends Command {
 			$mail->text($infomail->getMailBody());
 			$mail->html('<div style="font-family:sans-serif">'.str_replace(chr(10),'<br />',$infomail->getMailBody()).'</div>');
 			$received = $infomail->getSendReceiver();
-			$recipients = $userRepository->findInfomailSlice($limit, $received);
+			$recipients = $this->userRepository->findInfomailSlice($limit, $received);
 			$newReceived = $received + $recipients->count();
 			$infomail->setSendReceiver($newReceived);
 			if ($recipients->count() < $limit) {
@@ -65,7 +72,7 @@ class InfomailCommand extends Command {
 				$infomail->setStatusDate($now);
 				$infomail->setStatus(1);
 			}
-			$infomailRepository->update($infomail);
+			$this->infomailRepository->update($infomail);
 			$persistenceManager->persistAll();
 			
 			$counter = 0;
@@ -84,14 +91,14 @@ class InfomailCommand extends Command {
 			}
 			
 		} else {
-			$infomail = $infomailRepository->findFutureByStatus(3)->getFirst();
+			$infomail = $this->infomailRepository->findFutureByStatus(3)->getFirst();
 			if ($infomail) {
 				$mail = GeneralUtility::makeInstance(MailMessage::class);
 				$mail->from(new Address('info@freizeitsportler.ch', 'freizeitsportler.ch'));
 				$mail->subject($infomail->getMailSubject());
 				$mail->text($infomail->getMailBody());
 				$mail->html('<div style="font-family:sans-serif">'.str_replace(chr(10),'<br />',$infomail->getMailBody()).'</div>');
-				$recipients = $userRepository->findInfomailSlice($limit, 0);
+				$recipients = $this->userRepository->findInfomailSlice($limit, 0);
 				$newReceived = $received + $recipients->count();
 				$infomail->setSendReceiver($newReceived);
 				$infomail->setStatus(4);
@@ -101,7 +108,7 @@ class InfomailCommand extends Command {
 					$infomail->setStatusDate($now);
 					$infomail->setStatus(1);
 				}
-				$infomailRepository->update($infomail);
+				$this->infomailRepository->update($infomail);
 				$persistenceManager->persistAll();
 				
 				if ($suppressMails) {
