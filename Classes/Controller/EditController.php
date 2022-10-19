@@ -1,6 +1,7 @@
 <?php
 namespace DW\Trainingsplatz\Controller;
 
+use Psr\Http\Message\ResponseInterface;
 use DW\Trainingsplatz\Domain\Repository\MotivationRepository;
 use DW\Trainingsplatz\Domain\Repository\SportRepository;
 use In2code\Femanager\Domain\Model\User;
@@ -10,7 +11,6 @@ class EditController extends \In2code\Femanager\Controller\EditController {
     /**
      * action edit
      *
-     * @return void
      */
     public function editAction(): ResponseInterface {
 		$motivationRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(MotivationRepository::class);
@@ -22,7 +22,6 @@ class EditController extends \In2code\Femanager\Controller\EditController {
 	/**
 	* action initializeUpdate
 	*
-	* @return void
 	*/
 	public function initializeUpdateAction() {
         $userValues = $this->request->getArgument('user');
@@ -73,4 +72,3 @@ class EditController extends \In2code\Femanager\Controller\EditController {
     }
 
 }
-?>

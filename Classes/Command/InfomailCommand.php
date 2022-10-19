@@ -15,7 +15,7 @@ use DW\Trainingsplatz\Domain\Repository\InfomailRepository;
 use In2code\Femanager\Domain\Repository\UserRepository;
 
 /**
- * InfomailCommandController
+ * InfomailCommand
  */
 class InfomailCommand extends Command {
 

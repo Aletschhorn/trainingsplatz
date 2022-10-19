@@ -1,6 +1,7 @@
 <?php
 namespace DW\Trainingsplatz\Controller;
 
+use Psr\Http\Message\ResponseInterface;
 use DW\Trainingsplatz\Domain\Repository\MotivationRepository;
 use DW\Trainingsplatz\Domain\Repository\SportRepository;
 use In2code\Femanager\Domain\Model\User;
