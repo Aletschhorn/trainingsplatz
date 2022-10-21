@@ -79,24 +79,6 @@ defined('TYPO3') or die();
 	
 	
 	// Overwrite object classes to extend femanager fields
-	$extbaseObjectContainer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class);
-	$extbaseObjectContainer->registerImplementation(
-		\In2code\Femanager\Controller\NewController::class,
-		\DW\Trainingsplatz\Controller\NewController::class
-	);
-	$extbaseObjectContainer->registerImplementation(
-		\In2code\Femanager\Controller\EditController::class,
-		\DW\Trainingsplatz\Controller\EditController::class
-	);
-	$extbaseObjectContainer->registerImplementation(
-		\In2code\Femanager\Controller\EditInitController::class,
-		\DW\Trainingsplatz\Controller\EditInitController::class
-	);
-	$extbaseObjectContainer->registerImplementation(
-		\In2code\Femanager\Domain\Model\User::class,
-		\DW\Trainingsplatz\Domain\Model\User::class
-	);
-	
 	$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Controller\NewController::class] = ['className' => \DW\Trainingsplatz\Controller\NewController::class];
 	$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Controller\EditController::class] = ['className' => \DW\Trainingsplatz\Controller\EditController::class];
 	$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Controller\EditInitController::class] = ['className' => \DW\Trainingsplatz\Controller\EditInitController::class];
