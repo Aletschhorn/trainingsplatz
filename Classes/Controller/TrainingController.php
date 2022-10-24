@@ -414,7 +414,7 @@ class TrainingController extends ActionController {
 				} else { 
 					$trainer = $training->getAuthor(); 
 				}
-				$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Am '.$training->getTrainingDate()->format('j.m.y').' findet ein Training statt, das dich interessieren könnte:'.chr(10).chr(10).'Titel: '.$training->getTitle().chr(10).'Datum: '.$training->getTrainingDate()->format('j.m.y').chr(10).'Sportart: '.$training->getSport()->getTitle().chr(10).'Intensität: '.$training->getIntensity()->getTitle().chr(10).'Verantwortlich: '.$trainer->getName().chr(10).'Mehr Infos: https://www.freizeitsportler.ch/direkt/training/show/'.$training->getUid().chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch'.chr(10).chr(10).'----------'.chr(10).'Das ist ein automatisch generiertes E-Mail. Bitte nicht darauf antworten.';
+				$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Am '.$training->getTrainingDate()->format('j.m.y').' findet ein Training statt, das dich interessieren könnte:'.chr(10).chr(10).'Titel: '.$training->getTitle().chr(10).'Datum: '.$training->getTrainingDate()->format('j.m.y').chr(10).'Sportart: '.$training->getSport()->getTitle().chr(10).'Intensität: '.$training->getIntensity()->getTitle().chr(10).'Verantwortlich: '.$trainer->getName().chr(10).'Mehr Infos: https://freizeitsportler.ch/direkt/training/show/'.$training->getUid().chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch'.chr(10).chr(10).'----------'.chr(10).'Das ist ein automatisch generiertes E-Mail. Bitte nicht darauf antworten.';
 				$existing = $this->infomailRepository->findPerTrainingAndStatus($training,0);
 				if (count($existing) == 0) {
 					$infomail = new \DW\Trainingsplatz\Domain\Model\Infomail();
