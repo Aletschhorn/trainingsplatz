@@ -588,7 +588,7 @@ class TrainingController extends ActionController {
 			'userAnswer' => $answer,
 			'correctedAnswers' => $correctedAnswers,
 		]);
-		$this->htmlResponse();
+		return $this->htmlResponse();
 	}
 
 
@@ -706,7 +706,7 @@ class TrainingController extends ActionController {
 
 	public function messageAction(Training $training): ResponseInterface {
 		$this->view->assign('training', $training);
-		$this->htmlResponse();
+		return $this->htmlResponse();
 	}
 
 

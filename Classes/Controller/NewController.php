@@ -29,6 +29,7 @@ class NewController extends \In2code\Femanager\Controller\NewController {
 		$motivations = $this->motivationRepository->findAll();
 		$this->view->assign('motivations', $motivations);
 		parent::newAction();
+		return $this->htmlResponse();
 	}
 
 	/**
@@ -48,11 +49,10 @@ class NewController extends \In2code\Femanager\Controller\NewController {
 			}
 			$this->pluginVariables['user']['txTrainingsplatzSports'] = $sum;
 		}
-		if ($this->arguments->hasArgument('user')) {
-			$user = $this->arguments['user'];
-			$user->setDataType(\In2code\Femanager\Domain\Model\User::class);
-		}
-		// parent::initializeCreateAction();
+//		if ($this->arguments->hasArgument('user')) {
+//			$user = $this->arguments['user'];
+//			$user->setDataType(\In2code\Femanager\Domain\Model\User::class);
+//		}
 	}
 
 	/**
@@ -70,6 +70,7 @@ class NewController extends \In2code\Femanager\Controller\NewController {
 		$user->setName($user->getFirstName().' '.$user->getLastName());
 		
 		parent::createAction($user);
+		return $this->htmlResponse();
 	}
 }
 ?>

@@ -83,6 +83,7 @@ defined('TYPO3') or die();
 	$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Controller\EditController::class] = ['className' => \DW\Trainingsplatz\Controller\EditController::class];
 	$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Controller\EditInitController::class] = ['className' => \DW\Trainingsplatz\Controller\EditInitController::class];
 	$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Domain\Model\User::class] = ['className' => \DW\Trainingsplatz\Domain\Model\User::class];
+	$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Domain\Repository\UserRepository::class] = ['className' => \DW\Trainingsplatz\Domain\Repository\UserRepository::class];
 	
 	// Register type converter
 	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerTypeConverter(\DW\Trainingsplatz\Property\TypeConverter\BitConverter::class);
