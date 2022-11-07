@@ -1222,9 +1222,10 @@ class TrainingController extends ActionController {
 					}
 				}
 			}
+			$timezone = new \DateTimeZone('UTC');
 			if (count($dates) > 0) {
 				foreach ($dates as $date) {
-					$list[] = new \DateTime (date('Y-m-d',$date), $this->timezone);
+					$list[] = new \DateTime (date('Y-m-d',$date), $timezone);
 				}
 				return $list;
 			} else {

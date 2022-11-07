@@ -355,12 +355,10 @@ return array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_training.series_start',
 			'config' => array(
-				'dbType' => 'datetime',
 				'type' => 'input',
-				'size' => 12,
-				'eval' => 'datetime',
-				'checkbox' => 0,
-				'default' => '0000-00-00 00:00:00'
+				'dbType' => 'date',
+				'renderType' => 'inputDateTime',
+				'eval' => 'date,int',
 			),
 		),
 		'series_end' => array(
@@ -368,12 +366,10 @@ return array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_training.series_end',
 			'config' => array(
-				'dbType' => 'datetime',
 				'type' => 'input',
-				'size' => 12,
-				'eval' => 'datetime',
-				'checkbox' => 0,
-				'default' => '0000-00-00 00:00:00'
+				'dbType' => 'date',
+				'renderType' => 'inputDateTime',
+				'eval' => 'date,int',
 			),
 		),
 		'series_period' => array(
