@@ -583,7 +583,6 @@ class TrainingController extends ActionController {
 			'userAnswer' => $answer,
 			'correctedAnswers' => $correctedAnswers,
 		]);
-		$this->htmlResponse();
 	}
 
 
@@ -701,7 +700,6 @@ class TrainingController extends ActionController {
 
 	public function messageAction(Training $training) {
 		$this->view->assign('training', $training);
-		$this->htmlResponse();
 	}
 
 
