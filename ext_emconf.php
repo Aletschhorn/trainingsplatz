@@ -21,7 +21,7 @@ $EM_CONF[$_EXTKEY] = [
 	'uploadfolder' => '0',
 	'createDirs' => '',
 	'clearCacheOnLoad' => 0,
-	'version' => '3.5.3',
+	'version' => '3.5.4',
 	'constraints' => [
 		'depends' => [
 			'typo3' => '10.4.0-11.5.99',
@@ -215,5 +215,9 @@ $EM_CONF[$_EXTKEY] = [
  * Version 3.5.3
  * -------------
  * Corrected trainings dates of a series
+ *
+ * Version 3.5.4
+ * -------------
+ * Deleted twice "return htmlResponse" from TrainingController
  *
 **/
