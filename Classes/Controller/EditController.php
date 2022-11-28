@@ -17,6 +17,7 @@ class EditController extends \In2code\Femanager\Controller\EditController {
 		$motivations = $motivationRepository->findAll();
 		$this->view->assign('motivations', $motivations);
 		parent::editAction();
+		return $this->htmlResponse();
 	}
 
 	/**
