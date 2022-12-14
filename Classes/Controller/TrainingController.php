@@ -885,7 +885,7 @@ class TrainingController extends ActionController {
 	public function rankingAction() {
 		if ($this->request->hasArgument('year')) {
 			$year = intval($this->request->getArgument('year'));
-			if ($year < 2016 or $year > date('Y')) {
+			if ($year < 2016 or $year > date('Y')+1) {
 				$year = NULL;
 			}
 		}
@@ -924,6 +924,9 @@ class TrainingController extends ActionController {
 
 		for ($i=2016; $i<=date('Y'); $i++) {
 			$navigation[] = $i;
+		}
+		if (date('m') == 12) {
+			$navigation[] = date('Y')+1;
 		}
 
 		$this->view->assignMultiple([
@@ -965,11 +968,14 @@ class TrainingController extends ActionController {
 		if ($this->request->hasArgument('year')) {
 			$year = $this->request->getArgument('year');
 		}
-		if ($year < 2020 or $year > date('Y')) {
+		if ($year < 2020 or $year > date('Y')+1) {
 			$year = date('Y');
 		}
 		for ($i=2020; $i<=date('Y'); $i++) {
 			$navigation[] = $i;
+		}
+		if (date('m') == 12) {
+			$navigation[] = date('Y')+1;
 		}
 
 		$dates = $this->getRankingDateRange($year);
