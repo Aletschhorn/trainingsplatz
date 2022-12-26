@@ -36,7 +36,7 @@
 			</tr>
 			<f:for each="{list}" as="line">
 				<tr>
-					<td><f:link.action action="userParticipation" arguments="{user:line.user}">{line.user.name}</f:link.action></td>
+					<td><f:link.action action="userParticipation" arguments="{user:line.user,year:year}">{line.user.name}</f:link.action></td>
 					<td>{line.trainings->f:count()}</td>
 					<td>{line.answers->f:count()}</td>
 				</tr>

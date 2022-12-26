@@ -9,7 +9,14 @@
 	</f:for>
 </f:flashMessages>
 
-<h3>Statistische Auswertung der Trainings von {user.name} seit {startDate->f:format.date(format:'d.m.y')}</h3>
+<f:if condition="{endDate}">
+	<f:then>
+		<h3>Statistische Auswertung der Trainings von {user.name} zwischen {startDate->f:format.date(format:'d.m.Y')} und {endDate->f:format.date(format:'d.m.Y')}</h3>
+    </f:then>
+    <f:else>
+		<h3>Statistische Auswertung der Trainings von {user.name} seit {startDate->f:format.date(format:'d.m.Y')}</h3>
+    </f:else>
+</f:if>
 
 <f:if condition="{list}">
 	<f:then>

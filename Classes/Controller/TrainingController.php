@@ -1014,7 +1014,13 @@ class TrainingController extends ActionController {
 
 
 	public function userParticipationAction() {
-		$dates = $this->getRankingDateRange();
+		if ($this->request->hasArgument('year')) {
+			$year = $this->request->getArgument('year');
+		}
+		if ($year < 2020 or $year > date('Y')+1) {
+			$year = date('Y');
+		}
+		$dates = $this->getRankingDateRange($year);
 		if ($this->request->hasArgument('user')) {
 			$userId = $this->request->getArgument('user');
 			$user = $this->userRepository->findByUid($userId);
@@ -1047,6 +1053,7 @@ class TrainingController extends ActionController {
 			'user' => $user,
 			'list' => $list,
 			'startDate' => $dates['start'],
+			'endDate' => $dates['end'],
 			'count' => $count,
 		]);
 	}
