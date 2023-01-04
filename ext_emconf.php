@@ -220,4 +220,9 @@ $EM_CONF[$_EXTKEY] = [
  * -------------
  * Deleted twice "return htmlResponse" from TrainingController
  *
+ * Version 3.5.5
+ * -------------
+ * Corrections in user participation
+ * Correction of link creation for trainings answer cancellation link of non-members
+ *
 **/
