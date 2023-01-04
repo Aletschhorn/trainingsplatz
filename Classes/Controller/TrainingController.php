@@ -648,9 +648,8 @@ class TrainingController extends ActionController {
 							$answer->setHash($hash);
 							$this->answerRepository->update($answer);
 							$persistenceManager->persistAll();
-							$uriBuilder = $persistenceManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder::class);
 							$arguments = ['training' => $training->getUid(), 'answer' => $answer->getUid(), 'hash' => $hash];
-							$link = $uriBuilder->reset()->setTargetPageUid($this->settings['mainPid'])->setCreateAbsoluteUri(true)->uriFor('cancelPublicAnswer',$arguments);
+							$link = $this->uriBuilder->reset()->setTargetPageUid($this->settings['mainPid'])->setCreateAbsoluteUri(true)->uriFor('cancelPublicAnswer',$arguments);
 							
 							$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Um deine Teilnahme beim Training "'.$training->getTitle().'" vom '.$training->getTrainingDate()->format('j.m.y').' abzusagen, klicke bitte auf diesen Link:.'.chr(10).$link.chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch';
 
