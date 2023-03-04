@@ -51,7 +51,21 @@
 			<div class="form-group">
 				<label for="distance" class="col-sm-4 col-xs-3 control-label">darin</label>
 				<div class="col-sm-8 col-xs-9">
-					<f:form.select property="seriesPeriod" class="form-control" options="{0:'wöchentlich',1:'monatlich'}" additionalAttributes="{onchange: 'if(this.options[this.selectedIndex].value==0) {document.getElementById(\'seriesNumber\').options[0].selected=1;document.getElementById(\'seriesNumber\').disabled=1;} else {document.getElementById(\'seriesNumber\').disabled=0;}'}" />
+					<f:form.select property="seriesPeriod" class="form-control" options="{2:'täglich',0:'wöchentlich',1:'monatlich'}" additionalAttributes="{
+                    	onchange: '
+                        	if(this.options[this.selectedIndex].value==0) {
+        		                document.getElementById(\'seriesNumber\').disabled=1;
+                		        document.getElementById(\'seriesWeekday\').disabled=0;
+                            } else {
+                            	if(this.options[this.selectedIndex].value==1) {
+                                	document.getElementById(\'seriesNumber\').disabled=0;
+                                    document.getElementById(\'seriesWeekday\').disabled=0;
+                                } else {
+									document.getElementById(\'seriesNumber\').disabled=1;
+                                    document.getElementById(\'seriesWeekday\').disabled=1;
+                                }
+                            }
+                        '}" />
 				</div>
 			</div>
 		</div>
@@ -61,7 +75,7 @@
 			<div class="form-group">
 				<label for="distance" class="col-sm-4 col-xs-3 control-label">jeden</label>
 				<div class="col-sm-8 col-xs-9">
-					<f:if condition="{training.seriesPeriod}>0">
+					<f:if condition="{training.seriesPeriod}==1">
 						<f:then>
 							<f:form.select property="seriesNumber" id="seriesNumber" class="form-control" options="{0:'ersten',1:'zweiten',2:'dritten',3:'vierten',4:'letzten'}" />
 						</f:then>
@@ -78,7 +92,14 @@
 			<div class="form-group">
 				<label for="distance" class="col-sm-1"></label>
 				<div class="col-sm-10 col-xs-9">
-					<f:form.select property="seriesWeekday" class="form-control" options="{1:'Montag',2:'Dienstag',3:'Mittwoch',4:'Donnerstag',5:'Freitag',6:'Samstag',7:'Sonntag'}" />
+					<f:if condition="{training.seriesPeriod}<2">
+						<f:then>
+							<f:form.select property="seriesWeekday" id="seriesWeekday" class="form-control" options="{1:'Montag',2:'Dienstag',3:'Mittwoch',4:'Donnerstag',5:'Freitag',6:'Samstag',7:'Sonntag'}" />
+						</f:then>
+						<f:else>
+                            <f:form.select property="seriesWeekday" id="seriesWeekday" class="form-control"  disabled="disabled" options="{1:'Montag',2:'Dienstag',3:'Mittwoch',4:'Donnerstag',5:'Freitag',6:'Samstag',7:'Sonntag'}" />
+						</f:else>
+					</f:if>
 				</div>
 			</div>
 		</div>

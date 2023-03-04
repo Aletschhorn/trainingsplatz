@@ -1177,59 +1177,77 @@ class TrainingController extends ActionController {
 			if ($start <= $end) {
 				$wday = $training->getSeriesWeekday();
 				if ($wday > 6) { $wday = $wday-7; }
-				if ($training->getSeriesPeriod() == 0) {
-					// weekly dates
-					$dates[0] = $start;
-					while (date('w',$dates[0]) != $wday) {
-						$dates[0] = strtotime('+1 days', $dates[0]);
-					}
-					if ($dates[0] <= $end) {
-						$lastDate = $dates[0];
-						$newDate = strtotime('+1 weeks', $lastDate);
-						while ($newDate <= $end and count($dates) <= 25) {
-							$dates[] = $newDate;
-							$lastDate = $newDate;
+				switch ((int)$training->getSeriesPeriod()) {
+					case 0:
+						// weekly dates
+						$dates[0] = $start;
+						while (date('w',$dates[0]) != $wday) {
+							$dates[0] = strtotime('+1 days', $dates[0]);
+						}
+						if ($dates[0] <= $end) {
+							$lastDate = $dates[0];
 							$newDate = strtotime('+1 weeks', $lastDate);
+							while ($newDate <= $end and count($dates) <= 25) {
+								$dates[] = $newDate;
+								$lastDate = $newDate;
+								$newDate = strtotime('+1 weeks', $lastDate);
+							}
+						} else {
+							$dates = [];
 						}
-					} else {
-						$dates = [];
-					}
-				} else {
-					// monthly dates
-					$weekNo = $training->getSeriesNumber();
-					if ($weekNo < 0 or $weekNo > 4) { $weekNo = 0; }
-					if ($weekNo != 4) {
-						// first, second, third or fourth week per month, but not last week per month
-						$newDate = $start;
-						$minDay = $weekNo * 7 + 1;
-						$maxDay = ($weekNo+1) * 7;
-						while (date('w',$newDate) != $wday or date('j',$newDate) < $minDay or date('j',$newDate) > $maxDay) {
-							$newDate = strtotime('+1 days', $newDate);
-						}
-						while ($newDate <= $end and count($dates) <= 25) {
-							$dates[] = $newDate;
-							$newDate = strtotime('+4 weeks', $newDate);
-							if (date('j',$newDate) < $minDay or date('j',$newDate) > $maxDay) {
-								$newDate = strtotime('+1 weeks', $newDate);
+						break;
+					case 1:
+						// monthly dates
+						$weekNo = $training->getSeriesNumber();
+						if ($weekNo < 0 or $weekNo > 4) { $weekNo = 0; }
+						if ($weekNo != 4) {
+							// first, second, third or fourth week per month, but not last week per month
+							$newDate = $start;
+							$minDay = $weekNo * 7 + 1;
+							$maxDay = ($weekNo+1) * 7;
+							while (date('w',$newDate) != $wday or date('j',$newDate) < $minDay or date('j',$newDate) > $maxDay) {
+								$newDate = strtotime('+1 days', $newDate);
+							}
+							while ($newDate <= $end and count($dates) <= 24) {
+								$dates[] = $newDate;
+								$newDate = strtotime('+4 weeks', $newDate);
+								if (date('j',$newDate) < $minDay or date('j',$newDate) > $maxDay) {
+									$newDate = strtotime('+1 weeks', $newDate);
+								}
+							}
+						} else {
+							// last week per month
+							$newDate = $start;
+							$minDay = date('t',$newDate)-6;
+							while (date('w',$newDate) != $wday or date('j',$newDate) < $minDay) {
+								$newDate = strtotime('+1 days',$newDate);
+								$minDay = date('t',$newDate)-6;
+							}
+							while ($newDate <= $end and count($dates) <= 24) {
+								$dates[] = $newDate;
+								$newDate = strtotime ('+4 weeks', $newDate);
+								$minDay = date('t',$newDate)-6;
+								if (date('j',$newDate) < $minDay) {
+									$newDate = strtotime ('+1 weeks', $newDate);
+								}
 							}
 						}
-					} else {
-						// last week per month
-						$newDate = $start;
-						$minDay = date('t',$newDate)-6;
-						while (date('w',$newDate) != $wday or date('j',$newDate) < $minDay) {
-							$newDate = strtotime('+1 days',$newDate);
-							$minDay = date('t',$newDate)-6;
-						}
-						while ($newDate <= $end and count($dates) <= 25) {
-							$dates[] = $newDate;
-							$newDate = strtotime ('+4 weeks', $newDate);
-							$minDay = date('t',$newDate)-6;
-							if (date('j',$newDate) < $minDay) {
-								$newDate = strtotime ('+1 weeks', $newDate);
+						break;
+					case 2:
+						// daily dates
+						$dates[0] = $start;
+						if ($dates[0] <= $end) {
+							$lastDate = $dates[0];
+							$newDate = strtotime('+1 day', $lastDate);
+							while ($newDate <= $end and count($dates) <= 24) {
+								$dates[] = $newDate;
+								$lastDate = $newDate;
+								$newDate = strtotime('+1 day', $lastDate);
 							}
+						} else {
+							$dates = [];
 						}
-					}
+						break;
 				}
 			}
 			$timezone = new \DateTimeZone('UTC');
