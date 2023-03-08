@@ -21,7 +21,7 @@ $EM_CONF[$_EXTKEY] = [
 	'uploadfolder' => '0',
 	'createDirs' => '',
 	'clearCacheOnLoad' => 0,
-	'version' => '3.5.5',
+	'version' => '3.6.0',
 	'constraints' => [
 		'depends' => [
 			'typo3' => '10.4.0-11.5.99',
@@ -224,5 +224,9 @@ $EM_CONF[$_EXTKEY] = [
  * -------------
  * Corrections in user participation
  * Correction of link creation for trainings answer cancellation link of non-members
+ *
+ * Version 3.6.0
+ * -------------
+ * Use fluid-based e-mails
  *
 **/
