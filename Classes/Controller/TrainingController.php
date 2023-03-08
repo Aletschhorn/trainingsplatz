@@ -6,9 +6,15 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
+
+use Symfony\Component\Mime\Address;
+use TYPO3\CMS\Core\Mail\FluidEmail;
+use TYPO3\CMS\Core\Mail\Mailer;
+
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+
 use DW\Trainingsplatz\Domain\Repository\TrainingRepository;
 use DW\Trainingsplatz\Domain\Repository\AnswerRepository;
 use DW\Trainingsplatz\Domain\Repository\SportRepository;
@@ -414,7 +420,7 @@ class TrainingController extends ActionController {
 				} else { 
 					$trainer = $training->getAuthor(); 
 				}
-				$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Am '.$training->getTrainingDate()->format('j.m.y').' findet ein Training statt, das dich interessieren könnte:'.chr(10).chr(10).'Titel: '.$training->getTitle().chr(10).'Datum: '.$training->getTrainingDate()->format('j.m.y').chr(10).'Sportart: '.$training->getSport()->getTitle().chr(10).'Intensität: '.$training->getIntensity()->getTitle().chr(10).'Verantwortlich: '.$trainer->getName().chr(10).'Mehr Infos: https://freizeitsportler.ch/direkt/training/show/'.$training->getUid().chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch'.chr(10).chr(10).'----------'.chr(10).'Das ist ein automatisch generiertes E-Mail. Bitte nicht darauf antworten.';
+				$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Am '.$training->getTrainingDate()->format('j.m.Y').' findet ein Training statt, das dich interessieren könnte:'.chr(10).chr(10).'Titel: '.$training->getTitle().chr(10).'Datum: '.$training->getTrainingDate()->format('j.m.y').chr(10).'Sportart: '.$training->getSport()->getTitle().chr(10).'Intensität: '.$training->getIntensity()->getTitle().chr(10).'Verantwortlich: '.$trainer->getName().chr(10).'Mehr Infos: https://freizeitsportler.ch/direkt/training/show/'.$training->getUid().chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch';
 				$existing = $this->infomailRepository->findPerTrainingAndStatus($training,0);
 				if (count($existing) == 0) {
 					$infomail = new \DW\Trainingsplatz\Domain\Model\Infomail();
@@ -424,7 +430,7 @@ class TrainingController extends ActionController {
 					$new = false;
 				}
 				$infomail->setTraining($training);
-				$infomail->setMailSubject($training->getTitle().' am '.$training->getTrainingDate()->format('j.m.y'));
+				$infomail->setMailSubject($training->getTitle().' am '.$training->getTrainingDate()->format('j.m.Y'));
 				$infomail->setMailBody($mailtext);
 				if ($new) {
 					$infomail->setStatus(0);
@@ -436,14 +442,22 @@ class TrainingController extends ActionController {
 					
 				// Send notification to admins
 				if (! $this->settings['suppressMails']) {
-					$mailtext = 'Titel: '.$training->getTitle().chr(10).'Datum: '.$training->getTrainingDate()->format('j.m.y').chr(10).'Sportart: '.$training->getSport()->getTitle().chr(10).'Intensität: '.$training->getIntensity()->getTitle().chr(10).'Verantwortlich: '.$trainer->getName().chr(10).'InfoMail-Versand: https://www.freizeitsportler.ch/infomails'.chr(10).chr(10).'----------'.chr(10).'Das ist ein automatisch generiertes E-Mail. Bitte nicht darauf antworten.';
-					$mail = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Mail\MailMessage::class);
-					$mail->from(new \Symfony\Component\Mime\Address('notification@freizeitsportler.ch', 'freizeitsportler.ch'));
-					$mail->to(new \Symfony\Component\Mime\Address('infomailversand@freizeitsportler.ch', 'fs.ch-InfoMail'));
-					$mail->subject('Infomail für Training pendent');
-					$mail->text($mailtext);
-					$mail->html('<div style="font-family:sans-serif">'.str_replace(chr(10),'<br />',$mailtext).'</div>');
-					$mail->send();
+					$mailtext = 'Titel: '.$training->getTitle().chr(10).'Datum: '.$training->getTrainingDate()->format('j.m.Y').chr(10).'Sportart: '.$training->getSport()->getTitle().chr(10).'Intensität: '.$training->getIntensity()->getTitle().chr(10).'Verantwortlich: '.$trainer->getName().chr(10).'InfoMail-Versand: https://www.freizeitsportler.ch/infomails';
+					$mail = GeneralUtility::makeInstance(FluidEmail::class);
+					$mail
+						->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
+						->to(new Address('infomailversand@freizeitsportler.ch', 'fs.ch-InfoMail'))
+						->subject('Infomail für Training pendent')
+						->format(FluidEmail::FORMAT_BOTH)
+						->setTemplate('Training')
+						->assignMultiple([
+							'headline' => 'Infomail für Training pendent',
+							'content' => $mailtext,
+							'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
+							'note' => 'Dies ist eine automatisch erstellte Nachricht. Bitte nicht darauf antworten.'
+						]);
+					$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
+					$mailerInterface->send($mail);
 				}
 			}
 			$this->redirect('show','Training','trainingsplatz',array('training' => $training),$this->settings['mainPid']);
@@ -469,26 +483,34 @@ class TrainingController extends ActionController {
 			if (! $this->settings['suppressMails']) {
 				$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Das Training "'.$training->getTitle().'" vom '.$training->getTrainingDate()->format('j.m.y').' muss leider abgesagt werden.'.chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch';
 				$answers = $this->answerRepository->findPerTraining($training);
+				$subject = 'Training vom '.$training->getTrainingDate()->format('j.m.Y').' abgesagt';
 
-				$mail = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Mail\MailMessage::class);
-				$mail->from(new \Symfony\Component\Mime\Address('notification@freizeitsportler.ch', 'freizeitsportler.ch'));
-				$mail->subject('Training vom '.$training->getTrainingDate()->format('j.m.y').' abgesagt');
-				$mail->text($mailtext);
-				$mail->html('<div style="font-family:sans-serif">'.str_replace(chr(10),'<br />',$mailtext).'</div>');
+				$mail = GeneralUtility::makeInstance(FluidEmail::class);
+				$mail
+					->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
+					->to(new Address('infomailversand@freizeitsportler.ch', 'fs.ch-InfoMail'))
+					->subject($subject)
+					->format(FluidEmail::FORMAT_BOTH)
+					->setTemplate('Training')
+					->assignMultiple([
+						'headline' => $subject,
+						'content' => $mailtext,
+						'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
+						'note' => 'Dies ist eine automatisch erstellte Nachricht. Du erhältst sie, weil du dich für dieses Training eingeschrieben hast. Bitte nicht auf diese E-Mail antworten.'
+					]);
+				$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
+				$mailerInterface->send($mail);
 
-				$mail->to(new \Symfony\Component\Mime\Address('infomailversand@freizeitsportler.ch', 'fs.ch-InfoMail'));
-				$mail->send();
-	
 				foreach ($answers as $answer) {
 					if ($user = $answer->getFeuser()) {
 						if ($user->getEmail()) {
-							$mail->to(new \Symfony\Component\Mime\Address($user->getEmail(), $user->getName()));
-							$mail->send();
+							$mail->to(new Address($user->getEmail(), $user->getName()));
+							$mailerInterface->send($mail);
 						}
 					} else {
 						if ($answer->getEmail()) {
-							$mail->to(new \Symfony\Component\Mime\Address($answer->getEmail(), $answer->getAuthor()));
-							$mail->send();
+							$mail->to(new Address($answer->getEmail(), $answer->getAuthor()));
+							$mailerInterface->send($mail);
 						}
 					}
 				}
@@ -651,15 +673,25 @@ class TrainingController extends ActionController {
 							$arguments = ['training' => $training->getUid(), 'answer' => $answer->getUid(), 'hash' => $hash];
 							$link = $this->uriBuilder->reset()->setTargetPageUid($this->settings['mainPid'])->setCreateAbsoluteUri(true)->uriFor('cancelPublicAnswer',$arguments);
 							
-							$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Um deine Teilnahme beim Training "'.$training->getTitle().'" vom '.$training->getTrainingDate()->format('j.m.y').' abzusagen, klicke bitte auf diesen Link:.'.chr(10).$link.chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch';
+							$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Um deine Teilnahme beim Training "'.$training->getTitle().'" vom '.$training->getTrainingDate()->format('j.m.Y').' abzusagen, klicke bitte auf diesen Link:.'.chr(10).$link.chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch';
+							$subject = 'Deine Absage vom Training am '.$training->getTrainingDate()->format('j.m.Y');
 
-							$mail = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Mail\MailMessage::class);
-							$mail->from(new \Symfony\Component\Mime\Address('notification@freizeitsportler.ch', 'freizeitsportler.ch'));
-							$mail->to(new \Symfony\Component\Mime\Address($email));
-							$mail->subject('Deine Absage vom Training am '.$training->getTrainingDate()->format('j.m.y'));
-							$mail->text($mailtext);
-							$mail->html('<div style="font-family:sans-serif">'.str_replace(chr(10),'<br />',$mailtext).'</div>');
-							if ($mail->send()) {
+							$mail = GeneralUtility::makeInstance(FluidEmail::class);
+							$mail
+								->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
+								->to(new Address($email))
+								->subject($subject)
+								->format(FluidEmail::FORMAT_BOTH)
+								->setTemplate('Training')
+								->assignMultiple([
+									'headline' => $subject,
+									'content' => $mailtext,
+									'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
+									'note' => 'Dies ist eine automatisch erstellte Nachricht. Bitte nicht darauf antworten.'
+								]);
+							$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
+							$mailerInterface->send($mail);
+							if ($mailerInterface->send($mail)) {
 								$this->addFlashMessage('Der Abmelde-Link wurde dir per E-Mail zugesendet.', '', AbstractMessage::OK);
 							} else {
 								$this->addFlashMessage('Das Versenden des Anmelde-Link funktioniert aufgrund eines Fehlers nicht.<br />Bitte melde dich per E-Mail an <a href="mailto:info@freizeitsportler.ch">info@freizeitsportler.ch</a> bei uns.', '', AbstractMessage::ERROR);							
@@ -716,12 +748,20 @@ class TrainingController extends ActionController {
 					if (strlen($subject) > 0 and strlen($content) > 0) {
 
 						// send message
-						$mail = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Mail\MailMessage::class);
-						$mail->from(new \Symfony\Component\Mime\Address($user->getEmail(), $user->getName()));
-						$mail->subject($subject);
-						$content .= chr(10).chr(10).'----------'.chr(10).'Diese Nachricht wurde mittels Formular auf freizeitsportler.ch erfasst und automatisch an alle Teilnehmer des Trainings '.$training->getTitle().' am '.$training->getTrainingDate()->format('d.m.y').' versendet.';
-						$mail->text($content);
-						$mail->html('<div style="font-family:sans-serif">'.str_replace(chr(10),'<br />',$content).'</div>');
+						$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
+						$mail = GeneralUtility::makeInstance(FluidEmail::class);
+						$mail
+							->from(new Address('donotreply@freizeitsportler.ch', $user->getName().' über freizeitsportler.ch'))
+							->replyTo(new Address($user->getEmail(), $user->getName()))
+							->subject($subject)
+							->format(FluidEmail::FORMAT_BOTH)
+							->setTemplate('Training')
+							->assignMultiple([
+								'headline' => $subject,
+								'content' => $content,
+								'contentHtml' => str_replace(chr(10),'<br />',$content),
+								'note' => 'Diese Nachricht wurde mittels Formular auf freizeitsportler.ch erfasst und automatisch an alle Teilnehmer des Trainings "'.$training->getTitle().'" am '.$training->getTrainingDate()->format('d.m.Y').' versendet. Bitte nicht auf diese E-Mail antworten.'
+							]);
 				
 						if (! $this->settings['suppressMails']) {
 							$needCopyToUser = true;
@@ -750,32 +790,32 @@ class TrainingController extends ActionController {
 										$needCopyToCoach = false;
 									}
 									if ($recipient->getEmail()) {
-										$mail->to(new \Symfony\Component\Mime\Address($recipient->getEmail(), $recipient->getName()));
-										$mail->send();
+										$mail->to(new Address($recipient->getEmail(), $recipient->getName()));
+										$mailerInterface->send($mail);
 									}
 								} else {
 									if ($answer->getEmail()) {
-										$mail->to(new \Symfony\Component\Mime\Address($answer->getEmail(), $answer->getName()));
-										$mail->send();
+										$mail->to(new Address($answer->getEmail(), $answer->getName()));
+										$mailerInterface->send($mail);
 									}
 								}
 							}
 							if ($needCopyToUser) {
 								if ($user->getEmail()) {
-									$mail->to(new \Symfony\Component\Mime\Address($user->getEmail(), $user->getName()));
-									$mail->send();
+									$mail->to(new Address($user->getEmail(), $user->getName()));
+									$mailerInterface->send($mail);
 								}
 							}
 							if ($needCopyToAuthor) {								
 								if ($training->getAuthor()->getEmail()) {
-									$mail->to(new \Symfony\Component\Mime\Address($training->getAuthor()->getEmail(), $training->getAuthor()->getName()));
-									$mail->send();
+									$mail->to(new Address($training->getAuthor()->getEmail(), $training->getAuthor()->getName()));
+									$mailerInterface->send($mail);
 								}
 							}
 							if ($training->isGuided() and $needCopyToCoach) {								
 								if ($training->getLeader()->getEmail()) {
-									$mail->to(new \Symfony\Component\Mime\Address($training->getLeader()->getEmail(), $training->getLeader()->getName()));
-									$mail->send();
+									$mail->to(new Address($training->getLeader()->getEmail(), $training->getLeader()->getName()));
+									$mailerInterface->send($mail);
 								}
 							}							
 						}
@@ -1128,31 +1168,41 @@ class TrainingController extends ActionController {
 		} else {
 			$leader = $answer->getTraining()->getAuthor();
 		}
-		$mail = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Mail\MailMessage::class);
+		$mail = GeneralUtility::makeInstance(FluidEmail::class);
 		if ($mail and $leader->getEmail() and $reason>0 and $reason<=4) {
 			switch ($reason) {
 				case 1:
-					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).$writerName.' hat sich für dein Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.y').' angemeldet:'.chr(10).chr(10).$answer->getTitle().chr(10).$answer->getDescription().chr(10).chr(10).'----------'.chr(10).'Das ist ein automatisch generiertes E-Mail von www.freizeitsportler.ch. Bitte nicht darauf antworten.';
-					$mail->subject('Neuer Eintrag auf dein Training');
+					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).$writerName.' hat sich für dein Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.Y').' angemeldet:'.chr(10).chr(10).$answer->getTitle().chr(10).$answer->getDescription();
+					$subject = 'Neuer Eintrag auf dein Training';
 					break;
 				case 2:
-					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).$writerName.' hat den Eintrag für dein Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.y').' geändert:'.chr(10).chr(10).$answer->getTitle().chr(10).$answer->getDescription().chr(10).chr(10).'----------'.chr(10).'Das ist ein automatisch generiertes E-Mail von www.freizeitsportler.ch. Bitte nicht darauf antworten.';
-					$mail->subject('Eintrag in deinem Training geändert');
+					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).$writerName.' hat den Eintrag für dein Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.Y').' geändert:'.chr(10).chr(10).$answer->getTitle().chr(10).$answer->getDescription();
+					$subject = 'Eintrag in deinem Training geändert';
 					break;
 				case 3:
-					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).$writerName.' meldet sich von deinem Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.y').' ab.'.chr(10).chr(10).'----------'.chr(10).'Das ist ein automatisch generiertes E-Mail von www.freizeitsportler.ch. Bitte nicht darauf antworten.';
-					$mail->subject('Abmeldung von deinem Training');
+					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).$writerName.' meldet sich von deinem Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.Y').' ab.';
+					$subject = 'Abmeldung von deinem Training';
 					break;
 				case 4:
-					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).$writerName.' meldet sich für dein Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.y').' wieder an.'.chr(10).chr(10).'----------'.chr(10).'Das ist ein automatisch generiertes E-Mail von www.freizeitsportler.ch. Bitte nicht darauf antworten.';
-					$mail->subject('Erneute Anmeldung auf dein Training');
+					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).$writerName.' meldet sich für dein Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.Y').' wieder an.';
+					$subject = 'Erneute Anmeldung auf dein Training';
 					break;
 			}
-			$mail->text($mailtext);
-			$mail->html('<div style="font-family:sans-serif">'.str_replace(chr(10),'<br />',$mailtext).'</div>');
-			$mail->from(new \Symfony\Component\Mime\Address('notification@freizeitsportler.ch', 'freizeitsportler.ch'));
-			$mail->to(new \Symfony\Component\Mime\Address($leader->getEmail(), $leader->getName()));
-			return $mail->send();
+			$mail
+				->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
+				->to(new Address($leader->getEmail(), $leader->getName()))
+				->format(FluidEmail::FORMAT_BOTH)
+				->subject($subject)
+				->setTemplate('Training')
+				->assignMultiple([
+					'headline' => $subject,
+					'content' => $mailtext,
+					'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
+					'note' => 'Dies ist eine automatisch erstellte Nachricht. Du erhältst sie, weil du dieses Training ausgeschrieben und die Option aktiviert hast, über Antworten informiert zu werden. Bitte nicht auf diese E-Mail antworten.'
+				]);
+			$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
+			return $mailerInterface->send($mail);
+
 		} else {
 			return false;
 		}
