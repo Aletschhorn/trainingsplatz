@@ -58,8 +58,10 @@ class InfomailCommand extends Command {
 				->replyTo(new Address('info@freizeitsportler.ch', 'freizeitsportler.ch'))
 				->subject($infomail->getMailSubject())
 				->format(FluidEmail::FORMAT_BOTH)
+				->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
 				->setTemplate('Training')
 				->assignMultiple([
+					'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
 					'headline' => $infomail->getMailSubject(),
 					'content' => $infomail->getMailBody(),
 					'contentHtml' => str_replace(chr(10),'<br />',$infomail->getMailBody()),
@@ -102,13 +104,15 @@ class InfomailCommand extends Command {
 					->replyTo(new Address('info@freizeitsportler.ch', 'freizeitsportler.ch'))
 					->subject($infomail->getMailSubject())
 					->format(FluidEmail::FORMAT_BOTH)
+					->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
 					->setTemplate('Training')
-				->assignMultiple([
-					'headline' => $infomail->getMailSubject(),
-					'content' => $infomail->getMailBody(),
-					'contentHtml' => str_replace(chr(10),'<br />',$infomail->getMailBody()),
-					'note' => 'Dies ist eine automatisch erstellte Nachricht. Du erhältst sie, weil du in den Einstellungen deines Profils InfoMails aktiviert hast. Bitte nicht auf diese E-Mail antworten.'
-				]);
+					->assignMultiple([
+						'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+						'headline' => $infomail->getMailSubject(),
+						'content' => $infomail->getMailBody(),
+						'contentHtml' => str_replace(chr(10),'<br />',$infomail->getMailBody()),
+						'note' => 'Dies ist eine automatisch erstellte Nachricht. Du erhältst sie, weil du in den Einstellungen deines Profils InfoMails aktiviert hast. Bitte nicht auf diese E-Mail antworten.'
+					]);
 				$recipients = $userRepository->findInfomailSlice($limit, 0);
 				$newReceived = $received + $recipients->count();
 				$infomail->setSendReceiver($newReceived);
