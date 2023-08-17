@@ -21,7 +21,7 @@ $EM_CONF[$_EXTKEY] = [
 	'uploadfolder' => '0',
 	'createDirs' => '',
 	'clearCacheOnLoad' => 0,
-	'version' => '3.6.0',
+	'version' => '3.6.1',
 	'constraints' => [
 		'depends' => [
 			'typo3' => '10.4.0-11.5.99',
@@ -228,5 +228,9 @@ $EM_CONF[$_EXTKEY] = [
  * Version 3.6.0
  * -------------
  * Use fluid-based e-mails
+ *
+ * Version 3.6.1
+ * -------------
+ * Embed logo i nfluid-based e-mails (InfoMails)
  *
 **/
