@@ -74,8 +74,10 @@ class UserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 								->replyTo(new Address($sender->getEmail(), $sender->getName()))
 								->subject($subject)
 								->format(FluidEmail::FORMAT_BOTH)
+								->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
 								->setTemplate('Training')
 								->assignMultiple([
+									'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
 									'headline' => $subject,
 									'content' => $content,
 									'contentHtml' => str_replace(chr(10),'<br />',$content),

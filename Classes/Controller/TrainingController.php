@@ -450,7 +450,9 @@ class TrainingController extends ActionController {
 						->subject('Infomail für Training pendent')
 						->format(FluidEmail::FORMAT_BOTH)
 						->setTemplate('Training')
+						->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
 						->assignMultiple([
+							'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
 							'headline' => 'Infomail für Training pendent',
 							'content' => $mailtext,
 							'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
@@ -491,8 +493,10 @@ class TrainingController extends ActionController {
 					->to(new Address('infomailversand@freizeitsportler.ch', 'fs.ch-InfoMail'))
 					->subject($subject)
 					->format(FluidEmail::FORMAT_BOTH)
+					->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
 					->setTemplate('Training')
 					->assignMultiple([
+						'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
 						'headline' => $subject,
 						'content' => $mailtext,
 						'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
@@ -682,8 +686,10 @@ class TrainingController extends ActionController {
 								->to(new Address($email))
 								->subject($subject)
 								->format(FluidEmail::FORMAT_BOTH)
+								->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
 								->setTemplate('Training')
 								->assignMultiple([
+									'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
 									'headline' => $subject,
 									'content' => $mailtext,
 									'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
@@ -755,8 +761,10 @@ class TrainingController extends ActionController {
 							->replyTo(new Address($user->getEmail(), $user->getName()))
 							->subject($subject)
 							->format(FluidEmail::FORMAT_BOTH)
+							->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
 							->setTemplate('Training')
 							->assignMultiple([
+								'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
 								'headline' => $subject,
 								'content' => $content,
 								'contentHtml' => str_replace(chr(10),'<br />',$content),
@@ -1193,8 +1201,10 @@ class TrainingController extends ActionController {
 				->to(new Address($leader->getEmail(), $leader->getName()))
 				->format(FluidEmail::FORMAT_BOTH)
 				->subject($subject)
+				->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
 				->setTemplate('Training')
 				->assignMultiple([
+					'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
 					'headline' => $subject,
 					'content' => $mailtext,
 					'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
