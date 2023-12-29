@@ -23,7 +23,7 @@
 								<f:link.action action="billing" arguments="{training : training}"><div class="lead" style="margin-bottom:10px">ABGESAGT: {training.title}</div></f:link.action>
 							</f:then>
 							<f:else>
-								<f:link.action action="billing" arguments="{training : training}"><div class="lead" style="margin-bottom:10px">{training.title}</div></f:link.action><tp:objectAccess haystack="{answers}" needle="{training.uid}" /> Teilnehmer
+								<f:link.action action="billing" arguments="{training : training}"><div class="lead" style="margin-bottom:10px">{training.title}</div></f:link.action>{answers.{training.uid}} Teilnehmer
 							</f:else>
 						</f:if>					
 					</td>

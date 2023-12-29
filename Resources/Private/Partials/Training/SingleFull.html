@@ -1,24 +1,33 @@
-{namespace tp=DW\Trainingsplatz\ViewHelpers}
-
-<table class="table" >
-    <f:for each="{trainings}" as="training">
-        <tr>
-            <td style="width:150px">
-                <f:render partial="Training/Icons" arguments="{training:training}" />
-            </td>
-            <td>
-                <f:if condition="{training.cancelled}">
-                    <f:then>
-                        <f:link.action action="show" pluginName="TrainingList" pageUid="{settings.singlePid}" arguments="{training:training}"><div class="lead" style="margin-bottom:10px">ABGESAGT: {training.title}</div></f:link.action>
-                    </f:then>
-                    <f:else>
-                        <f:link.action action="show" pluginName="TrainingList" pageUid="{settings.singlePid}" arguments="{training:training}"><div class="lead" style="margin-bottom:10px">{training.title}</div></f:link.action><tp:objectAccess haystack="{answers}" needle="{training.uid}" /> Teilnehmer
-                    </f:else>
-                </f:if>					
-            </td>
-            <td class="text-right hidden-xs">
-                <f:render partial="Training/Avatar" arguments="{training:training,style:'margin-left:20px',settings:settings}" />
-            </td>
-        </tr>
-    </f:for>
-</table>
+<f:for each="{trainings}" as="training">
+	<hr style="margin:7px 0;border-color:#ddd;" />
+	<div style="display:flex;">
+    	<div style="margin-right:10px;">
+            <f:if condition="{training.guided}">
+                <f:then>
+                    <f:image image="{training.sport.pictureGuided.0}" alt="Sportart: {training.sport.title}" additionalAttributes="{title:'Sportart: {training.sport.title}, geleitetes Training'}" />
+                </f:then>
+                <f:else>
+                    <f:image image="{training.sport.picture.0}" alt="Sportart: {training.sport.title}" additionalAttributes="{title:'Sportart: {training.sport.title}'}" />
+                </f:else>
+            </f:if>
+        </div>
+        <div style="float:left; margin-right:20px;">
+			<div style="font-size:116.67%; font-weight:bold; line-height:100%; margin-bottom: 5px;">{training.trainingDate -> f:format.date(format:"d.m.y")}</div>
+			<div><f:image image="{training.intensity.picture.0}" alt="Intentität: {training.intensity.title}" additionalAttributes="{title:'Intentität: {training.intensity.title}'}" /></div>
+        </div>
+        <div>
+            <f:if condition="{training.cancelled}">
+                <f:then>
+                    <f:link.action action="show" pluginName="TrainingList" pageUid="{settings.singlePid}" arguments="{training:training}"><div class="lead" style="margin-bottom:10px">ABGESAGT: {training.title}</div></f:link.action>
+                </f:then>
+                <f:else>
+                    <f:link.action action="show" pluginName="TrainingList" pageUid="{settings.singlePid}" arguments="{training:training}"><div class="lead" style="margin-bottom:10px">{training.title}</div></f:link.action>{answers.{training.uid}} Teilnehmer
+                </f:else>
+            </f:if>        
+        </div>
+		<div style="margin-left:auto;">
+        	<f:render partial="Training/Avatar" arguments="{training:training,style:'margin-left:20px',settings:settings}" />
+        </div>
+	</div>
+</f:for>
+<hr style="margin:7px 0;border-color:#ddd;" />
