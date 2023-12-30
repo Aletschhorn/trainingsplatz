@@ -75,11 +75,7 @@ class TrainingController extends ActionController {
 		$limit = intval($this->settings['limitation']);
 		$includeCancelled = intval($this->settings['includeCancelled']);
 
-		if ($this->request->hasArgument('filter')) { 
-			$filter = intval($this->request->getArgument('filter')); 
-		} else {
-			$filter = 0;
-		}
+		$filter = $this->request->hasArgument('filter') ? intval($this->request->getArgument('filter')) : 0;
 		$GLOBALS['TSFE']->fe_user->setKey('ses','tpFilter',$filter);
 		if ($filter > 0) {
 			$trainings = $this->trainingRepository->findFutureFiltered($filter, $limit, $includeCancelled);
@@ -91,12 +87,40 @@ class TrainingController extends ActionController {
 		foreach ($trainings as $training) {
 			$answers[$training->getUid()] = $this->answerRepository->findPerTrainingCorrected($training);
 		}
+		
+		$itemsPerPage = $this->settings['itemsPerPage'] ? $this->settings['itemsPerPage'] : 25;
+		$currentPage = $this->request->hasArgument('currentPage') ? $this->request->getArgument('currentPage') : 1;
+		$paginator = new \TYPO3\CMS\Extbase\Pagination\QueryResultPaginator($trainings, $currentPage, $itemsPerPage);
+		$pagination = new \TYPO3\CMS\Core\Pagination\SimplePagination($paginator);
+		
+		
+		$paginationArray = [];
+		if ($paginator->getNumberOfPages() > 1) {
+			if ($currentPage == 1) {
+				$paginationArray[] = ['label' => '«', 'pageNo' => $pagination->getPreviousPageNumber(), 'status' => 'disabled'];
+			} else {
+				$paginationArray[] = ['label' => '«', 'pageNo' => $pagination->getPreviousPageNumber(), 'status' => ''];
+			}
+			foreach ($pagination->getAllPageNumbers() as $pageNumber) {
+				if ($pageNumber == $currentPage) {
+					$paginationArray[] = ['label' => $pageNumber, 'pageNo' => $pageNumber, 'status' => 'active'];
+				} else {
+					$paginationArray[] = ['label' => $pageNumber, 'pageNo' => $pageNumber, 'status' => ''];
+				}
+			}
+			if ($currentPage == $pagination->getLastPageNumber()) {
+				$paginationArray[] = ['label' => '»', 'pageNo' => $pagination->getNextPageNumber(), 'status' => 'disabled'];
+			} else {
+				$paginationArray[] = ['label' => '»', 'pageNo' => $pagination->getNextPageNumber(), 'status' => ''];
+			}
+		}
 
 		$this->view->assignMultiple([
-			'trainings' => $trainings,
+			'trainings' => $paginator->getPaginatedItems(),
 			'answers' => $answers,
 			'sports' => $this->sportRepository->findAll(),
 			'filter' => $filter,
+			'pagination' => $paginationArray,
 			'settings' => $this->settings,
 		]);
 	}

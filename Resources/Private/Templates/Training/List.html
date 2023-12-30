@@ -62,10 +62,24 @@
 
 <f:if condition="{trainings}">
 	<f:then>
+    	<f:if condition="{pagination}">
+            <ul class="pagination">
+                <f:for each="{pagination}" as="page">
+                    <li class="{page.status}"><f:link.action action="list" arguments="{filter:filter,currentPage:page.pageNo}">{page.label}</f:link.action></li>
+                </f:for>
+            </ul>
+        </f:if>
     	<f:switch expression="{settings.format}">
         	<f:case value="0"><f:render partial="Training/SingleFull" arguments="{trainings:trainings,answers:answers,settings:settings}" /></f:case>
             <f:case value="1"><f:render partial="Training/SingleCompact" arguments="{trainings:trainings,answers:answers,settings:settings}" /></f:case>
     	</f:switch>
+    	<f:if condition="{pagination}">
+            <ul class="pagination">
+                <f:for each="{pagination}" as="page">
+                    <li class="{page.status}"><f:link.action action="list" arguments="{filter:filter,currentPage:page.pageNo}">{page.label}</f:link.action></li>
+                </f:for>
+            </ul>
+        </f:if>
 	</f:then>
 	<f:else>
 		<f:if condition="{filter}==0">
