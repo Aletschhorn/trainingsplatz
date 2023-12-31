@@ -21,7 +21,7 @@ $EM_CONF[$_EXTKEY] = [
 	'uploadfolder' => '0',
 	'createDirs' => '',
 	'clearCacheOnLoad' => 0,
-	'version' => '3.6.3',
+	'version' => '3.7.0',
 	'constraints' => [
 		'depends' => [
 			'typo3' => '10.4.0-11.5.99',
@@ -236,5 +236,13 @@ $EM_CONF[$_EXTKEY] = [
  * Version 3.6.2
  * -------------
  * Embed logo in all other fluid-based e-mails
+ *
+ * Version 3.6.3
+ * -------------
+ * Reduce loading duration of training list
+ *
+ * Version 3.7.0
+ * -------------
+ * Provides deletion button per answer in training show action for admins
  *
 **/
