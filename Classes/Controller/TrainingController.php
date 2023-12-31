@@ -83,40 +83,49 @@ class TrainingController extends ActionController {
 			$trainings = $this->trainingRepository->findFuture($limit, $includeCancelled);
 		}
 
-		$answers = [];
-		foreach ($trainings as $training) {
-			$answers[$training->getUid()] = $this->answerRepository->findPerTrainingCorrected($training);
-		}
-		
-		$itemsPerPage = $this->settings['itemsPerPage'] ? $this->settings['itemsPerPage'] : 25;
 		$currentPage = $this->request->hasArgument('currentPage') ? $this->request->getArgument('currentPage') : 1;
-		$paginator = new \TYPO3\CMS\Extbase\Pagination\QueryResultPaginator($trainings, $currentPage, $itemsPerPage);
-		$pagination = new \TYPO3\CMS\Core\Pagination\SimplePagination($paginator);
-		
-		
-		$paginationArray = [];
-		if ($paginator->getNumberOfPages() > 1) {
-			if ($currentPage == 1) {
-				$paginationArray[] = ['label' => '«', 'pageNo' => $pagination->getPreviousPageNumber(), 'status' => 'disabled'];
-			} else {
-				$paginationArray[] = ['label' => '«', 'pageNo' => $pagination->getPreviousPageNumber(), 'status' => ''];
-			}
-			foreach ($pagination->getAllPageNumbers() as $pageNumber) {
-				if ($pageNumber == $currentPage) {
-					$paginationArray[] = ['label' => $pageNumber, 'pageNo' => $pageNumber, 'status' => 'active'];
+		$GLOBALS['TSFE']->fe_user->setKey('ses','tpListPageNo',$currentPage);
+
+		$itemsPerPage = intval($this->settings['itemsPerPage']);
+		if ($itemsPerPage == 0) {
+			// no pagination
+			$trainingsReduced = clone $trainings;			
+			$paginationArray = [];
+		} else {
+			// setup pagination
+			$paginator = new \TYPO3\CMS\Extbase\Pagination\QueryResultPaginator($trainings, $currentPage, $itemsPerPage);
+			$pagination = new \TYPO3\CMS\Core\Pagination\SimplePagination($paginator);
+			$trainingsReduced = clone $paginator->getPaginatedItems();
+					
+			$paginationArray = [];
+			if ($paginator->getNumberOfPages() > 1) {
+				if ($currentPage == 1) {
+					$paginationArray[] = ['label' => '«', 'pageNo' => $pagination->getPreviousPageNumber(), 'status' => 'disabled'];
 				} else {
-					$paginationArray[] = ['label' => $pageNumber, 'pageNo' => $pageNumber, 'status' => ''];
+					$paginationArray[] = ['label' => '«', 'pageNo' => $pagination->getPreviousPageNumber(), 'status' => ''];
 				}
-			}
-			if ($currentPage == $pagination->getLastPageNumber()) {
-				$paginationArray[] = ['label' => '»', 'pageNo' => $pagination->getNextPageNumber(), 'status' => 'disabled'];
-			} else {
-				$paginationArray[] = ['label' => '»', 'pageNo' => $pagination->getNextPageNumber(), 'status' => ''];
+				foreach ($pagination->getAllPageNumbers() as $pageNumber) {
+					if ($pageNumber == $currentPage) {
+						$paginationArray[] = ['label' => $pageNumber, 'pageNo' => $pageNumber, 'status' => 'active'];
+					} else {
+						$paginationArray[] = ['label' => $pageNumber, 'pageNo' => $pageNumber, 'status' => ''];
+					}
+				}
+				if ($currentPage == $pagination->getLastPageNumber()) {
+					$paginationArray[] = ['label' => '»', 'pageNo' => $pagination->getNextPageNumber(), 'status' => 'disabled'];
+				} else {
+					$paginationArray[] = ['label' => '»', 'pageNo' => $pagination->getNextPageNumber(), 'status' => ''];
+				}
 			}
 		}
 
+		$answers = [];
+		foreach ($trainingsReduced as $training) {
+			$answers[$training->getUid()] = $this->answerRepository->findPerTrainingCorrected($training);
+		}
+		
 		$this->view->assignMultiple([
-			'trainings' => $paginator->getPaginatedItems(),
+			'trainings' => $trainingsReduced,
 			'answers' => $answers,
 			'sports' => $this->sportRepository->findAll(),
 			'filter' => $filter,
@@ -128,6 +137,7 @@ class TrainingController extends ActionController {
 
 	public function showAction(Training $training) {
 		$filter = intval($GLOBALS['TSFE']->fe_user->getKey('ses','tpFilter'));
+		$listPageNo = intval($GLOBALS['TSFE']->fe_user->getKey('ses','tpListPageNo'));
 		$answers = $this->answerRepository->findPerTraining($training);
 		$countPublicAnswers = $this->answerRepository->countPerTrainingAndNotMember($training);
 		$userId = $GLOBALS['TSFE']->fe_user->user['uid'];
@@ -161,6 +171,7 @@ class TrainingController extends ActionController {
 			'userAnswer' => $userAnswer[0],
 			'correctedAnswers' => $correctedAnswers,
 			'filter' => $filter,
+			'listPageNo' => $listPageNo,
 			'settings' => $this->settings,
 		]);
 	}

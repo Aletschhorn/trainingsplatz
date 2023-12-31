@@ -1,4 +1,4 @@
-<f:link.action pageUid="{settings.mainPid}" action="list" arguments="{filter:filter}" class="btn btn-primary">Zur&uuml;ck zur Liste</f:link.action>
+<f:link.action pageUid="{settings.mainPid}" action="list" arguments="{filter:filter,currentPage:listPageNo}" class="btn btn-primary">Zur&uuml;ck zur Liste</f:link.action>
 <f:security.ifHasRole role="{settings.usergroupAdmin}">
 	<f:then>
 		<f:if condition="{training.cancelled}">
