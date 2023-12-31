@@ -133,7 +133,7 @@ class TrainingController extends ActionController {
 			'settings' => $this->settings,
 		]);
 	}
-
+	
 
 	public function showAction(Training $training) {
 		$filter = intval($GLOBALS['TSFE']->fe_user->getKey('ses','tpFilter'));
@@ -770,6 +770,15 @@ class TrainingController extends ActionController {
 	}
 
 
+	public function deleteAnswerAction(Answer $answer) {
+		if ($answer->getTraining()->isNotification()) {
+			$this->sendNotification($answer, 5);
+		}
+		$this->answerRepository->remove($answer);
+		$this->redirect('show','Training','trainingsplatz',['training' => $answer->getTraining()->getUid()]);
+	}
+
+
 	public function messageAction(Training $training) {
 		$this->view->assign('training', $training);
 	}
@@ -1229,6 +1238,15 @@ class TrainingController extends ActionController {
 				case 4:
 					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).$writerName.' meldet sich für dein Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.Y').' wieder an.';
 					$subject = 'Erneute Anmeldung auf dein Training';
+					break;
+				case 5:
+					if ($answer->getFeuser()) {
+						$participant = $answer->getFeuser->getFirstname().' '.substr($answer->getFeuser->getLastname(),0,1).'.';
+					} else {
+						$participant = $answer->getAuthor();
+					}
+					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).'Ein Administrator von freizeitsportler.ch hat den (resp. einen mehrfachen) Eintrag von '.$participant.' für dein Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.Y').' gelöscht.';
+					$subject = 'Eintrag in deinem Training geändert';
 					break;
 			}
 			$mail

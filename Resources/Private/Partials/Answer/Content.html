@@ -21,7 +21,17 @@
 		{answer.author}
 	</f:else>
 </f:if>
-<span style="float:right">{answer.changeDate->f:format.date(format:'d.m.y H:i')}</span>
+
+<span class="pull-right text-right">
+	{answer.changeDate->f:format.date(format:'d.m.y H:i')}
+    <f:if condition="{showDeleteButton}">
+        <f:security.ifHasRole role="{settings.usergroupAdmin}">
+            <br />
+            <f:link.action action="deleteAnswer" arguments="{answer:userAnswer}" class="btn btn-default" additionalAttributes="{onclick: 'return confirm(\'Willst du diesen Teilnahme-Eintrag wirklich löschen?\')'}" style="margin-top:5px"><span class="glyphicon glyphicon-trash"></span></f:link.action>
+        </f:security.ifHasRole>
+    </f:if>
+</span>
+
 <h4><f:if condition="{answer.cancelled}"><f:then><strike>{answer.title}</strike></f:then><f:else>{answer.title}</f:else></f:if></h4>
 <p>{answer.description->f:format.crop(maxCharacters:300,append:'...')}</p>
 <f:if condition="{answer.cancelled}">
