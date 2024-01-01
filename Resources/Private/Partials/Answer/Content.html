@@ -27,7 +27,7 @@
     <f:if condition="{showDeleteButton}">
         <f:security.ifHasRole role="{settings.usergroupAdmin}">
             <br />
-            <f:link.action action="deleteAnswer" arguments="{answer:userAnswer}" class="btn btn-default" additionalAttributes="{onclick: 'return confirm(\'Willst du diesen Teilnahme-Eintrag wirklich löschen?\')'}" style="margin-top:5px"><span class="glyphicon glyphicon-trash"></span></f:link.action>
+            <f:link.action action="deleteAnswer" arguments="{answer:answer}" class="btn btn-default" additionalAttributes="{onclick: 'return confirm(\'Willst du diesen Teilnahme-Eintrag wirklich löschen?\')'}" style="margin-top:5px"><span class="glyphicon glyphicon-trash"></span></f:link.action>
         </f:security.ifHasRole>
     </f:if>
 </span>
