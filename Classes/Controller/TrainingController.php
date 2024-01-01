@@ -83,7 +83,10 @@ class TrainingController extends ActionController {
 			$trainings = $this->trainingRepository->findFuture($limit, $includeCancelled);
 		}
 
-		$currentPage = $this->request->hasArgument('currentPage') ? $this->request->getArgument('currentPage') : 1;
+		$currentPage = 1;
+		if ($this->request->hasArgument('currentPage')) {
+			$currentPage = max([1, intval($this->request->getArgument('currentPage'))]);
+		}
 		$GLOBALS['TSFE']->fe_user->setKey('ses','tpListPageNo',$currentPage);
 
 		$itemsPerPage = intval($this->settings['itemsPerPage']);
