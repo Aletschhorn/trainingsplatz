@@ -21,7 +21,7 @@ $EM_CONF[$_EXTKEY] = [
 	'uploadfolder' => '0',
 	'createDirs' => '',
 	'clearCacheOnLoad' => 0,
-	'version' => '3.7.1',
+	'version' => '3.7.2',
 	'constraints' => [
 		'depends' => [
 			'typo3' => '10.4.0-11.5.99',
@@ -248,5 +248,9 @@ $EM_CONF[$_EXTKEY] = [
  * Version 3.7.1
  * -------------
  * Fixes bug for provides deletion button per answer in training show action for admins
+ *
+ * Version 3.7.2
+ * -------------
+ * Typo in partial template Step3.html corrected
  *
 **/
