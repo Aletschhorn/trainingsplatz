@@ -3,30 +3,17 @@ namespace DW\Trainingsplatz\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use DW\Trainingsplatz\Domain\Repository\MotivationRepository;
-use DW\Trainingsplatz\Domain\Repository\SportRepository;
 use In2code\Femanager\Domain\Model\User;
 
 class NewController extends \In2code\Femanager\Controller\NewController {
-
-	protected $motivationRepository;
-	
-	protected $sportRepository;
-	
-	public function __construct (
-			MotivationRepository $motivationRepository,
-			SportRepository $sportRepository
-	) {
-		$this->motivationRepository = $motivationRepository;
-		$this->sportRepository = $sportRepository;
-	}
-	
 
     /**
      * action new
      *
      */
     public function newAction(User $user = NULL): ResponseInterface {
-		$motivations = $this->motivationRepository->findAll();
+		$motivationRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(MotivationRepository::class);
+		$motivations = $motivationRepository->findAll();
 		$this->view->assign('motivations', $motivations);
 		parent::newAction();
 		return $this->htmlResponse();
@@ -36,23 +23,12 @@ class NewController extends \In2code\Femanager\Controller\NewController {
 	* action initializeCreate
 	*
 	*/
-	public function initializeCreateAction() {
-        $userValues = $this->request->getArgument('user');
-		if ($source = $userValues['txTrainingsplatzSports']) {
-			$sum = 0;
-			if (is_array($source)) {
-				foreach ($source as $key => $value) {
-					$sum += $value;
-				}
-			} else {
-				$sum = $source;
-			}
-			$this->pluginVariables['user']['txTrainingsplatzSports'] = $sum;
+	public function initializeCreateAction(): void {
+		if ($this->arguments->hasArgument('user')) {
+			$this->arguments->getArgument('user')->getPropertyMappingConfiguration()->forProperty('txTrainingsplatzSports')->setTypeConverter(
+				$this->objectManager->get(\DW\Trainingsplatz\Property\TypeConverter\BitConverter::class)
+			);
 		}
-//		if ($this->arguments->hasArgument('user')) {
-//			$user = $this->arguments['user'];
-//			$user->setDataType(\In2code\Femanager\Domain\Model\User::class);
-//		}
 	}
 
 	/**

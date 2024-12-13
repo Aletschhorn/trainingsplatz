@@ -10,10 +10,10 @@ class BitConverter extends \TYPO3\CMS\Extbase\Property\TypeConverter\AbstractTyp
 		$sum = 0;
 		if (is_array($source)) {
 			foreach ($source as $key => $value) {
-				$sum += $value;
+				$sum += intval($value);
 			}
 		} else {
-			$sum = $source;
+			$sum = intval($source);
 		}
 		return $sum;
 	}

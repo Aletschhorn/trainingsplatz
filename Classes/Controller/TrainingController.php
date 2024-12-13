@@ -6,6 +6,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -51,7 +52,8 @@ class TrainingController extends ActionController {
 			MapRepository $mapRepository,
 			InfomailRepository $infomailRepository,
 			UserRepository $userRepository,
-			NewsRepository $newsRepository
+			NewsRepository $newsRepository,
+			private readonly Context $context
 	) {
 		$this->trainingRepository = $trainingRepository;
 		$this->answerRepository = $answerRepository;
@@ -61,7 +63,7 @@ class TrainingController extends ActionController {
 		$this->infomailRepository = $infomailRepository;
 		$this->userRepository = $userRepository;
 		$this->newsRepository = $newsRepository;
-		$this->timezone = new \DateTimeZone('Europe/Zurich');
+		$this->timezone = new \DateTimeZone($this->context->getPropertyFromAspect('date', 'timezone'));
 	}
 	
 
@@ -101,7 +103,7 @@ class TrainingController extends ActionController {
 		$filter = intval($GLOBALS['TSFE']->fe_user->getKey('ses','tpFilter'));
 		$answers = $this->answerRepository->findPerTraining($training);
 		$countPublicAnswers = $this->answerRepository->countPerTrainingAndNotMember($training);
-		$userId = $GLOBALS['TSFE']->fe_user->user['uid'];
+		$userId = $this->context->getPropertyFromAspect('frontend.user', 'id');
 		$newAnswer = new \DW\Trainingsplatz\Domain\Model\Answer();
 		$newAnswer->setTitle('Bin dabei');
 		$newAnswer->setDescription('Ich mache bei diesem Training mit.');
@@ -110,18 +112,6 @@ class TrainingController extends ActionController {
 			$userAnswer = $this->answerRepository->findByTrainingAndUser($training,$userId);
 		}
 		$correctedAnswers = $this->answerRepository->findPerTrainingCorrected($training);
-
-		if ($training->getMap() or $training->getStartOption() > 0) {
-			$js = '<script src="//maps.googleapis.com/maps/api/js?key='.$this->settings['googleMapsKey'].'" type="text/javascript"></script>'.chr(10).
-			'<script src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/elabel.js" type="text/javascript"></script>'.chr(10).
-			'<script type="text/javascript">'.chr(10).
-			'const TPstreckenfarbe = \''.$this->settings['routeColor'].'\'; '.chr(10).
-			'const TPstreckenbreite = '.$this->settings['routeWidth'].'; '.chr(10).
-			'const TPtpicon = {url: \'/typo3conf/ext/trainingsplatz/Resources/Public/Icons/meetingpoint.png\', size: new google.maps.Size('.$this->settings['meetingpointIconSize'].'), origin: new google.maps.Point(0,0), anchor: new google.maps.Point('.$this->settings['meetingpointIconAnchor'].')}; '.chr(10).
-			'</script>'.chr(10).
-			'<script type="text/javascript" src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/mapcontrol_newtraining.js"></script>';
-		    $this->response->addAdditionalHeaderData($js);
-		}
 
 		$this->view->assignMultiple([
 			'training' => $training,
@@ -141,18 +131,6 @@ class TrainingController extends ActionController {
 	public function singleAction(Training $training): ResponseInterface {
 		$answers = $this->answerRepository->findPerTraining($training);
 		$correctedAnswers = $this->answerRepository->findPerTrainingCorrected($training);
-
-		if ($training->getMap() or $training->getStartOption() > 0) {
-			$js = '<script src="//maps.googleapis.com/maps/api/js?key='.$this->settings['googleMapsKey'].'" type="text/javascript"></script>'.chr(10).
-			'<script src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/elabel.js" type="text/javascript"></script>'.chr(10).
-			'<script type="text/javascript">'.chr(10).
-			'const TPstreckenfarbe = \''.$this->settings['routeColor'].'\'; '.chr(10).
-			'const TPstreckenbreite = '.$this->settings['routeWidth'].'; '.chr(10).
-			'const TPtpicon = {url: \'/typo3conf/ext/trainingsplatz/Resources/Public/Icons/meetingpoint.png\', size: new google.maps.Size('.$this->settings['meetingpointIconSize'].'), origin: new google.maps.Point(0,0), anchor: new google.maps.Point('.$this->settings['meetingpointIconAnchor'].')}; '.chr(10).
-			'</script>'.chr(10).
-			'<script type="text/javascript" src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/mapcontrol_newtraining.js"></script>';
-		    $this->response->addAdditionalHeaderData($js);
-		}
 
 		$this->view->assignMultiple([
 			'training' => $training,
@@ -198,15 +176,15 @@ class TrainingController extends ActionController {
 
 
 	public function createAction(Training $training): ResponseInterface {
-		$now = new \DateTime();
+		$now = new \DateTime('now', $this->timezone);
 		$training->setCreationDate($now);
-		$user = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
+		$user = $this->userRepository->findByUid($this->context->getPropertyFromAspect('frontend.user', 'id'));
 		$training->setAuthor($user);
 		if (in_array('TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup:'.$this->settings['usergroupSportcoach'],$user->getUsergroup()->toArray())) {
 			$training->setLeader($user);
 		}
 		
-		$today = new \DateTime('today');
+		$today = new \DateTime('today', $this->timezone);
 		$failue = false;
 		if ($training->getSeries() == 0) {
 			if ($training->getTrainingDate() == NULL) {
@@ -264,18 +242,6 @@ class TrainingController extends ActionController {
 	 * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("training")	 
 	 */
 	public function editAction(Training $training, int $step=2): ResponseInterface {
-		if ($step >= 3) {
-			$js = '<script src="//maps.googleapis.com/maps/api/js?key='.$this->settings['googleMapsKey'].'" type="text/javascript"></script>'.chr(10).
-			'<script src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/elabel.js" type="text/javascript"></script>'.chr(10).
-			'<script type="text/javascript">'.chr(10).
-			'const TPstreckenfarbe = \''.$this->settings['routeColor'].'\'; '.chr(10).
-			'const TPstreckenbreite = '.$this->settings['routeWidth'].'; '.chr(10).
-			'const TPtpicon = {url: \'/typo3conf/ext/trainingsplatz/Resources/Public/Icons/meetingpoint.png\', size: new google.maps.Size('.$this->settings['meetingpointIconSize'].'), origin: new google.maps.Point(0,0), anchor: new google.maps.Point('.$this->settings['meetingpointIconAnchor'].')}; '.chr(10).
-			'</script>'.chr(10).
-			'<script type="text/javascript" src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/mapcontrol_newtraining.js"></script>';
-		    $this->response->addAdditionalHeaderData($js);
-		}
-		
 		if ($training->getSeries() == 0) {
 			$seriesDates = NULL;
 		} else {
@@ -307,14 +273,14 @@ class TrainingController extends ActionController {
 
 
 	public function updateAction(Training $training): ResponseInterface {
-		$now = new \DateTime();
+		$now = new \DateTime('now', $this->timezone);
+		$today = new \DateTime('today', $this->timezone);
 		if ($training->isPublic()) {
 			$training->setLastChange($now);
 		} else {
 			$training->setCreationDate($now);
 		}
 		$step = $training->getStep();
-		$today = new \DateTime('today');
 		
 		// Validate some fields
 		if ($step == 1) {
@@ -433,7 +399,7 @@ class TrainingController extends ActionController {
 				$infomail->setMailBody($mailtext);
 				if ($new) {
 					$infomail->setStatus(0);
-					$infomail->setStatusDate($today);
+					$infomail->setStatusDate($now);
 					$this->infomailRepository->add($infomail);
 				} else {
 					$this->infomailRepository->update($infomail);
@@ -533,9 +499,11 @@ class TrainingController extends ActionController {
 			$error = true;
 		}
 		$member = false;
-		if ($GLOBALS['TSFE']->fe_user->user['uid'] > 0) {
-			$feuserObject = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
-			if (is_array($GLOBALS['TSFE']->fe_user->groupData['uid']) && in_array($this->settings['usergroupMember'], $GLOBALS['TSFE']->fe_user->groupData['uid'])) {
+		$feuserId = $this->context->getPropertyFromAspect('frontend.user', 'id');
+		if ($feuserId > 0) {
+			$feuserObject = $this->userRepository->findByUid($feuserId);
+			$userGroups = $this->context->getPropertyFromAspect('frontend.user', 'groupIds');
+			if (is_array($userGroups) && in_array($this->settings['usergroupMember'], $userGroups)) {
 				$member = true;
 				$answer->setFeuser($feuserObject);
 				$answer->setAuthor($feuserObject->getName());
@@ -557,8 +525,9 @@ class TrainingController extends ActionController {
 			$now = new \DateTime('now',$this->timezone);
 			$answer->setCreationDate($now);
 			$answer->setChangeDate($now);
-			if ($GLOBALS['TSFE']->fe_user->user['uid'] > 0) {
-				$feuserObject = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
+			$feuserId = $this->context->getPropertyFromAspect('frontend.user', 'id');
+			if ($feuserId > 0) {
+				$feuserObject = $this->userRepository->findByUid($feuserId);
 				$answer->setFeuser($feuserObject);
 				$answer->setAuthor($feuserObject->getName());
 			}
@@ -575,7 +544,7 @@ class TrainingController extends ActionController {
 
 		$training = $answer->getTraining();
 		$answers = $this->answerRepository->findPerTraining($training);
-		$userId = $GLOBALS['TSFE']->fe_user->user['uid'];
+		$userId = $this->context->getPropertyFromAspect('frontend.user', 'id');
 		if ($userId > 0) {
 			$feuser = $this->userRepository->findByUid($userId);
 			$userAnswer = $this->answerRepository->findByTrainingAndUser($training,$userId);
@@ -654,9 +623,12 @@ class TrainingController extends ActionController {
 							$answer->setHash($hash);
 							$this->answerRepository->update($answer);
 							$persistenceManager->persistAll();
-							$uriBuilder = $persistenceManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder::class);
 							$arguments = ['training' => $training->getUid(), 'answer' => $answer->getUid(), 'hash' => $hash];
-							$link = $uriBuilder->reset()->setTargetPageUid($this->settings['mainPid'])->setCreateAbsoluteUri(true)->uriFor('cancelPublicAnswer',$arguments);
+							$link = $this->uriBuilder
+								->reset()
+								->setTargetPageUid($this->settings['mainPid'])
+								->setCreateAbsoluteUri(true)
+								->uriFor('cancelPublicAnswer', $arguments, 'Training');
 							
 							$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Um deine Teilnahme beim Training "'.$training->getTitle().'" vom '.$training->getTrainingDate()->format('j.m.y').' abzusagen, klicke bitte auf diesen Link:.'.chr(10).$link.chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch';
 
@@ -716,7 +688,7 @@ class TrainingController extends ActionController {
 			$training = $this->trainingRepository->findByUid(intval($arguments['training']));
 			if ($training) {
 				$answers = $this->answerRepository->findPerTraining($training);
-				$userId = $GLOBALS['TSFE']->fe_user->user['uid'];
+				$userId = $this->context->getPropertyFromAspect('frontend.user', 'id');
 				if (count($answers) > 0 and $userId > 0) {
 					$user = $this->userRepository->findByUid($userId);
 					$subject = trim($arguments['subject']);
@@ -954,12 +926,11 @@ class TrainingController extends ActionController {
 	 */
 	public function userCompetitionAction(): ResponseInterface {
 		$dates = $this->getRankingDateRange();
-		$feuserId = $GLOBALS['TSFE']->fe_user->user['uid'];
+		$feuserId = $this->context->getPropertyFromAspect('frontend.user', 'id');
 		if ($feuserId > 0) {
-			$feuser = $this->userRepository->findByUid($feuserId);
 			$answers = $this->answerRepository->findEvaluatedByUser($feuserId, $dates['start']);
 			$total = $this->answerRepository->countPointsByUser($feuserId, $dates['start']);
-			$extra = $feuser->getTxTrainingsplatzContestExtra();
+			$extra = $this->userRepository->findByUid($feuserId)->getTxTrainingsplatzContestExtra();
 			$total += $extra;
 		}
 
@@ -1027,7 +998,7 @@ class TrainingController extends ActionController {
 			$user = $this->userRepository->findByUid($userId);
 		}
 		if (! $user) {
-			$userId = $GLOBALS['TSFE']->fe_user->user['uid'];
+			$userId = $this->context->getPropertyFromAspect('frontend.user', 'id');
 			$user = $this->userRepository->findByUid($userId);
 		}
 		if ($user) {
@@ -1255,9 +1226,9 @@ class TrainingController extends ActionController {
 	 */
 	protected function getRankingDateRange (int $year = NULL) {
 		if ($this->settings['competitionStart']) {
-			$today = new \DateTime('today');
+			$today = new \DateTime('today', $this->timezone);
 			$startDates = explode(',',$this->settings['competitionStart']);
-			$startDate = new \DateTime(array_pop($startDates));
+			$startDate = new \DateTime(array_pop($startDates), $this->timezone);
 			while ($startDate->format('Ymd') > $today->format('Ymd')) {
 				if (count($startDates)>0) {
 					$recentDate = array_pop($startDates);

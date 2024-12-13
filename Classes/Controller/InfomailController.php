@@ -5,6 +5,7 @@ use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -17,51 +18,45 @@ class InfomailController extends ActionController {
 	private $infomailRepository;
 
 	private $userRepository;
+
+	protected $timezone;
 	
 	public function __construct (
 			InfomailRepository $infomailRepository,
-			UserRepository $userRepository
+			UserRepository $userRepository,
+			private readonly Context $context
 	) {
 		$this->infomailRepository = $infomailRepository;
 		$this->userRepository = $userRepository;
+		$this->timezone = new \DateTimeZone('Europe/Zurich');
 	}
 	
 
 	public function listAction(): ResponseInterface {
-		$pending = $this->infomailRepository->findFutureByStatus(0);
-		$sent = $this->infomailRepository->findFutureByStatus(1);
-		$queued = $this->infomailRepository->findFutureByStatus(3);
-		$inprogress = $this->infomailRepository->findFutureByStatus(4);
 		$this->view->assignMultiple([
-			'pending' => $pending,
-			'sent' => $sent,
-			'queued' => $queued,
-			'inprogress' => $inprogress,
+			'pending' => $this->infomailRepository->findFutureByStatus(0),
+			'sent' => $this->infomailRepository->findFutureByStatus(1),
+			'queued' => $this->infomailRepository->findFutureByStatus(3),
+			'inprogress' => $this->infomailRepository->findFutureByStatus(4),
 		]);
 		return $this->htmlResponse();
 	}
 
 
 	public function showAction(Infomail $infomail): ResponseInterface {
-		$js = '<script src="//maps.googleapis.com/maps/api/js?key='.$this->settings['googleMapsKey'].'" type="text/javascript"></script>'.chr(10).'<script src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/elabel.js" type="text/javascript"></script>'.chr(10).'<script type="text/javascript">'.chr(10).'var streckenfarbe = \''.$this->settings['routeColor'].'\'; '.chr(10).'var streckenbreite = '.$this->settings['routeWidth'].'; '.chr(10).'var tpicon = new GIcon(); '.chr(10).'tpicon.image = \''.$this->settings['meetingpointIcon'].'\'; '.chr(10).'tpicon.iconSize = new GSize('.$this->settings['meetingpointIconSize'].'); '.chr(10).'tpicon.iconAnchor = new GPoint('.$this->settings['meetingpointIconAnchor'].'); '.chr(10).'</script>'.chr(10).'<script type="text/javascript" src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/mapcontrol_newtraining.js"></script>';
-	    $this->response->addAdditionalHeaderData($js);
-
 		$this->view->assign('infomail', $infomail);
 		return $this->htmlResponse();
 	}
 
 
 	public function reviewAction(Infomail $infomail): ResponseInterface {
-		$js = '<script src="//maps.googleapis.com/maps/api/js?key='.$this->settings['googleMapsKey'].'" type="text/javascript"></script>'.chr(10).'<script src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/elabel.js" type="text/javascript"></script>'.chr(10).'<script type="text/javascript">'.chr(10).'var streckenfarbe = \''.$this->settings['routeColor'].'\'; '.chr(10).'var streckenbreite = '.$this->settings['routeWidth'].'; '.chr(10).'var tpicon = new GIcon(); '.chr(10).'tpicon.image = \''.$this->settings['meetingpointIcon'].'\'; '.chr(10).'tpicon.iconSize = new GSize('.$this->settings['meetingpointIconSize'].'); '.chr(10).'tpicon.iconAnchor = new GPoint('.$this->settings['meetingpointIconAnchor'].'); '.chr(10).'</script>'.chr(10).'<script type="text/javascript" src="'.PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('trainingsplatz')).'Resources/Public/Javascript/mapcontrol_newtraining.js"></script>';
-	    $this->response->addAdditionalHeaderData($js);
-
 		$this->view->assign('infomail', $infomail);
 		return $this->htmlResponse();
 	}
 
 
 	public function copyAction(Infomail $infomail): ResponseInterface {
-		$senduser = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
+		$senduser = $this->userRepository->findByUid($this->context->getPropertyFromAspect('frontend.user', 'id'));
 		if ($senduser) {
 			if (in_array($this->settings['usergroupAdmin'], self::getUsergroupArray($senduser))) {
 				$newInfomail = new \DW\Trainingsplatz\Domain\Model\Infomail();
@@ -69,8 +64,7 @@ class InfomailController extends ActionController {
 				$newInfomail->setMailSubject($infomail->getMailSubject());
 				$newInfomail->setMailBody($infomail->getMailBody());
 				$newInfomail->setStatus(0);
-				$UTC = new \DateTimeZone('UTC');
-				$now = new \DateTime('now',$UTC);
+				$now = new \DateTime('now', $this->timezone);
 				$newInfomail->setStatusDate($now);
 				
 				$this->infomailRepository->add($newInfomail);
@@ -84,11 +78,10 @@ class InfomailController extends ActionController {
 
 
 	public function sendAction(Infomail $infomail): ResponseInterface {
-		$senduser = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
+		$senduser = $this->userRepository->findByUid($this->context->getPropertyFromAspect('frontend.user', 'id'));
 		if ($senduser) {
 			if (in_array($this->settings['usergroupAdmin'], self::getUsergroupArray($senduser))) {
-				$UTC = new \DateTimeZone('UTC');
-				$now = new \DateTime('now',$UTC);
+				$now = new \DateTime('now', $this->timezone);
 				$infomail->setStatusDate($now);
 				$infomail->setStatus(3);
 				$infomail->setSendUser($senduser);
@@ -107,11 +100,10 @@ class InfomailController extends ActionController {
 
 
 	public function denyAction(Infomail $infomail): ResponseInterface {
-		$senduser = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
+		$senduser = $this->userRepository->findByUid($this->context->getPropertyFromAspect('frontend.user', 'id'));
 		if ($senduser) {
 			if (in_array($this->settings['usergroupAdmin'], self::getUsergroupArray($senduser))) {
-				$UTC = new \DateTimeZone('UTC');
-				$now = new \DateTime('now',$UTC);
+				$now = new \DateTime('now', $this->timezone);
 				$infomail->setStatusDate($now);
 				$infomail->setStatus(2);
 				$infomail->setSendUser($senduser);
@@ -124,12 +116,11 @@ class InfomailController extends ActionController {
 
 
 	public function cancelAction(Infomail $infomail): ResponseInterface {
-		$senduser = $this->userRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
+		$senduser = $this->userRepository->findByUid($this->context->getPropertyFromAspect('frontend.user', 'id'));
 		if ($senduser) {
 			if (in_array($this->settings['usergroupAdmin'], self::getUsergroupArray($senduser))) {
 				if ($infomail->getStatus() == 3) {
-					$UTC = new \DateTimeZone('UTC');
-					$now = new \DateTime('now',$UTC);
+					$now = new \DateTime('now', $this->timezone);
 					$infomail->setStatusDate($now);
 					$infomail->setStatus(0);
 					$infomail->setSendUser($senduser);

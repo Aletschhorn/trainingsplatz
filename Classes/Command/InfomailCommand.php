@@ -35,8 +35,6 @@ class InfomailCommand extends Command {
      * Configure the command
      */
     protected function configure() {
-        $this->setDescription('Send Training InfoMails');
-        $this->setHelp('Sends InfoMails for defined trainings to users');
 		$this->addArgument('limit',InputArgument::OPTIONAL,'Number of e-mails sent per run. Default: 50');
 		$this->addArgument('suppress',InputArgument::OPTIONAL,'Boolean. Suppress sending e-mails.');
     }
@@ -53,7 +51,9 @@ class InfomailCommand extends Command {
 		if ($limit == 0) {
 			$limit = 50;
 		}
-		$UTC = new \DateTimeZone('UTC');
+		$timezone = new \DateTimeZone('Europe/Zurich');
+		$now = new \DateTime('now',$timezone);
+		$persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
 		
 		$infomail = $this->infomailRepository->findFutureByStatus(4)->getFirst();
 		if ($infomail) {
@@ -66,10 +66,9 @@ class InfomailCommand extends Command {
 			$recipients = $this->userRepository->findInfomailSlice($limit, $received);
 			$newReceived = $received + $recipients->count();
 			$infomail->setSendReceiver($newReceived);
+			$infomail->setStatusDate($now);
 			if ($recipients->count() < $limit) {
 				// completed
-				$now = new \DateTime('now',$UTC);
-				$infomail->setStatusDate($now);
 				$infomail->setStatus(1);
 			}
 			$this->infomailRepository->update($infomail);
@@ -101,11 +100,10 @@ class InfomailCommand extends Command {
 				$recipients = $this->userRepository->findInfomailSlice($limit, 0);
 				$newReceived = $received + $recipients->count();
 				$infomail->setSendReceiver($newReceived);
+				$infomail->setStatusDate($now);
 				$infomail->setStatus(4);
 				if ($recipients->count() < $limit) {
 					// completed
-					$now = new \DateTime('now',$UTC);
-					$infomail->setStatusDate($now);
 					$infomail->setStatus(1);
 				}
 				$this->infomailRepository->update($infomail);

@@ -25,21 +25,10 @@ class EditController extends \In2code\Femanager\Controller\EditController {
 	*
 	*/
 	public function initializeUpdateAction() {
-        $userValues = $this->request->getArgument('user');
-		if ($source = $userValues['txTrainingsplatzSports']) {
-			$sum = 0;
-			if (is_array($source)) {
-				foreach ($source as $key => $value) {
-					$sum += $value;
-				}
-			} else {
-				$sum = $source;
-			}
-			$this->pluginVariables['user']['txTrainingsplatzSports'] = $sum;
-		}
 		if ($this->arguments->hasArgument('user')) {
-			$user = $this->arguments['user'];
-			// $user->setDataType(\In2code\Femanager\Domain\Model\User::class);
+			$this->arguments->getArgument('user')->getPropertyMappingConfiguration()->forProperty('txTrainingsplatzSports')->setTypeConverter(
+				$this->objectManager->get(\DW\Trainingsplatz\Property\TypeConverter\BitConverter::class)
+			);
 		}
 		parent::initializeUpdateAction();
 	}

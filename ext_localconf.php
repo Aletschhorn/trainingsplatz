@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use DW\Trainingsplatz\Controller\TrainingController;
 use DW\Trainingsplatz\Controller\InfomailController;
@@ -86,6 +87,8 @@ defined('TYPO3') or die();
 	$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Domain\Repository\UserRepository::class] = ['className' => \DW\Trainingsplatz\Domain\Repository\UserRepository::class];
 	
 	// Register type converter
-	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerTypeConverter(\DW\Trainingsplatz\Property\TypeConverter\BitConverter::class);
+	if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() < 12) {
+		\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerTypeConverter(\DW\Trainingsplatz\Property\TypeConverter\BitConverter::class);
+	}
 
 })();
