@@ -7,9 +7,15 @@ use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Context\Context;
+
+use Symfony\Component\Mime\Address;
+use TYPO3\CMS\Core\Mail\FluidEmail;
+use TYPO3\CMS\Core\Mail\Mailer;
+
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+
 use DW\Trainingsplatz\Domain\Repository\TrainingRepository;
 use DW\Trainingsplatz\Domain\Repository\AnswerRepository;
 use DW\Trainingsplatz\Domain\Repository\SportRepository;
@@ -71,11 +77,7 @@ class TrainingController extends ActionController {
 		$limit = intval($this->settings['limitation']);
 		$includeCancelled = intval($this->settings['includeCancelled']);
 
-		if ($this->request->hasArgument('filter')) { 
-			$filter = intval($this->request->getArgument('filter')); 
-		} else {
-			$filter = 0;
-		}
+		$filter = $this->request->hasArgument('filter') ? intval($this->request->getArgument('filter')) : 0;
 		$GLOBALS['TSFE']->fe_user->setKey('ses','tpFilter',$filter);
 		if ($filter > 0) {
 			$trainings = $this->trainingRepository->findFutureFiltered($filter, $limit, $includeCancelled);
@@ -83,24 +85,65 @@ class TrainingController extends ActionController {
 			$trainings = $this->trainingRepository->findFuture($limit, $includeCancelled);
 		}
 
-		$answers = [];
-		foreach ($trainings as $training) {
-			$answers[$training->getUid()] = $this->answerRepository->findPerTrainingCorrected($training);
+		$currentPage = 1;
+		if ($this->request->hasArgument('currentPage')) {
+			$currentPage = max([1, intval($this->request->getArgument('currentPage'))]);
+		}
+		$GLOBALS['TSFE']->fe_user->setKey('ses','tpListPageNo',$currentPage);
+
+		$itemsPerPage = intval($this->settings['itemsPerPage']);
+		if ($itemsPerPage == 0) {
+			// no pagination
+			$trainingsReduced = clone $trainings;			
+			$paginationArray = [];
+		} else {
+			// setup pagination
+			$paginator = new \TYPO3\CMS\Extbase\Pagination\QueryResultPaginator($trainings, $currentPage, $itemsPerPage);
+			$pagination = new \TYPO3\CMS\Core\Pagination\SimplePagination($paginator);
+			$trainingsReduced = clone $paginator->getPaginatedItems();
+					
+			$paginationArray = [];
+			if ($paginator->getNumberOfPages() > 1) {
+				if ($currentPage == 1) {
+					$paginationArray[] = ['label' => '«', 'pageNo' => $pagination->getPreviousPageNumber(), 'status' => 'disabled'];
+				} else {
+					$paginationArray[] = ['label' => '«', 'pageNo' => $pagination->getPreviousPageNumber(), 'status' => ''];
+				}
+				foreach ($pagination->getAllPageNumbers() as $pageNumber) {
+					if ($pageNumber == $currentPage) {
+						$paginationArray[] = ['label' => $pageNumber, 'pageNo' => $pageNumber, 'status' => 'active'];
+					} else {
+						$paginationArray[] = ['label' => $pageNumber, 'pageNo' => $pageNumber, 'status' => ''];
+					}
+				}
+				if ($currentPage == $pagination->getLastPageNumber()) {
+					$paginationArray[] = ['label' => '»', 'pageNo' => $pagination->getNextPageNumber(), 'status' => 'disabled'];
+				} else {
+					$paginationArray[] = ['label' => '»', 'pageNo' => $pagination->getNextPageNumber(), 'status' => ''];
+				}
+			}
 		}
 
+		$answers = [];
+		foreach ($trainingsReduced as $training) {
+			$answers[$training->getUid()] = $this->answerRepository->findPerTrainingCorrected($training);
+		}
+		
 		$this->view->assignMultiple([
-			'trainings' => $trainings,
+			'trainings' => $trainingsReduced,
 			'answers' => $answers,
 			'sports' => $this->sportRepository->findAll(),
 			'filter' => $filter,
+			'pagination' => $paginationArray,
 			'settings' => $this->settings,
 		]);
 		return $this->htmlResponse();
 	}
-
+	
 
 	public function showAction(Training $training): ResponseInterface {
 		$filter = intval($GLOBALS['TSFE']->fe_user->getKey('ses','tpFilter'));
+		$listPageNo = intval($GLOBALS['TSFE']->fe_user->getKey('ses','tpListPageNo'));
 		$answers = $this->answerRepository->findPerTraining($training);
 		$countPublicAnswers = $this->answerRepository->countPerTrainingAndNotMember($training);
 		$userId = $this->context->getPropertyFromAspect('frontend.user', 'id');
@@ -122,6 +165,7 @@ class TrainingController extends ActionController {
 			'userAnswer' => $userAnswer[0],
 			'correctedAnswers' => $correctedAnswers,
 			'filter' => $filter,
+			'listPageNo' => $listPageNo,
 			'settings' => $this->settings,
 		]);
 		return $this->htmlResponse();
@@ -385,7 +429,7 @@ class TrainingController extends ActionController {
 				} else { 
 					$trainer = $training->getAuthor(); 
 				}
-				$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Am '.$training->getTrainingDate()->format('j.m.y').' findet ein Training statt, das dich interessieren könnte:'.chr(10).chr(10).'Titel: '.$training->getTitle().chr(10).'Datum: '.$training->getTrainingDate()->format('j.m.y').chr(10).'Sportart: '.$training->getSport()->getTitle().chr(10).'Intensität: '.$training->getIntensity()->getTitle().chr(10).'Verantwortlich: '.$trainer->getName().chr(10).'Mehr Infos: https://www.freizeitsportler.ch/direkt/training/show/'.$training->getUid().chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch'.chr(10).chr(10).'----------'.chr(10).'Das ist ein automatisch generiertes E-Mail. Bitte nicht darauf antworten.';
+				$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Am '.$training->getTrainingDate()->format('j.m.Y').' findet ein Training statt, das dich interessieren könnte:'.chr(10).chr(10).'Titel: '.$training->getTitle().chr(10).'Datum: '.$training->getTrainingDate()->format('j.m.y').chr(10).'Sportart: '.$training->getSport()->getTitle().chr(10).'Intensität: '.$training->getIntensity()->getTitle().chr(10).'Verantwortlich: '.$trainer->getName().chr(10).'Mehr Infos: https://freizeitsportler.ch/direkt/training/show/'.$training->getUid().chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch';
 				$existing = $this->infomailRepository->findPerTrainingAndStatus($training,0);
 				if (count($existing) == 0) {
 					$infomail = new \DW\Trainingsplatz\Domain\Model\Infomail();
@@ -395,7 +439,7 @@ class TrainingController extends ActionController {
 					$new = false;
 				}
 				$infomail->setTraining($training);
-				$infomail->setMailSubject($training->getTitle().' am '.$training->getTrainingDate()->format('j.m.y'));
+				$infomail->setMailSubject($training->getTitle().' am '.$training->getTrainingDate()->format('j.m.Y'));
 				$infomail->setMailBody($mailtext);
 				if ($new) {
 					$infomail->setStatus(0);
@@ -407,14 +451,24 @@ class TrainingController extends ActionController {
 					
 				// Send notification to admins
 				if (! $this->settings['suppressMails']) {
-					$mailtext = 'Titel: '.$training->getTitle().chr(10).'Datum: '.$training->getTrainingDate()->format('j.m.y').chr(10).'Sportart: '.$training->getSport()->getTitle().chr(10).'Intensität: '.$training->getIntensity()->getTitle().chr(10).'Verantwortlich: '.$trainer->getName().chr(10).'InfoMail-Versand: https://www.freizeitsportler.ch/infomails'.chr(10).chr(10).'----------'.chr(10).'Das ist ein automatisch generiertes E-Mail. Bitte nicht darauf antworten.';
-					$mail = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Mail\MailMessage::class);
-					$mail->from(new \Symfony\Component\Mime\Address('notification@freizeitsportler.ch', 'freizeitsportler.ch'));
-					$mail->to(new \Symfony\Component\Mime\Address('infomailversand@freizeitsportler.ch', 'fs.ch-InfoMail'));
-					$mail->subject('Infomail für Training pendent');
-					$mail->text($mailtext);
-					$mail->html('<div style="font-family:sans-serif">'.str_replace(chr(10),'<br />',$mailtext).'</div>');
-					$mail->send();
+					$mailtext = 'Titel: '.$training->getTitle().chr(10).'Datum: '.$training->getTrainingDate()->format('j.m.Y').chr(10).'Sportart: '.$training->getSport()->getTitle().chr(10).'Intensität: '.$training->getIntensity()->getTitle().chr(10).'Verantwortlich: '.$trainer->getName().chr(10).'InfoMail-Versand: https://www.freizeitsportler.ch/infomails';
+					$mail = GeneralUtility::makeInstance(FluidEmail::class);
+					$mail
+						->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
+						->to(new Address('infomailversand@freizeitsportler.ch', 'fs.ch-InfoMail'))
+						->subject('Infomail für Training pendent')
+						->format(FluidEmail::FORMAT_BOTH)
+						->setTemplate('Training')
+						->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
+						->assignMultiple([
+							'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+							'headline' => 'Infomail für Training pendent',
+							'content' => $mailtext,
+							'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
+							'note' => 'Dies ist eine automatisch erstellte Nachricht. Bitte nicht darauf antworten.'
+						]);
+					$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
+					$mailerInterface->send($mail);
 				}
 			}
 			return $this->redirect('show','Training','trainingsplatz',array('training' => $training),$this->settings['mainPid']);
@@ -440,26 +494,36 @@ class TrainingController extends ActionController {
 			if (! $this->settings['suppressMails']) {
 				$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Das Training "'.$training->getTitle().'" vom '.$training->getTrainingDate()->format('j.m.y').' muss leider abgesagt werden.'.chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch';
 				$answers = $this->answerRepository->findPerTraining($training);
+				$subject = 'Training vom '.$training->getTrainingDate()->format('j.m.Y').' abgesagt';
 
-				$mail = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Mail\MailMessage::class);
-				$mail->from(new \Symfony\Component\Mime\Address('notification@freizeitsportler.ch', 'freizeitsportler.ch'));
-				$mail->subject('Training vom '.$training->getTrainingDate()->format('j.m.y').' abgesagt');
-				$mail->text($mailtext);
-				$mail->html('<div style="font-family:sans-serif">'.str_replace(chr(10),'<br />',$mailtext).'</div>');
+				$mail = GeneralUtility::makeInstance(FluidEmail::class);
+				$mail
+					->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
+					->to(new Address('infomailversand@freizeitsportler.ch', 'fs.ch-InfoMail'))
+					->subject($subject)
+					->format(FluidEmail::FORMAT_BOTH)
+					->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
+					->setTemplate('Training')
+					->assignMultiple([
+						'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+						'headline' => $subject,
+						'content' => $mailtext,
+						'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
+						'note' => 'Dies ist eine automatisch erstellte Nachricht. Du erhältst sie, weil du dich für dieses Training eingeschrieben hast. Bitte nicht auf diese E-Mail antworten.'
+					]);
+				$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
+				$mailerInterface->send($mail);
 
-				$mail->to(new \Symfony\Component\Mime\Address('infomailversand@freizeitsportler.ch', 'fs.ch-InfoMail'));
-				$mail->send();
-	
 				foreach ($answers as $answer) {
 					if ($user = $answer->getFeuser()) {
 						if ($user->getEmail()) {
-							$mail->to(new \Symfony\Component\Mime\Address($user->getEmail(), $user->getName()));
-							$mail->send();
+							$mail->to(new Address($user->getEmail(), $user->getName()));
+							$mailerInterface->send($mail);
 						}
 					} else {
 						if ($answer->getEmail()) {
-							$mail->to(new \Symfony\Component\Mime\Address($answer->getEmail(), $answer->getAuthor()));
-							$mail->send();
+							$mail->to(new Address($answer->getEmail(), $answer->getAuthor()));
+							$mailerInterface->send($mail);
 						}
 					}
 				}
@@ -628,17 +692,28 @@ class TrainingController extends ActionController {
 								->reset()
 								->setTargetPageUid($this->settings['mainPid'])
 								->setCreateAbsoluteUri(true)
-								->uriFor('cancelPublicAnswer', $arguments, 'Training');
-							
-							$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Um deine Teilnahme beim Training "'.$training->getTitle().'" vom '.$training->getTrainingDate()->format('j.m.y').' abzusagen, klicke bitte auf diesen Link:.'.chr(10).$link.chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch';
+								->uriFor('cancelPublicAnswer', $arguments, 'Training');							
+							$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Um deine Teilnahme beim Training "'.$training->getTitle().'" vom '.$training->getTrainingDate()->format('j.m.Y').' abzusagen, klicke bitte auf diesen Link:.'.chr(10).$link.chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch';
+							$subject = 'Deine Absage vom Training am '.$training->getTrainingDate()->format('j.m.Y');
 
-							$mail = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Mail\MailMessage::class);
-							$mail->from(new \Symfony\Component\Mime\Address('notification@freizeitsportler.ch', 'freizeitsportler.ch'));
-							$mail->to(new \Symfony\Component\Mime\Address($email));
-							$mail->subject('Deine Absage vom Training am '.$training->getTrainingDate()->format('j.m.y'));
-							$mail->text($mailtext);
-							$mail->html('<div style="font-family:sans-serif">'.str_replace(chr(10),'<br />',$mailtext).'</div>');
-							if ($mail->send()) {
+							$mail = GeneralUtility::makeInstance(FluidEmail::class);
+							$mail
+								->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
+								->to(new Address($email))
+								->subject($subject)
+								->format(FluidEmail::FORMAT_BOTH)
+								->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
+								->setTemplate('Training')
+								->assignMultiple([
+									'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+									'headline' => $subject,
+									'content' => $mailtext,
+									'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
+									'note' => 'Dies ist eine automatisch erstellte Nachricht. Bitte nicht darauf antworten.'
+								]);
+							$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
+							$mailerInterface->send($mail);
+							if ($mailerInterface->send($mail)) {
 								$this->addFlashMessage('Der Abmelde-Link wurde dir per E-Mail zugesendet.', '', AbstractMessage::OK);
 							} else {
 								$this->addFlashMessage('Das Versenden des Anmelde-Link funktioniert aufgrund eines Fehlers nicht.<br />Bitte melde dich per E-Mail an <a href="mailto:info@freizeitsportler.ch">info@freizeitsportler.ch</a> bei uns.', '', AbstractMessage::ERROR);							
@@ -679,6 +754,15 @@ class TrainingController extends ActionController {
 	public function messageAction(Training $training): ResponseInterface {
 		$this->view->assign('training', $training);
 		return $this->htmlResponse();
+  }
+   
+  
+	public function deleteAnswerAction(Answer $answer): ResponseInterface {
+		if ($answer->getTraining()->isNotification()) {
+			$this->sendNotification($answer, 5);
+		}
+		$this->answerRepository->remove($answer);
+		return $this->redirect('show','Training','trainingsplatz',['training' => $answer->getTraining()->getUid()]);
 	}
 
 
@@ -696,12 +780,22 @@ class TrainingController extends ActionController {
 					if (strlen($subject) > 0 and strlen($content) > 0) {
 
 						// send message
-						$mail = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Mail\MailMessage::class);
-						$mail->from(new \Symfony\Component\Mime\Address($user->getEmail(), $user->getName()));
-						$mail->subject($subject);
-						$content .= chr(10).chr(10).'----------'.chr(10).'Diese Nachricht wurde mittels Formular auf freizeitsportler.ch erfasst und automatisch an alle Teilnehmer des Trainings '.$training->getTitle().' am '.$training->getTrainingDate()->format('d.m.y').' versendet.';
-						$mail->text($content);
-						$mail->html('<div style="font-family:sans-serif">'.str_replace(chr(10),'<br />',$content).'</div>');
+						$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
+						$mail = GeneralUtility::makeInstance(FluidEmail::class);
+						$mail
+							->from(new Address('donotreply@freizeitsportler.ch', $user->getName().' über freizeitsportler.ch'))
+							->replyTo(new Address($user->getEmail(), $user->getName()))
+							->subject($subject)
+							->format(FluidEmail::FORMAT_BOTH)
+							->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
+							->setTemplate('Training')
+							->assignMultiple([
+								'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+								'headline' => $subject,
+								'content' => $content,
+								'contentHtml' => str_replace(chr(10),'<br />',$content),
+								'note' => 'Diese Nachricht wurde mittels Formular auf freizeitsportler.ch erfasst und automatisch an alle Teilnehmer des Trainings "'.$training->getTitle().'" am '.$training->getTrainingDate()->format('d.m.Y').' versendet. Bitte nicht auf diese E-Mail antworten.'
+							]);
 				
 						if (! $this->settings['suppressMails']) {
 							$needCopyToUser = true;
@@ -730,32 +824,32 @@ class TrainingController extends ActionController {
 										$needCopyToCoach = false;
 									}
 									if ($recipient->getEmail()) {
-										$mail->to(new \Symfony\Component\Mime\Address($recipient->getEmail(), $recipient->getName()));
-										$mail->send();
+										$mail->to(new Address($recipient->getEmail(), $recipient->getName()));
+										$mailerInterface->send($mail);
 									}
 								} else {
 									if ($answer->getEmail()) {
-										$mail->to(new \Symfony\Component\Mime\Address($answer->getEmail(), $answer->getName()));
-										$mail->send();
+										$mail->to(new Address($answer->getEmail(), $answer->getName()));
+										$mailerInterface->send($mail);
 									}
 								}
 							}
 							if ($needCopyToUser) {
 								if ($user->getEmail()) {
-									$mail->to(new \Symfony\Component\Mime\Address($user->getEmail(), $user->getName()));
-									$mail->send();
+									$mail->to(new Address($user->getEmail(), $user->getName()));
+									$mailerInterface->send($mail);
 								}
 							}
 							if ($needCopyToAuthor) {								
 								if ($training->getAuthor()->getEmail()) {
-									$mail->to(new \Symfony\Component\Mime\Address($training->getAuthor()->getEmail(), $training->getAuthor()->getName()));
-									$mail->send();
+									$mail->to(new Address($training->getAuthor()->getEmail(), $training->getAuthor()->getName()));
+									$mailerInterface->send($mail);
 								}
 							}
 							if ($training->isGuided() and $needCopyToCoach) {								
 								if ($training->getLeader()->getEmail()) {
-									$mail->to(new \Symfony\Component\Mime\Address($training->getLeader()->getEmail(), $training->getLeader()->getName()));
-									$mail->send();
+									$mail->to(new Address($training->getLeader()->getEmail(), $training->getLeader()->getName()));
+									$mailerInterface->send($mail);
 								}
 							}							
 						}
@@ -867,7 +961,7 @@ class TrainingController extends ActionController {
 	public function rankingAction(): ResponseInterface {
 		if ($this->request->hasArgument('year')) {
 			$year = intval($this->request->getArgument('year'));
-			if ($year < 2016 or $year > date('Y')) {
+			if ($year < 2016 or $year > date('Y')+1) {
 				$year = NULL;
 			}
 		}
@@ -906,6 +1000,9 @@ class TrainingController extends ActionController {
 
 		for ($i=2016; $i<=date('Y'); $i++) {
 			$navigation[] = $i;
+		}
+		if (date('m') == 12) {
+			$navigation[] = date('Y')+1;
 		}
 
 		$this->view->assignMultiple([
@@ -948,11 +1045,14 @@ class TrainingController extends ActionController {
 		if ($this->request->hasArgument('year')) {
 			$year = $this->request->getArgument('year');
 		}
-		if ($year < 2020 or $year > date('Y')) {
+		if ($year < 2020 or $year > date('Y')+1) {
 			$year = date('Y');
 		}
 		for ($i=2020; $i<=date('Y'); $i++) {
 			$navigation[] = $i;
+		}
+		if (date('m') == 12) {
+			$navigation[] = date('Y')+1;
 		}
 
 		$dates = $this->getRankingDateRange($year);
@@ -992,7 +1092,13 @@ class TrainingController extends ActionController {
 
 
 	public function userParticipationAction(): ResponseInterface {
-		$dates = $this->getRankingDateRange();
+		if ($this->request->hasArgument('year')) {
+			$year = $this->request->getArgument('year');
+		}
+		if ($year < 2020 or $year > date('Y')+1) {
+			$year = date('Y');
+		}
+		$dates = $this->getRankingDateRange($year);
 		if ($this->request->hasArgument('user')) {
 			$userId = $this->request->getArgument('user');
 			$user = $this->userRepository->findByUid($userId);
@@ -1025,6 +1131,7 @@ class TrainingController extends ActionController {
 			'user' => $user,
 			'list' => $list,
 			'startDate' => $dates['start'],
+			'endDate' => $dates['end'],
 			'count' => $count,
 		]);
 		return $this->htmlResponse();
@@ -1103,31 +1210,52 @@ class TrainingController extends ActionController {
 		} else {
 			$leader = $answer->getTraining()->getAuthor();
 		}
-		$mail = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Mail\MailMessage::class);
+		$mail = GeneralUtility::makeInstance(FluidEmail::class);
 		if ($mail and $leader->getEmail() and $reason>0 and $reason<=4) {
 			switch ($reason) {
 				case 1:
-					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).$writerName.' hat sich für dein Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.y').' angemeldet:'.chr(10).chr(10).$answer->getTitle().chr(10).$answer->getDescription().chr(10).chr(10).'----------'.chr(10).'Das ist ein automatisch generiertes E-Mail von www.freizeitsportler.ch. Bitte nicht darauf antworten.';
-					$mail->subject('Neuer Eintrag auf dein Training');
+					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).$writerName.' hat sich für dein Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.Y').' angemeldet:'.chr(10).chr(10).$answer->getTitle().chr(10).$answer->getDescription();
+					$subject = 'Neuer Eintrag auf dein Training';
 					break;
 				case 2:
-					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).$writerName.' hat den Eintrag für dein Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.y').' geändert:'.chr(10).chr(10).$answer->getTitle().chr(10).$answer->getDescription().chr(10).chr(10).'----------'.chr(10).'Das ist ein automatisch generiertes E-Mail von www.freizeitsportler.ch. Bitte nicht darauf antworten.';
-					$mail->subject('Eintrag in deinem Training geändert');
+					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).$writerName.' hat den Eintrag für dein Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.Y').' geändert:'.chr(10).chr(10).$answer->getTitle().chr(10).$answer->getDescription();
+					$subject = 'Eintrag in deinem Training geändert';
 					break;
 				case 3:
-					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).$writerName.' meldet sich von deinem Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.y').' ab.'.chr(10).chr(10).'----------'.chr(10).'Das ist ein automatisch generiertes E-Mail von www.freizeitsportler.ch. Bitte nicht darauf antworten.';
-					$mail->subject('Abmeldung von deinem Training');
+					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).$writerName.' meldet sich von deinem Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.Y').' ab.';
+					$subject = 'Abmeldung von deinem Training';
 					break;
 				case 4:
-					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).$writerName.' meldet sich für dein Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.y').' wieder an.'.chr(10).chr(10).'----------'.chr(10).'Das ist ein automatisch generiertes E-Mail von www.freizeitsportler.ch. Bitte nicht darauf antworten.';
-					$mail->subject('Erneute Anmeldung auf dein Training');
+					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).$writerName.' meldet sich für dein Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.Y').' wieder an.';
+					$subject = 'Erneute Anmeldung auf dein Training';
+					break;
+				case 5:
+					if ($answer->getFeuser()) {
+						$participant = $answer->getFeuser->getFirstname().' '.substr($answer->getFeuser->getLastname(),0,1).'.';
+					} else {
+						$participant = $answer->getAuthor();
+					}
+					$mailtext = 'Hoi '.$leader->getFirstName().chr(10).chr(10).'Ein Administrator von freizeitsportler.ch hat den (resp. einen mehrfachen) Eintrag von '.$participant.' für dein Training "'.$answer->getTraining()->getTitle().'" vom '.$answer->getTraining()->getTrainingDate()->format('j.m.Y').' gelöscht.';
+					$subject = 'Eintrag in deinem Training geändert';
 					break;
 			}
-			$mail->text($mailtext);
-			$mail->html('<div style="font-family:sans-serif">'.str_replace(chr(10),'<br />',$mailtext).'</div>');
-			$mail->from(new \Symfony\Component\Mime\Address('notification@freizeitsportler.ch', 'freizeitsportler.ch'));
-			$mail->to(new \Symfony\Component\Mime\Address($leader->getEmail(), $leader->getName()));
-			return $mail->send();
+			$mail
+				->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
+				->to(new Address($leader->getEmail(), $leader->getName()))
+				->format(FluidEmail::FORMAT_BOTH)
+				->subject($subject)
+				->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
+				->setTemplate('Training')
+				->assignMultiple([
+					'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+					'headline' => $subject,
+					'content' => $mailtext,
+					'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
+					'note' => 'Dies ist eine automatisch erstellte Nachricht. Du erhältst sie, weil du dieses Training ausgeschrieben und die Option aktiviert hast, über Antworten informiert zu werden. Bitte nicht auf diese E-Mail antworten.'
+				]);
+			$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
+			return $mailerInterface->send($mail);
+
 		} else {
 			return false;
 		}
@@ -1152,64 +1280,83 @@ class TrainingController extends ActionController {
 			if ($start <= $end) {
 				$wday = $training->getSeriesWeekday();
 				if ($wday > 6) { $wday = $wday-7; }
-				if ($training->getSeriesPeriod() == 0) {
-					// weekly dates
-					$dates[0] = $start;
-					while (date('w',$dates[0]) != $wday) {
-						$dates[0] = strtotime('+1 days', $dates[0]);
-					}
-					if ($dates[0] <= $end) {
-						$lastDate = $dates[0];
-						$newDate = strtotime('+1 weeks', $lastDate);
-						while ($newDate <= $end and count($dates) <= 25) {
-							$dates[] = $newDate;
-							$lastDate = $newDate;
+				switch ((int)$training->getSeriesPeriod()) {
+					case 0:
+						// weekly dates
+						$dates[0] = $start;
+						while (date('w',$dates[0]) != $wday) {
+							$dates[0] = strtotime('+1 days', $dates[0]);
+						}
+						if ($dates[0] <= $end) {
+							$lastDate = $dates[0];
 							$newDate = strtotime('+1 weeks', $lastDate);
+							while ($newDate <= $end and count($dates) <= 25) {
+								$dates[] = $newDate;
+								$lastDate = $newDate;
+								$newDate = strtotime('+1 weeks', $lastDate);
+							}
+						} else {
+							$dates = [];
 						}
-					} else {
-						$dates = [];
-					}
-				} else {
-					// monthly dates
-					$weekNo = $training->getSeriesNumber();
-					if ($weekNo < 0 or $weekNo > 4) { $weekNo = 0; }
-					if ($weekNo != 4) {
-						// first, second, third or fourth week per month, but not last week per month
-						$newDate = $start;
-						$minDay = $weekNo * 7 + 1;
-						$maxDay = ($weekNo+1) * 7;
-						while (date('w',$newDate) != $wday or date('j',$newDate) < $minDay or date('j',$newDate) > $maxDay) {
-							$newDate = strtotime('+1 days', $newDate);
-						}
-						while ($newDate <= $end and count($dates) <= 25) {
-							$dates[] = $newDate;
-							$newDate = strtotime('+4 weeks', $newDate);
-							if (date('j',$newDate) < $minDay or date('j',$newDate) > $maxDay) {
-								$newDate = strtotime('+1 weeks', $newDate);
+						break;
+					case 1:
+						// monthly dates
+						$weekNo = $training->getSeriesNumber();
+						if ($weekNo < 0 or $weekNo > 4) { $weekNo = 0; }
+						if ($weekNo != 4) {
+							// first, second, third or fourth week per month, but not last week per month
+							$newDate = $start;
+							$minDay = $weekNo * 7 + 1;
+							$maxDay = ($weekNo+1) * 7;
+							while (date('w',$newDate) != $wday or date('j',$newDate) < $minDay or date('j',$newDate) > $maxDay) {
+								$newDate = strtotime('+1 days', $newDate);
+							}
+							while ($newDate <= $end and count($dates) <= 24) {
+								$dates[] = $newDate;
+								$newDate = strtotime('+4 weeks', $newDate);
+								if (date('j',$newDate) < $minDay or date('j',$newDate) > $maxDay) {
+									$newDate = strtotime('+1 weeks', $newDate);
+								}
+							}
+						} else {
+							// last week per month
+							$newDate = $start;
+							$minDay = date('t',$newDate)-6;
+							while (date('w',$newDate) != $wday or date('j',$newDate) < $minDay) {
+								$newDate = strtotime('+1 days',$newDate);
+								$minDay = date('t',$newDate)-6;
+							}
+							while ($newDate <= $end and count($dates) <= 24) {
+								$dates[] = $newDate;
+								$newDate = strtotime ('+4 weeks', $newDate);
+								$minDay = date('t',$newDate)-6;
+								if (date('j',$newDate) < $minDay) {
+									$newDate = strtotime ('+1 weeks', $newDate);
+								}
 							}
 						}
-					} else {
-						// last week per month
-						$newDate = $start;
-						$minDay = date('t',$newDate)-6;
-						while (date('w',$newDate) != $wday or date('j',$newDate) < $minDay) {
-							$newDate = strtotime('+1 days',$newDate);
-							$minDay = date('t',$newDate)-6;
-						}
-						while ($newDate <= $end and count($dates) <= 25) {
-							$dates[] = $newDate;
-							$newDate = strtotime ('+4 weeks', $newDate);
-							$minDay = date('t',$newDate)-6;
-							if (date('j',$newDate) < $minDay) {
-								$newDate = strtotime ('+1 weeks', $newDate);
+						break;
+					case 2:
+						// daily dates
+						$dates[0] = $start;
+						if ($dates[0] <= $end) {
+							$lastDate = $dates[0];
+							$newDate = strtotime('+1 day', $lastDate);
+							while ($newDate <= $end and count($dates) <= 24) {
+								$dates[] = $newDate;
+								$lastDate = $newDate;
+								$newDate = strtotime('+1 day', $lastDate);
 							}
+						} else {
+							$dates = [];
 						}
-					}
+						break;
 				}
 			}
+			$timezone = new \DateTimeZone('UTC');
 			if (count($dates) > 0) {
 				foreach ($dates as $date) {
-					$list[] = new \DateTime (date('Y-m-d',$date), $this->timezone);
+					$list[] = new \DateTime (date('Y-m-d',$date), $timezone);
 				}
 				return $list;
 			} else {

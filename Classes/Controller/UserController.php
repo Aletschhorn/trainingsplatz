@@ -2,6 +2,10 @@
 namespace DW\Trainingsplatz\Controller;
 
 use TYPO3\CMS\Core\Context\Context;
+use Symfony\Component\Mime\Address;
+use TYPO3\CMS\Core\Mail\FluidEmail;
+use TYPO3\CMS\Core\Mail\Mailer;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use In2code\Femanager\Domain\Repository\UserRepository;
 
 /**
@@ -66,16 +70,24 @@ class UserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 						if (strlen($subject) > 0 and strlen($content) > 0) {
 
 							// send message
-							if (! $this->settings['suppressMails']) {
-								$mail = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Mail\MailMessage::class);
-								$mail->from(new \Symfony\Component\Mime\Address($sender->getEmail(), $sender->getName()));
-								$mail->to(new \Symfony\Component\Mime\Address($recipient->getEmail(), $recipient->getName()));
-								$mail->subject($subject);
-								$content .= chr(10).chr(10).'----------'.chr(10).'Diese Nachricht wurde mittels Formular auf freizeitsportler.ch versendet.';
-								$mail->text($content);
-								$mail->html('<div style="font-family:sans-serif">'.str_replace(chr(10),'<br />',$content).'</div>');
-								$mail->send();
-							}
+							$mail = GeneralUtility::makeInstance(FluidEmail::class);
+							$mail
+								->from(new Address('donotreply@freizeitsportler.ch', $sender->getName().' über freizeitsportler.ch'))
+								->to(new Address($recipient->getEmail(), $recipient->getName()))
+								->replyTo(new Address($sender->getEmail(), $sender->getName()))
+								->subject($subject)
+								->format(FluidEmail::FORMAT_BOTH)
+								->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
+								->setTemplate('Training')
+								->assignMultiple([
+									'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+									'headline' => $subject,
+									'content' => $content,
+									'contentHtml' => str_replace(chr(10),'<br />',$content),
+									'note' => 'Diese Nachricht wurde mittels Formular auf freizeitsportler.ch versendet. Wenn du darauf antwortest, erreichst du den Absender über seine Mailadresse.'
+								]);
+							$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
+							$mailerInterface->send($mail);
 						
 							$this->addFlashMessage('E-Mail wurde versendet','',\TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
 							$this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 1));

@@ -2,7 +2,7 @@
 <f:if condition="{answers}">
 	<f:then>
 		<f:for each="{answers}" as="answer">
-			<f:render partial="Answer/Box" arguments="{answer:answer,userAnswer:userAnswer,training:training}" />
+			<f:render partial="Answer/Box" arguments="{answer:answer,userAnswer:userAnswer,training:training,settings:settings}" />
 		</f:for>
 	</f:then>
 	<f:else>

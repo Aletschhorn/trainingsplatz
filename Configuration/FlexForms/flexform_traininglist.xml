@@ -39,6 +39,16 @@
 							</config>
 						</TCEforms>
 					</settings.limitation>
+					<settings.itemsPerPage>
+						<TCEforms>
+							<label>Number of items per page (0 = all)</label>
+							<config>
+								<type>input</type>
+								<size>5</size>
+								<eval>int</eval>
+							</config>
+						</TCEforms>
+					</settings.itemsPerPage>
 					<settings.includeCancelled>
 						<TCEforms>
 							<label>Include cancelled trainings</label>

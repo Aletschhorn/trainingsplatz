@@ -11,8 +11,8 @@ defined('TYPO3') or die();
 	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
 		'Trainingsplatz',
 		'TrainingList',
-		[TrainingController::class => 'list, show, new, create, edit, update, delete, cancel, activate, addAnswer, editAnswer, modifyAnswer, cancelAnswer, reactivateAnswer, message, messageSend, cancelRequestAnswer, cancelPublicAnswer'],
-		[TrainingController::class => 'new, create, edit, update, delete, cancel, activate, addAnswer, editAnswer, modifyAnswer, cancelAnswer, reactivateAnswer, message, messageSend, cancelRequestAnswer, cancelPublicAnswer']
+		[TrainingController::class => 'list, show, new, create, edit, update, delete, cancel, activate, addAnswer, editAnswer, modifyAnswer, cancelAnswer, reactivateAnswer, deleteAnswer, message, messageSend, cancelRequestAnswer, cancelPublicAnswer'],
+		[TrainingController::class => 'new, create, edit, update, delete, cancel, activate, addAnswer, editAnswer, modifyAnswer, cancelAnswer, reactivateAnswer, deleteAnswer, message, messageSend, cancelRequestAnswer, cancelPublicAnswer']
 	);
 	
 	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(

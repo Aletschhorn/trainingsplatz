@@ -204,4 +204,53 @@ $EM_CONF[$_EXTKEY] = [
  * Get rid of cache clearing in extension (to be done with PageTS instead)
  * Tidying up controller files
  *
+ * Version 3.5.1
+ * -------------
+ * Corrected URL in informails
+ *
+ * Version 3.5.2
+ * -------------
+ * Corrected partial template Step3.html to allow setting a training startpoiint in Google Maps
+ *
+ * Version 3.5.3
+ * -------------
+ * Corrected trainings dates of a series
+ *
+ * Version 3.5.4
+ * -------------
+ * Deleted twice "return htmlResponse" from TrainingController
+ *
+ * Version 3.5.5
+ * -------------
+ * Corrections in user participation
+ * Correction of link creation for trainings answer cancellation link of non-members
+ *
+ * Version 3.6.0
+ * -------------
+ * Use fluid-based e-mails
+ *
+ * Version 3.6.1
+ * -------------
+ * Embed logo in fluid-based e-mails (InfoMails)
+ *
+ * Version 3.6.2
+ * -------------
+ * Embed logo in all other fluid-based e-mails
+ *
+ * Version 3.6.3
+ * -------------
+ * Reduce loading duration of training list
+ *
+ * Version 3.7.0
+ * -------------
+ * Provides deletion button per answer in training show action for admins
+ *
+ * Version 3.7.1
+ * -------------
+ * Fixes bug for provides deletion button per answer in training show action for admins
+ *
+ * Version 3.7.2
+ * -------------
+ * Typo in partial template Step3.html corrected
+ *
 **/

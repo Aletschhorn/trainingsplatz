@@ -13,7 +13,7 @@
                     </f:then>
                     <f:else>
                         <f:link.action action="show" pluginName="TrainingList" pageUid="{settings.singlePid}" arguments="{training:training}">{training.title->f:format.crop(maxCharacters:45)}</f:link.action><br />
-                        <tp:objectAccess haystack="{answers}" needle="{training.uid}" /> Teilnehmer
+                        {answers.{training.uid}} Teilnehmer
                     </f:else>
                 </f:if>					
             </td>

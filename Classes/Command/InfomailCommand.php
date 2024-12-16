@@ -7,7 +7,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Mime\Address;
-use TYPO3\CMS\Core\Mail\MailMessage;
+use TYPO3\CMS\Core\Mail\FluidEmail;
+use TYPO3\CMS\Core\Mail\Mailer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use DW\Trainingsplatz\Domain\Repository\InfomailRepository;
@@ -57,11 +58,21 @@ class InfomailCommand extends Command {
 		
 		$infomail = $this->infomailRepository->findFutureByStatus(4)->getFirst();
 		if ($infomail) {
-			$mail = GeneralUtility::makeInstance(MailMessage::class);
-			$mail->from(new Address('info@freizeitsportler.ch', 'freizeitsportler.ch'));
-			$mail->subject($infomail->getMailSubject());
-			$mail->text($infomail->getMailBody());
-			$mail->html('<div style="font-family:sans-serif">'.str_replace(chr(10),'<br />',$infomail->getMailBody()).'</div>');
+			$mail = GeneralUtility::makeInstance(FluidEmail::class);
+			$mail
+				->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
+				->replyTo(new Address('info@freizeitsportler.ch', 'freizeitsportler.ch'))
+				->subject($infomail->getMailSubject())
+				->format(FluidEmail::FORMAT_BOTH)
+				->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
+				->setTemplate('Training')
+				->assignMultiple([
+					'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+					'headline' => $infomail->getMailSubject(),
+					'content' => $infomail->getMailBody(),
+					'contentHtml' => str_replace(chr(10),'<br />',$infomail->getMailBody()),
+					'note' => 'Dies ist eine automatisch erstellte Nachricht. Du erhältst sie, weil du in den Einstellungen deines Profils InfoMails aktiviert hast. Bitte nicht auf diese E-Mail antworten.'
+				]);
 			$received = $infomail->getSendReceiver();
 			$recipients = $this->userRepository->findInfomailSlice($limit, $received);
 			$newReceived = $received + $recipients->count();
@@ -81,7 +92,7 @@ class InfomailCommand extends Command {
 						if ($suppressMails) {
 							$counter++;
 						} else {
-							if ($mail->send()) {
+							if ($mailerInterface->send($mail)) {
 								$counter++;
 							}
 						}
@@ -92,12 +103,22 @@ class InfomailCommand extends Command {
 		} else {
 			$infomail = $this->infomailRepository->findFutureByStatus(3)->getFirst();
 			if ($infomail) {
-				$mail = GeneralUtility::makeInstance(MailMessage::class);
-				$mail->from(new Address('info@freizeitsportler.ch', 'freizeitsportler.ch'));
-				$mail->subject($infomail->getMailSubject());
-				$mail->text($infomail->getMailBody());
-				$mail->html('<div style="font-family:sans-serif">'.str_replace(chr(10),'<br />',$infomail->getMailBody()).'</div>');
-				$recipients = $this->userRepository->findInfomailSlice($limit, 0);
+				$mail = GeneralUtility::makeInstance(FluidEmail::class);
+				$mail
+					->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
+					->replyTo(new Address('info@freizeitsportler.ch', 'freizeitsportler.ch'))
+					->subject($infomail->getMailSubject())
+					->format(FluidEmail::FORMAT_BOTH)
+					->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
+					->setTemplate('Training')
+					->assignMultiple([
+						'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+						'headline' => $infomail->getMailSubject(),
+						'content' => $infomail->getMailBody(),
+						'contentHtml' => str_replace(chr(10),'<br />',$infomail->getMailBody()),
+						'note' => 'Dies ist eine automatisch erstellte Nachricht. Du erhältst sie, weil du in den Einstellungen deines Profils InfoMails aktiviert hast. Bitte nicht auf diese E-Mail antworten.'
+					]);
+				$recipients = $userRepository->findInfomailSlice($limit, 0);
 				$newReceived = $received + $recipients->count();
 				$infomail->setSendReceiver($newReceived);
 				$infomail->setStatusDate($now);
@@ -116,7 +137,7 @@ class InfomailCommand extends Command {
 					foreach ($recipients as $recipient) {
 						if ($recipient->getEmail() and $recipient->getName()) {
 							if ($mail->to(new Address($recipient->getEmail(), $recipient->getName()))) {
-								if ($mail->send()) {
+								if ($mailerInterface->send($mail)) {
 									$counter++;
 								}
 							}
