@@ -1,17 +1,12 @@
 {namespace tp=DW\Trainingsplatz\ViewHelpers}
 
 <div id="Karte" style="width:100%; height:450px; margin-bottom:20px;"></div>
-<script type="text/javascript">	
-	<f:if condition="{training.startCoordinates}">TPtreffpunkt = new google.maps.LatLng{training.startCoordinates};</f:if>
-	<f:if condition="{training.mapCenter}">TPcenter = new google.maps.LatLng{training.mapCenter};</f:if>
-	<f:if condition="{training.mapZoom}">TPzoom = {training.mapZoom};</f:if>
-	initialize();
-	<f:if condition="{training.map}">
-		TPpunkte = Array (<tp:coordinates map="{training.map}" />);
-		TPshowMeilenstein = <f:if condition="{training.map.milestones}"><f:then>1</f:then><f:else>0</f:else></f:if>;
-		// milestone();
-	</f:if>
-	zeichnen();
-	// map.removeControl(kartencontrol);
-	// map.setCenter(center, zoom);
-</script>
+
+<f:asset.script identifier="GoogleMapsJS" src="//maps.googleapis.com/maps/api/js?key={settings.googleMapsKey}&v=weekly&libraries=marker" />
+<f:asset.script identifier="GoogleMapsShow" src="EXT:trainingsplatz/Resources/Public/Javascript/gmap_show.js" />
+<f:asset.script identifier="GoogleMapsJSInline">
+	TPcenter = new google.maps.LatLng {training.mapCenter};
+	TPzoom = {training.mapZoom};
+	TPtreffpunkt = new google.maps.LatLng {training.startCoordinates};
+    initialize();
+</f:asset.script>

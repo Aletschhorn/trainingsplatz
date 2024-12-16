@@ -1,84 +1,44 @@
 <?php
 namespace DW\Trainingsplatz\Controller;
 
+use Psr\Http\Message\ResponseInterface;
 use DW\Trainingsplatz\Domain\Repository\MotivationRepository;
-use DW\Trainingsplatz\Domain\Repository\SportRepository;
+use In2code\Femanager\Domain\Model\User;
 
 class NewController extends \In2code\Femanager\Controller\NewController {
-
-	/**
-	 * motivationRepository
-	 *
-	 * @var MotivationRepository
-	 */
-	protected $motivationRepository;
-	
-	/**
-	 * sportRepository
-	 *
-	 * @var SportRepository
-	 */
-	protected $sportRepository;
-	
-	/**
-	 * @param MotivationRepository $motivationRepository
-	 * @param SportRepository $sportRepository
-	 */
-	public function __construct (
-			MotivationRepository $motivationRepository,
-			SportRepository $sportRepository
-	) {
-		$this->motivationRepository = $motivationRepository;
-		$this->sportRepository = $sportRepository;
-	}
-	
 
     /**
      * action new
      *
-	 * @param In2code\Femanager\Domain\Model\User $user
-     * @return void
      */
-    public function newAction($user = NULL) {
-		$motivations = $this->motivationRepository->findAll();
+    public function newAction(User $user = NULL): ResponseInterface {
+		$motivationRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(MotivationRepository::class);
+		$motivations = $motivationRepository->findAll();
 		$this->view->assign('motivations', $motivations);
 		parent::newAction();
+		return $this->htmlResponse();
 	}
 
 	/**
 	* action initializeCreate
 	*
-	* @return void
 	*/
-	public function initializeCreateAction() {
-        $userValues = $this->request->getArgument('user');
-		if ($source = $userValues['txTrainingsplatzSports']) {
-			$sum = 0;
-			if (is_array($source)) {
-				foreach ($source as $key => $value) {
-					$sum += $value;
-				}
-			} else {
-				$sum = $source;
-			}
-			$this->pluginVariables['user']['txTrainingsplatzSports'] = $sum;
-		}
+	public function initializeCreateAction(): void {
 		if ($this->arguments->hasArgument('user')) {
-			$user = $this->arguments['user'];
-			$user->setDataType(\In2code\Femanager\Domain\Model\User::class);
+			$this->arguments->getArgument('user')->getPropertyMappingConfiguration()->forProperty('txTrainingsplatzSports')->setTypeConverter(
+				$this->objectManager->get(\DW\Trainingsplatz\Property\TypeConverter\BitConverter::class)
+			);
 		}
-		// parent::initializeCreateAction();
 	}
 
 	/**
 	* action create
 	*
-    * @param In2code\Femanager\Domain\Model\User $user
     * @TYPO3\CMS\Extbase\Annotation\Validate("In2code\Femanager\Domain\Validator\ServersideValidator", param="user")
     * @TYPO3\CMS\Extbase\Annotation\Validate("In2code\Femanager\Domain\Validator\PasswordValidator", param="user")
 	* @return void
 	*/
-	public function createAction($user): void {
+	public function createAction(User $user) {
 		// Default values
 		$user->setTxTrainingsplatzInfomail(1);
 		$user->setTxTrainingsplatzNewsletter(1);
@@ -86,6 +46,7 @@ class NewController extends \In2code\Femanager\Controller\NewController {
 		$user->setName($user->getFirstName().' '.$user->getLastName());
 		
 		parent::createAction($user);
+		return $this->htmlResponse();
 	}
 }
 ?>

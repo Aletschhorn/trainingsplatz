@@ -1,44 +1,34 @@
 <?php
 namespace DW\Trainingsplatz\Controller;
 
+use Psr\Http\Message\ResponseInterface;
 use DW\Trainingsplatz\Domain\Repository\MotivationRepository;
 use DW\Trainingsplatz\Domain\Repository\SportRepository;
+use In2code\Femanager\Domain\Model\User;
 
 class EditController extends \In2code\Femanager\Controller\EditController {
 
     /**
      * action edit
      *
-     * @return void
      */
-    public function editAction() {
+    public function editAction(): ResponseInterface {
 		$motivationRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(MotivationRepository::class);
 		$motivations = $motivationRepository->findAll();
 		$this->view->assign('motivations', $motivations);
 		parent::editAction();
+		return $this->htmlResponse();
 	}
 
 	/**
 	* action initializeUpdate
 	*
-	* @return void
 	*/
 	public function initializeUpdateAction() {
-        $userValues = $this->request->getArgument('user');
-		if ($source = $userValues['txTrainingsplatzSports']) {
-			$sum = 0;
-			if (is_array($source)) {
-				foreach ($source as $key => $value) {
-					$sum += $value;
-				}
-			} else {
-				$sum = $source;
-			}
-			$this->pluginVariables['user']['txTrainingsplatzSports'] = $sum;
-		}
 		if ($this->arguments->hasArgument('user')) {
-			$user = $this->arguments['user'];
-			// $user->setDataType(\In2code\Femanager\Domain\Model\User::class);
+			$this->arguments->getArgument('user')->getPropertyMappingConfiguration()->forProperty('txTrainingsplatzSports')->setTypeConverter(
+				$this->objectManager->get(\DW\Trainingsplatz\Property\TypeConverter\BitConverter::class)
+			);
 		}
 		parent::initializeUpdateAction();
 	}
@@ -46,11 +36,10 @@ class EditController extends \In2code\Femanager\Controller\EditController {
 	/**
 	* action update
 	*
-    * @param In2code\Femanager\Domain\Model\User $user
     * @TYPO3\CMS\Extbase\Annotation\Validate("In2code\Femanager\Domain\Validator\ServersideValidator", param="user")
     * @TYPO3\CMS\Extbase\Annotation\Validate("In2code\Femanager\Domain\Validator\PasswordValidator", param="user")
     */
-    public function updateAction($user): void {
+    public function updateAction(User $user) {
 		$user->setName($user->getFirstName().' '.$user->getLastName());
 		parent::updateAction($user);
 	}
@@ -58,10 +47,8 @@ class EditController extends \In2code\Femanager\Controller\EditController {
     /**
      * action delete
      *
-     * @param In2code\Femanager\Domain\Model\User $user
-     * @return void
      */
-    public function deleteAction(\In2code\Femanager\Domain\Model\User $user) {
+    public function deleteAction(User $user) {
 		$mail = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Mail\MailMessage::class);
 		$mailtext = 'Das Mitglied '.$user->getName().' hat sein Profil auf freizeitsportler.ch gelöscht.'.chr(10).chr(10).'----------'.chr(10).'Das ist ein automatisch generiertes E-Mail. Bitte nicht darauf antworten.';
 		$mail = new \TYPO3\CMS\Core\Mail\MailMessage;
@@ -75,4 +62,3 @@ class EditController extends \In2code\Femanager\Controller\EditController {
     }
 
 }
-?>

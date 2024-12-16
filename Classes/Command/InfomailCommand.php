@@ -10,22 +10,32 @@ use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\FluidEmail;
 use TYPO3\CMS\Core\Mail\Mailer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use DW\Trainingsplatz\Domain\Repository\InfomailRepository;
 use In2code\Femanager\Domain\Repository\UserRepository;
 
 /**
- * InfomailCommandController
+ * InfomailCommand
  */
 class InfomailCommand extends Command {
+	
+	
+	private ?InfomailRepository $infomailRepository = NULL;
+	private ?UserRepository $userRepository = NULL;
+
+    public function injectInfomailRepository(InfomailRepository $infomailRepository) {
+        $this->infomailRepository = $infomailRepository;
+    }
+	
+    public function injectUserRepository(UserRepository $userRepository) {
+        $this->userRepository = $userRepository;
+    }
+	 
 
     /**
      * Configure the command
      */
     protected function configure() {
-        $this->setDescription('Send Training InfoMails');
-        $this->setHelp('Sends InfoMails for defined trainings to users');
 		$this->addArgument('limit',InputArgument::OPTIONAL,'Number of e-mails sent per run. Default: 50');
 		$this->addArgument('suppress',InputArgument::OPTIONAL,'Boolean. Suppress sending e-mails.');
     }
@@ -37,20 +47,16 @@ class InfomailCommand extends Command {
      * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output) {
-
-		$persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
-		$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-		$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
-		$infomailRepository = $objectManager->get(InfomailRepository::class);
-		$userRepository = $objectManager->get(UserRepository::class);
 		$limit = intval($input->getArgument('limit'));
 		$suppressMails = intval($input->getArgument('suppress'));
 		if ($limit == 0) {
 			$limit = 50;
 		}
-		$UTC = new \DateTimeZone('UTC');
+		$timezone = new \DateTimeZone('Europe/Zurich');
+		$now = new \DateTime('now',$timezone);
+		$persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
 		
-		$infomail = $infomailRepository->findFutureByStatus(4)->getFirst();
+		$infomail = $this->infomailRepository->findFutureByStatus(4)->getFirst();
 		if ($infomail) {
 			$mail = GeneralUtility::makeInstance(FluidEmail::class);
 			$mail
@@ -68,16 +74,15 @@ class InfomailCommand extends Command {
 					'note' => 'Dies ist eine automatisch erstellte Nachricht. Du erhältst sie, weil du in den Einstellungen deines Profils InfoMails aktiviert hast. Bitte nicht auf diese E-Mail antworten.'
 				]);
 			$received = $infomail->getSendReceiver();
-			$recipients = $userRepository->findInfomailSlice($limit, $received);
+			$recipients = $this->userRepository->findInfomailSlice($limit, $received);
 			$newReceived = $received + $recipients->count();
 			$infomail->setSendReceiver($newReceived);
+			$infomail->setStatusDate($now);
 			if ($recipients->count() < $limit) {
 				// completed
-				$now = new \DateTime('now',$UTC);
-				$infomail->setStatusDate($now);
 				$infomail->setStatus(1);
 			}
-			$infomailRepository->update($infomail);
+			$this->infomailRepository->update($infomail);
 			$persistenceManager->persistAll();
 			
 			$counter = 0;
@@ -96,7 +101,7 @@ class InfomailCommand extends Command {
 			}
 			
 		} else {
-			$infomail = $infomailRepository->findFutureByStatus(3)->getFirst();
+			$infomail = $this->infomailRepository->findFutureByStatus(3)->getFirst();
 			if ($infomail) {
 				$mail = GeneralUtility::makeInstance(FluidEmail::class);
 				$mail
@@ -116,14 +121,13 @@ class InfomailCommand extends Command {
 				$recipients = $userRepository->findInfomailSlice($limit, 0);
 				$newReceived = $received + $recipients->count();
 				$infomail->setSendReceiver($newReceived);
+				$infomail->setStatusDate($now);
 				$infomail->setStatus(4);
 				if ($recipients->count() < $limit) {
 					// completed
-					$now = new \DateTime('now',$UTC);
-					$infomail->setStatusDate($now);
 					$infomail->setStatus(1);
 				}
-				$infomailRepository->update($infomail);
+				$this->infomailRepository->update($infomail);
 				$persistenceManager->persistAll();
 				
 				if ($suppressMails) {

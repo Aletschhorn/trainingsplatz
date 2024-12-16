@@ -1,6 +1,7 @@
 <?php
 namespace DW\Trainingsplatz\Controller;
 
+use TYPO3\CMS\Core\Context\Context;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\FluidEmail;
 use TYPO3\CMS\Core\Mail\Mailer;
@@ -14,14 +15,17 @@ class UserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 
 	private $userRepository;	
 	
-	public function __construct (UserRepository $userRepository) {
+	public function __construct (
+			UserRepository $userRepository, 
+			private readonly Context $context
+	) {
 		$this->userRepository = $userRepository;
 	}
 	
 
 	public function birthdayAction() {
 		$usergroups = explode (',', $this->settings['usergroups']);
-		$todayDate = new \DateTime ('now');
+		$todayDate = new \DateTime ('today');
 		$tomorrowDate = new \DateTime ('tomorrow');
 		$todayUser = $this->userRepository->findBirthdayToday(0, $usergroups);
 		$tomorrowUser = $this->userRepository->findBirthdayToday(1, $usergroups);
@@ -30,7 +34,6 @@ class UserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 			'tomorrowUser' => $tomorrowUser,
 			'todayDate' => $todayDate,
 			'tomorrowDate' => $tomorrowDate,
-			'settings' => $this->settings,
 		]);
 	}
 
@@ -58,7 +61,7 @@ class UserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 		if ($arguments['member']) {
 			$recipient = $this->userRepository->findByUid(intval($arguments['member']));
 			if ($recipient) {
-				$senderId = $GLOBALS['TSFE']->fe_user->user['uid'];
+				$senderId = $this->context->getPropertyFromAspect('frontend.user', 'id');
 				if ($senderId > 0) {
 					$sender = $this->userRepository->findByUid($senderId);
 					if ($sender->getEmail() and $recipient->getEmail()) {
