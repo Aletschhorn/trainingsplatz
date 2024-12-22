@@ -33,7 +33,6 @@ services:
         target: int
         sources: array,int
   
-  In2code\Femanager\ViewHelpers\Form\HiddenViewHelper: '@DW\Trainingsplatz\ViewHelpers\HiddenViewHelper'
   In2code\Femanager\Controller\EditController: '@DW\Trainingsplatz\Controller\EditController'
   In2code\Femanager\Controller\NewController: '@DW\Trainingsplatz\Controller\NewController'
   In2code\Femanager\Domain\Model\User: '@DW\Trainingsplatz\Domain\Model\User'
