@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace DW\Trainingsplatz\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -14,24 +16,15 @@ use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use DW\Trainingsplatz\Domain\Repository\InfomailRepository;
 use In2code\Femanager\Domain\Repository\UserRepository;
 
-/**
- * InfomailCommand
- */
-class InfomailCommand extends Command {
-	
-	
-	private ?InfomailRepository $infomailRepository = NULL;
-	private ?UserRepository $userRepository = NULL;
-
-    public function injectInfomailRepository(InfomailRepository $infomailRepository) {
-        $this->infomailRepository = $infomailRepository;
+final class InfomailCommand extends Command
+{
+    public function __construct(
+        private readonly InfomailRepository $infomailRepository,
+        private readonly UserRepository $userRepository,
+    ) {
+        parent::__construct();
     }
 	
-    public function injectUserRepository(UserRepository $userRepository) {
-        $this->userRepository = $userRepository;
-    }
-	 
-
     /**
      * Configure the command
      */
