@@ -164,6 +164,7 @@ class TrainingController extends ActionController {
 			'feuser' => $feuser,
 			'userAnswer' => $userAnswer[0],
 			'correctedAnswers' => $correctedAnswers,
+			'outdated' => $this->isTrainingOutdated($training),
 			'filter' => $filter,
 			'listPageNo' => $listPageNo,
 			'settings' => $this->settings,
@@ -562,6 +563,10 @@ class TrainingController extends ActionController {
 			// Robot filled hidden text field (honey pot)
 			$error = true;
 		}
+		if ($this->isTrainingOutdated($answer->getTraining())) {
+			// Only allow adding an answer for today's and future trainings, not for outdated ones
+			$error = true;
+		}
 		$member = false;
 		$feuserId = $this->context->getPropertyFromAspect('frontend.user', 'id');
 		if ($feuserId > 0) {
@@ -629,6 +634,10 @@ class TrainingController extends ActionController {
 		// Validate some fields
 		$error = false;
 		if ($answer->getTitle() == "" or $answer->getDescription() == "") {
+			$error = true;
+		}
+		if ($this->isTrainingOutdated($answer->getTraining())) {
+			// Only allow adding an answer for today's and future trainings, not for outdated ones
 			$error = true;
 		}
 
@@ -1418,4 +1427,14 @@ class TrainingController extends ActionController {
 			return ['start' => NULL, 'end' => NULL];
 		}
 	}
+	
+	protected function isTrainingOutdated (Training $training) {
+		$yesterday = new \DateTime('yesterday');
+		if ($training->getTrainingDate() <= $yesterday) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }
