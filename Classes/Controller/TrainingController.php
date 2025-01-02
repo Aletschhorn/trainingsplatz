@@ -583,7 +583,7 @@ class TrainingController extends ActionController {
 				$error = true;
 			}
 		} else {
-			if ($answer->getAuthor() == "" or $answer->getEmail() == "") {
+			if ($answer->getAuthor() == "" or GeneralUtility::validEmail($answer->getEmail()) == false) {
 				$error = true;
 			}
 		}
@@ -688,54 +688,58 @@ class TrainingController extends ActionController {
 			$training = $this->trainingRepository->findByUid($this->request->getArgument('training'));
 			if ($training and $this->request->hasArgument('email')) {
 				$email = $this->request->getArgument('email');
-				$answers = $this->answerRepository->findPerTrainingAndEmail($training,$email);
-				if ($answers->count() > 0) {
-					foreach ($answers as $answer) {
-						if (! $answer->isCancelled()) {
-							$hash = md5($training->getUid().'-'.$answer->getUid().'-'.time());
-							$answer->setHash($hash);
-							$this->answerRepository->update($answer);
-							$persistenceManager->persistAll();
-							$arguments = ['training' => $training->getUid(), 'answer' => $answer->getUid(), 'hash' => $hash];
-							$link = $this->uriBuilder
-								->reset()
-								->setTargetPageUid($this->settings['mainPid'])
-								->setCreateAbsoluteUri(true)
-								->uriFor('cancelPublicAnswer', $arguments, 'Training');							
-							$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Um deine Teilnahme beim Training "'.$training->getTitle().'" vom '.$training->getTrainingDate()->format('j.m.Y').' abzusagen, klicke bitte auf diesen Link:.'.chr(10).$link.chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch';
-							$subject = 'Deine Absage vom Training am '.$training->getTrainingDate()->format('j.m.Y');
-
-							$mail = GeneralUtility::makeInstance(FluidEmail::class);
-							$mail
-								->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
-								->to(new Address($email))
-								->subject($subject)
-								->format(FluidEmail::FORMAT_BOTH)
-								->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
-								->setTemplate('Training')
-								->assignMultiple([
-									'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
-									'headline' => $subject,
-									'content' => $mailtext,
-									'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
-									'note' => 'Dies ist eine automatisch erstellte Nachricht. Bitte nicht darauf antworten.'
-								]);
-							$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
-							$mailerInterface->send($mail);
-							if ($mailerInterface->send($mail)) {
-								$this->addFlashMessage('Der Abmelde-Link wurde dir per E-Mail zugesendet.', '', AbstractMessage::OK);
-							} else {
-								$this->addFlashMessage('Das Versenden des Anmelde-Link funktioniert aufgrund eines Fehlers nicht.<br />Bitte melde dich per E-Mail an <a href="mailto:info@freizeitsportler.ch">info@freizeitsportler.ch</a> bei uns.', '', AbstractMessage::ERROR);							
+				if (GeneralUtility::validEmail($email)) {
+					$answers = $this->answerRepository->findPerTrainingAndEmail($training,$email);
+					if ($answers->count() > 0) {
+						foreach ($answers as $answer) {
+							if (! $answer->isCancelled()) {
+								$hash = md5($training->getUid().'-'.$answer->getUid().'-'.time());
+								$answer->setHash($hash);
+								$this->answerRepository->update($answer);
+								$persistenceManager->persistAll();
+								$arguments = ['training' => $training->getUid(), 'answer' => $answer->getUid(), 'hash' => $hash];
+								$link = $this->uriBuilder
+									->reset()
+									->setTargetPageUid($this->settings['mainPid'])
+									->setCreateAbsoluteUri(true)
+									->uriFor('cancelPublicAnswer', $arguments, 'Training');							
+								$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Um deine Teilnahme beim Training "'.$training->getTitle().'" vom '.$training->getTrainingDate()->format('j.m.Y').' abzusagen, klicke bitte auf diesen Link:.'.chr(10).$link.chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch';
+								$subject = 'Deine Absage vom Training am '.$training->getTrainingDate()->format('j.m.Y');
+	
+								$mail = GeneralUtility::makeInstance(FluidEmail::class);
+								$mail
+									->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
+									->to(new Address($email))
+									->subject($subject)
+									->format(FluidEmail::FORMAT_BOTH)
+									->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
+									->setTemplate('Training')
+									->assignMultiple([
+										'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+										'headline' => $subject,
+										'content' => $mailtext,
+										'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
+										'note' => 'Dies ist eine automatisch erstellte Nachricht. Bitte nicht darauf antworten.'
+									]);
+								$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
+								$mailerInterface->send($mail);
+								if ($mailerInterface->send($mail)) {
+									$this->addFlashMessage('Der Abmelde-Link wurde dir per E-Mail zugesendet.', '', AbstractMessage::OK);
+								} else {
+									$this->addFlashMessage('Das Versenden des Anmelde-Link funktioniert aufgrund eines Fehlers nicht.<br />Bitte melde dich per E-Mail an <a href="mailto:info@freizeitsportler.ch">info@freizeitsportler.ch</a> bei uns.', '', AbstractMessage::ERROR);							
+								}
+								break;
 							}
-							break;
 						}
+					} else {
+						$this->addFlashMessage('Die angegebene Mailadresse wurde in keinem der Teilnahme-Einträgen gefunden.', '', AbstractMessage::WARNING);
 					}
 				} else {
-					$this->addFlashMessage('Die anggegebene Mailadresse wurde in keiner der Teilnahme-Einträgen gefunden.', '', AbstractMessage::WARNING);
+					$this->addFlashMessage('Die angegebene Mailadresse ist ungültig.', '', AbstractMessage::WARNING);
 				}
 				return $this->redirect('show','Training','trainingsplatz',['training' => $training]);
 			}
-			$this->addFlashMessage('Die anggegebene Mailadresse wurde in keiner der Teilnahme-Einträgen gefunden.', '', AbstractMessage::WARNING);
+			$this->addFlashMessage('Die anggeebene Mailadresse wurde in keiner der Teilnahme-Einträgen gefunden.', '', AbstractMessage::WARNING);
 			return $this->redirect('show','Training','trainingsplatz',['training' => $training]);
 		}
 		return $this->redirect('list');
