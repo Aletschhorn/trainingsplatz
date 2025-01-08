@@ -19,8 +19,7 @@ use In2code\Femanager\Domain\Repository\UserRepository;
 final class InfomailCommand extends Command
 {
     public function __construct(
-        private readonly InfomailRepository $infomailRepository,
-        private readonly UserRepository $userRepository,
+        private readonly InfomailRepository $infomailRepository
     ) {
         parent::__construct();
     }
@@ -31,6 +30,7 @@ final class InfomailCommand extends Command
     protected function configure() {
 		$this->addArgument('limit',InputArgument::OPTIONAL,'Number of e-mails sent per run. Default: 50');
 		$this->addArgument('suppress',InputArgument::OPTIONAL,'Boolean. Suppress sending e-mails.');
+		$this->addArgument('sendOnlyTo',InputArgument::OPTIONAL,'Only one e-mail per execution is sent to this address');
     }
 
     /**
@@ -42,6 +42,7 @@ final class InfomailCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output) {
 		$limit = intval($input->getArgument('limit'));
 		$suppressMails = intval($input->getArgument('suppress'));
+		$sendOnlyTo = $input->getArgument('sendOnlyTo') ?? NULL;
 		if ($limit == 0) {
 			$limit = 50;
 		}
@@ -67,7 +68,8 @@ final class InfomailCommand extends Command
 					'note' => 'Dies ist eine automatisch erstellte Nachricht. Du erhältst sie, weil du in den Einstellungen deines Profils InfoMails aktiviert hast. Bitte nicht auf diese E-Mail antworten.'
 				]);
 			$received = $infomail->getSendReceiver();
-			$recipients = $this->userRepository->findInfomailSlice($limit, $received);
+			$userRepository = GeneralUtility::makeInstance(UserRepository::class);
+			$recipients = $userRepository->findInfomailSlice($limit, $received);
 			$newReceived = $received + $recipients->count();
 			$infomail->setSendReceiver($newReceived);
 			$infomail->setStatusDate($now);
@@ -78,18 +80,24 @@ final class InfomailCommand extends Command
 			$this->infomailRepository->update($infomail);
 			$persistenceManager->persistAll();
 			
-			$counter = 0;
-			foreach ($recipients as $recipient) {
-				if ($recipient->getEmail() and $recipient->getName()) {
-					if ($mail->to(new Address($recipient->getEmail(), $recipient->getName()))) {
-						if ($suppressMails) {
-							$counter++;
-						} else {
+			$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
+			if ($suppressMails or $sendOnlyTo) {
+				$counter = count($recipients);
+			} else {
+				$counter = 0;
+				foreach ($recipients as $recipient) {
+					if ($recipient->getEmail() and $recipient->getName()) {
+						if ($mail->to(new Address($recipient->getEmail(), $recipient->getName()))) {
 							if ($mailerInterface->send($mail)) {
 								$counter++;
 							}
 						}
 					}
+				}
+			}
+			if ($sendOnlyTo) {
+				if ($mail->to(new Address($sendOnlyTo))) {
+					$mailerInterface->send($mail);
 				}
 			}
 			
@@ -111,6 +119,7 @@ final class InfomailCommand extends Command
 						'contentHtml' => str_replace(chr(10),'<br />',$infomail->getMailBody()),
 						'note' => 'Dies ist eine automatisch erstellte Nachricht. Du erhältst sie, weil du in den Einstellungen deines Profils InfoMails aktiviert hast. Bitte nicht auf diese E-Mail antworten.'
 					]);
+				$userRepository = GeneralUtility::makeInstance(UserRepository::class);
 				$recipients = $userRepository->findInfomailSlice($limit, 0);
 				$newReceived = $received + $recipients->count();
 				$infomail->setSendReceiver($newReceived);
@@ -123,7 +132,8 @@ final class InfomailCommand extends Command
 				$this->infomailRepository->update($infomail);
 				$persistenceManager->persistAll();
 				
-				if ($suppressMails) {
+				$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
+				if ($suppressMails or $sendOnlyTo) {
 					$counter = count($recipients);
 				} else {
 					$counter = 0;
@@ -135,6 +145,11 @@ final class InfomailCommand extends Command
 								}
 							}
 						}
+					}
+				}
+				if ($sendOnlyTo) {
+					if ($mail->to(new Address($sendOnlyTo))) {
+						$mailerInterface->send($mail);
 					}
 				}
 			}

@@ -28,6 +28,10 @@ plugin.tx_trainingsplatz {
 		usergroupAdmin = {$plugin.tx_trainingsplatz.settings.usergroupAdmin}
 		usergroupSportcoach = {$plugin.tx_trainingsplatz.settings.usergroupSportcoach}
 		usergroupMember = {$plugin.tx_trainingsplatz.settings.usergroupMember}
+		emails {
+			suppress = {$plugin.tx_trainingsplatz.settings.suppressMails}
+			sendOnlyTo =
+		}
 	}
 }
 

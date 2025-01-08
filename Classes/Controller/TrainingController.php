@@ -451,12 +451,16 @@ class TrainingController extends ActionController {
 				}
 					
 				// Send notification to admins
-				if (! $this->settings['suppressMails']) {
+				if (! $this->settings['emails']['suppress']) {
 					$mailtext = 'Titel: '.$training->getTitle().chr(10).'Datum: '.$training->getTrainingDate()->format('j.m.Y').chr(10).'Sportart: '.$training->getSport()->getTitle().chr(10).'Intensität: '.$training->getIntensity()->getTitle().chr(10).'Verantwortlich: '.$trainer->getName().chr(10).'InfoMail-Versand: https://www.freizeitsportler.ch/infomails';
 					$mail = GeneralUtility::makeInstance(FluidEmail::class);
+					if ($this->settings['emails']['sendOnlyTo']) {
+						$mail->to(new Address($this->settings['emails']['sendOnlyTo'], 'fs.ch-InfoMail'));
+					} else {
+						$mail->to(new Address('infomailversand@freizeitsportler.ch', 'fs.ch-InfoMail'));
+					}
 					$mail
 						->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
-						->to(new Address('infomailversand@freizeitsportler.ch', 'fs.ch-InfoMail'))
 						->subject('Infomail für Training pendent')
 						->format(FluidEmail::FORMAT_BOTH)
 						->setTemplate('Training')
@@ -492,15 +496,19 @@ class TrainingController extends ActionController {
 			$training->setCancelled(true);
 			$this->trainingRepository->update($training);
 			
-			if (! $this->settings['suppressMails']) {
+			if (! $this->settings['emails']['suppress']) {
 				$mailtext = 'Hoi Freizeitsportler'.chr(10).chr(10).'Das Training "'.$training->getTitle().'" vom '.$training->getTrainingDate()->format('j.m.y').' muss leider abgesagt werden.'.chr(10).chr(10).'Sportliche Grüsse'.chr(10).'freizeitsportler.ch';
 				$answers = $this->answerRepository->findPerTraining($training);
 				$subject = 'Training vom '.$training->getTrainingDate()->format('j.m.Y').' abgesagt';
 
 				$mail = GeneralUtility::makeInstance(FluidEmail::class);
+				if ($this->settings['emails']['sendOnlyTo']) {
+					$mail->to(new Address($this->settings['emails']['sendOnlyTo'], 'fs.ch-InfoMail'));
+				} else {
+					$mail->to(new Address('infomailversand@freizeitsportler.ch', 'fs.ch-InfoMail'));
+				}
 				$mail
 					->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
-					->to(new Address('infomailversand@freizeitsportler.ch', 'fs.ch-InfoMail'))
 					->subject($subject)
 					->format(FluidEmail::FORMAT_BOTH)
 					->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
@@ -515,22 +523,24 @@ class TrainingController extends ActionController {
 				$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
 				$mailerInterface->send($mail);
 
-				foreach ($answers as $answer) {
-					if ($user = $answer->getFeuser()) {
-						if ($user->getEmail()) {
-							$mail->to(new Address($user->getEmail(), $user->getName()));
-							$mailerInterface->send($mail);
-						}
-					} else {
-						if ($answer->getEmail()) {
-							$mail->to(new Address($answer->getEmail(), $answer->getAuthor()));
-							$mailerInterface->send($mail);
+				if (! $this->settings['emails']['sendOnlyTo']) {
+					foreach ($answers as $answer) {
+						if ($user = $answer->getFeuser()) {
+							if ($user->getEmail()) {
+								$mail->to(new Address($user->getEmail(), $user->getName()));
+								$mailerInterface->send($mail);
+							}
+						} else {
+							if ($answer->getEmail()) {
+								$mail->to(new Address($answer->getEmail(), $answer->getAuthor()));
+								$mailerInterface->send($mail);
+							}
 						}
 					}
 				}
 			}
 			
-			$this->addFlashMessage('Training wurde abgesagt und die eingetragenen Teilnehmer per Mail informiert', '', AbstractMessage::OK);
+			$this->addFlashMessage('Training wurde abgesagt und die eingetragenen Teilnehmer per Mail informiert.', '', AbstractMessage::OK);
 		}
 		return $this->redirect('show','Training','trainingsplatz',array('training' => $training->getUid()));
 	}
@@ -542,14 +552,14 @@ class TrainingController extends ActionController {
 		$training->setCancelled(false);
 		$this->trainingRepository->update($training);
 
-		$this->addFlashMessage('Training wurde wieder aktiviert');
+		$this->addFlashMessage('Training wurde wieder aktiviert. Es wurden keine Mails versendet.', '', AbstractMessage::OK);
 		return $this->redirect('show','Training','trainingsplatz',array('training' => $training->getUid()));
 	}
 
 
 	public function deleteAction(Training $training): ResponseInterface {
 		$this->trainingRepository->remove($training);
-		$this->addFlashMessage('Training wurde gelöscht');
+		$this->addFlashMessage('Das Training wurde gelöscht.');
 		return $this->redirect('list');
 	}
 
@@ -707,9 +717,14 @@ class TrainingController extends ActionController {
 								$subject = 'Deine Absage vom Training am '.$training->getTrainingDate()->format('j.m.Y');
 	
 								$mail = GeneralUtility::makeInstance(FluidEmail::class);
+								if ($this->settings['emails']['sendOnlyTo']) {
+									$mail->to(new Address($this->settings['emails']['sendOnlyTo']));
+								} else {
+									$mail->to(new Address($email));
+								}
 								$mail
 									->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
-									->to(new Address($email))
+									->to(new Address('daniel.widmer@dotter.ch'))
 									->subject($subject)
 									->format(FluidEmail::FORMAT_BOTH)
 									->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
@@ -721,14 +736,13 @@ class TrainingController extends ActionController {
 										'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
 										'note' => 'Dies ist eine automatisch erstellte Nachricht. Bitte nicht darauf antworten.'
 									]);
-								$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
-								$mailerInterface->send($mail);
-								if ($mailerInterface->send($mail)) {
-									$this->addFlashMessage('Der Abmelde-Link wurde dir per E-Mail zugesendet.', '', AbstractMessage::OK);
+								if ($this->settings['emails']['suppress']) {
+									$this->addFlashMessage('Weil der Versand von E-Mails unterdrückt ist, ist keine Nachtricht versendet worden.', '', AbstractMessage::WARNING);
 								} else {
-									$this->addFlashMessage('Das Versenden des Anmelde-Link funktioniert aufgrund eines Fehlers nicht.<br />Bitte melde dich per E-Mail an <a href="mailto:info@freizeitsportler.ch">info@freizeitsportler.ch</a> bei uns.', '', AbstractMessage::ERROR);							
+									$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
+									$mailerInterface->send($mail);
+									$this->addFlashMessage('Der Abmelde-Link wurde dir per E-Mail zugesendet.', '', AbstractMessage::OK);
 								}
-								break;
 							}
 						}
 					} else {
@@ -810,59 +824,64 @@ class TrainingController extends ActionController {
 								'note' => 'Diese Nachricht wurde mittels Formular auf freizeitsportler.ch erfasst und automatisch an alle Teilnehmer des Trainings "'.$training->getTitle().'" am '.$training->getTrainingDate()->format('d.m.Y').' versendet. Bitte nicht auf diese E-Mail antworten.'
 							]);
 				
-						if (! $this->settings['suppressMails']) {
-							$needCopyToUser = true;
-							$needCopyToAuthor = true;
-							$needCopyToCoach = true;
-							if ($user == $training->getAuthor()) {
-								$needCopyToAuthor = false;
-							}
-							if ($training->isGuided()) {
-								if ($user == $training->getLeader() or $training->getAuthor() == $training->getLeader()) {
-									$needCopyToCoach = false;
-								}
+						if (! $this->settings['emails']['suppress']) {
+							if ($this->settings['emails']['sendOnlyTo']) {
+								$mail->to(new Address($this->settings['emails']['sendOnlyTo']));
+								$mailerInterface->send($mail);
 							} else {
-								$needCopyToCoach = false;
-							}
-							
-							foreach ($answers as $answer) {
-								if ($recipient = $answer->getFeuser()) {
-									if ($recipient == $user) {
-										$needCopyToUser = false;
-									}
-									if ($recipient == $training->getAuthor()) {
-										$needCopyToAuthor = false;
-									}
-									if ($training->isGuided() and $training->getLeader()) {
+								$needCopyToUser = true;
+								$needCopyToAuthor = true;
+								$needCopyToCoach = true;
+								if ($user == $training->getAuthor()) {
+									$needCopyToAuthor = false;
+								}
+								if ($training->isGuided()) {
+									if ($user == $training->getLeader() or $training->getAuthor() == $training->getLeader()) {
 										$needCopyToCoach = false;
 									}
-									if ($recipient->getEmail()) {
-										$mail->to(new Address($recipient->getEmail(), $recipient->getName()));
-										$mailerInterface->send($mail);
-									}
 								} else {
-									if ($answer->getEmail()) {
-										$mail->to(new Address($answer->getEmail(), $answer->getName()));
+									$needCopyToCoach = false;
+								}
+								
+								foreach ($answers as $answer) {
+									if ($recipient = $answer->getFeuser()) {
+										if ($recipient == $user) {
+											$needCopyToUser = false;
+										}
+										if ($recipient == $training->getAuthor()) {
+											$needCopyToAuthor = false;
+										}
+										if ($training->isGuided() and $training->getLeader()) {
+											$needCopyToCoach = false;
+										}
+										if ($recipient->getEmail()) {
+											$mail->to(new Address($recipient->getEmail(), $recipient->getName()));
+											$mailerInterface->send($mail);
+										}
+									} else {
+										if ($answer->getEmail()) {
+											$mail->to(new Address($answer->getEmail(), $answer->getName()));
+											$mailerInterface->send($mail);
+										}
+									}
+								}
+								if ($needCopyToUser) {
+									if ($user->getEmail()) {
+										$mail->to(new Address($user->getEmail(), $user->getName()));
 										$mailerInterface->send($mail);
 									}
 								}
-							}
-							if ($needCopyToUser) {
-								if ($user->getEmail()) {
-									$mail->to(new Address($user->getEmail(), $user->getName()));
-									$mailerInterface->send($mail);
+								if ($needCopyToAuthor) {								
+									if ($training->getAuthor()->getEmail()) {
+										$mail->to(new Address($training->getAuthor()->getEmail(), $training->getAuthor()->getName()));
+										$mailerInterface->send($mail);
+									}
 								}
-							}
-							if ($needCopyToAuthor) {								
-								if ($training->getAuthor()->getEmail()) {
-									$mail->to(new Address($training->getAuthor()->getEmail(), $training->getAuthor()->getName()));
-									$mailerInterface->send($mail);
-								}
-							}
-							if ($training->isGuided() and $needCopyToCoach) {								
-								if ($training->getLeader()->getEmail()) {
-									$mail->to(new Address($training->getLeader()->getEmail(), $training->getLeader()->getName()));
-									$mailerInterface->send($mail);
+								if ($training->isGuided() and $needCopyToCoach) {								
+									if ($training->getLeader()->getEmail()) {
+										$mail->to(new Address($training->getLeader()->getEmail(), $training->getLeader()->getName()));
+										$mailerInterface->send($mail);
+									}
 								}
 							}							
 						}
@@ -1210,7 +1229,7 @@ class TrainingController extends ActionController {
 	 * $reason => Reason code: 1 = new answer, 2 = modification, 3 = cancellation, 4 = re-activation
 	 */
 	protected function sendNotification (Answer $answer, int $reason) {
-		if ($this->settings['suppressMails']) {
+		if ($this->settings['emails']['suppress']) {
 			return false;
 		}
 		if ($answer->getFeuser()) {
@@ -1252,9 +1271,13 @@ class TrainingController extends ActionController {
 					$subject = 'Eintrag in deinem Training geändert';
 					break;
 			}
+			if ($this->settings['emails']['sendOnlyTo']) {
+				$mail->to(new Address($this->settings['emails']['sendOnlyTo'], $leader->getName()));
+			} else {
+				$mail->to(new Address($leader->getEmail(), $leader->getName()));
+			}
 			$mail
 				->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
-				->to(new Address($leader->getEmail(), $leader->getName()))
 				->format(FluidEmail::FORMAT_BOTH)
 				->subject($subject)
 				->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
