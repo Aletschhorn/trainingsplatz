@@ -4,15 +4,17 @@
 		<div class="panel panel-primary">
 			<div class="panel-body">
 				<f:render partial="Answer/Content" arguments="{answer:answer,showDeleteButton:1}" />
-				<f:if condition="{answer.cancelled}">
-					<f:then>
-						<f:link.action action="reactivateAnswer" arguments="{answer:userAnswer}" class="btn btn-default">Doch wieder teilnehmen</f:link.action>
-					</f:then>
-					<f:else>
-						<f:link.action action="editAnswer" arguments="{answer:userAnswer}" section="edit" class="btn btn-default">Text ändern</f:link.action> &nbsp; 
-						<f:link.action action="cancelAnswer" arguments="{answer:userAnswer}" class="btn btn-default" additionalAttributes="{onclick: 'return confirm(\'Willst du deine Teilnahme wirklich absagen?\')'}">Teilnahme absagen</f:link.action>
-					</f:else>
-				</f:if>
+                <f:if condition="{training.cancelled}==0">
+                    <f:if condition="{answer.cancelled}">
+                        <f:then>
+                            <f:link.action action="reactivateAnswer" arguments="{answer:userAnswer}" class="btn btn-default">Doch wieder teilnehmen</f:link.action>
+                        </f:then>
+                        <f:else>
+                            <f:link.action action="editAnswer" arguments="{answer:userAnswer}" section="edit" class="btn btn-default">Text ändern</f:link.action> &nbsp; 
+                            <f:link.action action="cancelAnswer" arguments="{answer:userAnswer}" class="btn btn-default" additionalAttributes="{onclick: 'return confirm(\'Willst du deine Teilnahme wirklich absagen?\')'}">Teilnahme absagen</f:link.action>
+                        </f:else>
+                    </f:if>
+                </f:if>
 			</div>
 		</div>
 	</f:then>

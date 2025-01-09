@@ -3,7 +3,7 @@
 	<f:then>
 		<div class="alert alert-success">Du hast dich am {userAnswer.creationDate->f:format.date(format:'d.m.y')} um {userAnswer.creationDate->f:format.date(format:'H:i')} Uhr für dieses Training eingetragen. <f:if condition="{userAnswer.cancelled}"><f:then>Am {userAnswer.changeDate->f:format.date(format:'d.m.y')} um {userAnswer.changeDate->f:format.date(format:'H:i')} Uhr hast du dich wieder abgemeldet.</f:then><f:else><f:if condition="{userAnswer.creationDate->f:format.date(format:'YmdHis')}!={userAnswer.changeDate->f:format.date(format:'YmdHis')}">Deine Antwort hast du am {userAnswer.changeDate->f:format.date(format:'d.m.y')} um {userAnswer.changeDate->f:format.date(format:'H:i')} Uhr letztmals geändert.</f:if></f:else></f:if></div>
 		<f:link.action action="show" pageUid="{settings.mainPid}#userAnswer" arguments="{training:training}" class="btn btn-default">Eintrag zeigen</f:link.action>
-        <f:if condition="{outdated}==0">
+        <f:if condition="{outdated}==0 and {training.cancelled}==0">
             <f:if condition="{userAnswer.cancelled}">
                 <f:then>
                     &nbsp; <f:link.action action="reactivateAnswer" arguments="{answer:userAnswer}" class="btn btn-default">Doch wieder teilnehmen</f:link.action>
