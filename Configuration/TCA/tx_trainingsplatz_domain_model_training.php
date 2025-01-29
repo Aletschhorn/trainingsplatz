@@ -15,14 +15,14 @@ return [
 			'starttime' => 'starttime',
 			'endtime' => 'endtime',
 		],
-		'searchFields' => 'author,leader,creation_date,last_change,training_date,guided,title,description,start_text,start_coordinates,duration,distance,speed,route,picture,cancelled,intensity,sport,map,',
+		'searchFields' => 'author,leader,creation_date,last_change,training_date,guided,title,description,start_text,start_coordinates,duration,distance,speed,route,picture,cancelled,intensity,sport,',
 		'iconfile' => 'EXT:trainingsplatz/Resources/Public/Icons/tx_trainingsplatz_domain_model_training.png'
 	],
 	'interface' => [
-		'showRecordFieldList' => 'title, hidden, public, closed, author, creation_date, last_change, training_date, guided, leader, duration, distance, speed, cancelled, intensity, sport, map, map_center, map_zoom, map_type, infomail, notification',
+		'showRecordFieldList' => 'title, hidden, public, closed, author, creation_date, last_change, training_date, guided, leader, duration, distance, speed, cancelled, intensity, sport, map_center, map_zoom, map_type, infomail, notification',
 	],
 	'types' => [
-		'1' => ['showitem' => '--palette--;;displayOptions, --palette--;;creationChange, --palette--;;notifications, --div--;LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_training.tab_content, author, --palette--;;sportcoach, --palette--;;dateTitle, --palette--;;sportIntensity, start_text, duration, distance, speed, description, picture, --div--;LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_training.tab_map, start_option, start_coordinates, route, map, --palette--;;drawMap, --div--;LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_training.tab_series, series, series_start, series_end, series_period, series_number, series_weekday, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, starttime, endtime'],
+		'1' => ['showitem' => '--palette--;;displayOptions, --palette--;;creationChange, --palette--;;notifications, --div--;LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_training.tab_content, author, --palette--;;sportcoach, --palette--;;dateTitle, --palette--;;sportIntensity, start_text, duration, distance, speed, description, picture, --div--;LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_training.tab_map, start_option, start_coordinates, route, --palette--;;drawMap, --div--;LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_training.tab_series, series, series_start, series_end, series_period, series_number, series_weekday, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, starttime, endtime'],
 	],
 	'palettes' => [
 		'1' => ['showitem' => ''],
@@ -264,23 +264,6 @@ return [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'foreign_table' => 'tx_trainingsplatz_domain_model_sport',
-			],
-		],
-		'map' => [
-			'exclude' => 1,
-			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_training.map',
-			'config' => [
-				'type' => 'inline',
-				'foreign_table' => 'tx_trainingsplatz_domain_model_map',
-				'minitems' => 0,
-				'maxitems' => 1,
-				'appearance' => [
-					'collapseAll' => 0,
-					'levelLinksPosition' => 'top',
-					'showSynchronizationLink' => 1,
-					'showPossibleLocalizationRecords' => 1,
-					'showAllLocalizationLink' => 1
-				],
 			],
 		],
 		'map_center' => [

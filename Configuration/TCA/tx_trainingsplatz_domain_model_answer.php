@@ -1,176 +1,174 @@
 <?php
-return array(
-	'ctrl' => array(
+return [
+	'ctrl' => [
 		'title'	=> 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_answer',
 		'label' => 'author',
 		'tstamp' => 'tstamp',
 		'crdate' => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'dividers2tabs' => TRUE,
-
-		'versioningWS' => 2,
+		'versioningWS' => TRUE,
 		'versioning_followPages' => TRUE,
-
 		'delete' => 'deleted',
-		'enablecolumns' => array(
+		'enablecolumns' => [
 			'disabled' => 'hidden',
-		),
+		],
 		'searchFields' => 'creation_date,change_date,author,owntraining,title,description,cancelled,training,hash',
 		'iconfile' => 'EXT:trainingsplatz/Public/Icons/tx_trainingsplatz_domain_model_answer.gif'
-	),
-	'interface' => array(
+	],
+	'interface' => [
 		'showRecordFieldList' => 'hidden, creation_date, change_date, author, email, feuser, owntraining, title, description, cancelled, training, points, compensation, hash',
-	),
-	'types' => array(
-		'1' => array('showitem' => 'hidden;;1, creation_date, change_date, author, email, feuser, owntraining, title, description, cancelled, training, points, compensation, hash'),
-	),
-	'palettes' => array(
-		'1' => array('showitem' => ''),
-	),
-	'columns' => array(
-		'hidden' => array(
+	],
+	'types' => [
+		'1' => ['showitem' => 'hidden;;1, creation_date, change_date, author, email, feuser, owntraining, title, description, cancelled, training, points, compensation, hash'],
+	],
+	'palettes' => [
+		'1' => ['showitem' => ''],
+	],
+	'columns' => [
+		'hidden' => [
 			'exclude' => 1,
 			'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
-			'config' => array(
+			'config' => [
 				'type' => 'check',
-			),
-		),
-		'creation_date' => array(
+			],
+		],
+		'creation_date' => [
 			'exclude' => 1,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_answer.creation_date',
-			'config' => array(
+			'config' => [
 				'dbType' => 'datetime',
 				'type' => 'input',
 				'size' => 12,
 				'eval' => 'datetime',
 				'checkbox' => 0,
 				'default' => '0000-00-00 00:00:00'
-			),
-		),
-		'change_date' => array(
+			],
+		],
+		'change_date' => [
 			'exclude' => 1,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_answer.change_date',
-			'config' => array(
+			'config' => [
 				'dbType' => 'datetime',
 				'type' => 'input',
 				'size' => 12,
 				'eval' => 'datetime',
 				'checkbox' => 0,
 				'default' => '0000-00-00 00:00:00'
-			),
-		),
-		'author' => array(
+			],
+		],
+		'author' => [
 			'exclude' => 1,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_answer.author',
-			'config' => array(
+			'config' => [
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim'
-			),
-		),
-		'email' => array(
+			],
+		],
+		'email' => [
 			'exclude' => 1,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_answer.email',
-			'config' => array(
+			'config' => [
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim'
-			),
-		),
-		'feuser' => array(
+			],
+		],
+		'feuser' => [
 			'exclude' => 1,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_answer.feuser',
-			'config' => array(
+			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'foreign_table' => 'fe_users',
 				'foreign_table_where' => 'ORDER BY username',
-				'items' => array (
-					array ('(nobody)', 0)
-				)
-			),
-		),
-		'owntraining' => array(
+				'items' => [
+					['(nobody)', 0]
+				]
+			],
+		],
+		'owntraining' => [
 			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_answer.owntraining',
-			'config' => array(
+			'config' => [
 				'type' => 'check',
 				'default' => 0
-			)
-		),
-		'title' => array(
+			]
+		],
+		'title' => [
 			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_answer.title',
-			'config' => array(
+			'config' => [
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim'
-			),
-		),
-		'description' => array(
+			],
+		],
+		'description' => [
 			'exclude' => 1,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_answer.description',
-			'config' => array(
+			'config' => [
 				'type' => 'text',
 				'cols' => 40,
 				'rows' => 5,
 				'eval' => 'trim'
-			)
-		),
-		'cancelled' => array(
+			]
+		],
+		'cancelled' => [
 			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_answer.cancelled',
-			'config' => array(
+			'config' => [
 				'type' => 'check',
 				'default' => 0
-			)
-		),
-		'training' => array(
+			]
+		],
+		'training' => [
 			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_answer.training',
-			'config' => array(
+			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'foreign_table' => 'tx_trainingsplatz_domain_model_training',
 				'minitems' => 0,
 				'maxitems' => 1,
-			),
-		),
-		'points' => array(
+			],
+		],
+		'points' => [
 			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_answer.points',
-			'config' => array(
+			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
-				'items' => array (
-					array ('Offen', 0),
-					array ('0 Punkte', 1),
-					array ('1 Punkt', 2),
-				),
-			),
-		),
-		'compensation' => array(
+				'items' => [
+					['Offen', 0],
+					['0 Punkte', 1],
+					['1 Punkt', 2],
+				],
+			],
+		],
+		'compensation' => [
 			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_answer.compensation',
-			'config' => array(
+			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
-				'items' => array (
-					array ('Offen', 0),
-					array ('Nein', 1),
-					array ('Ja', 2),
-				),
-			),
-		),
-		'hash' => array(
+				'items' => [
+					['Offen', 0],
+					['Nein', 1],
+					['Ja', 2],
+				],
+			],
+		],
+		'hash' => [
 			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_answer.hash',
-			'config' => array(
+			'config' => [
 				'type' => 'input',
 				'readOnly' => 1,
-			)
-		),
+			]
+		],
 		
-	),
-);
+	],
+];
 ?>
