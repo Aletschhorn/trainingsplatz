@@ -1,952 +1,447 @@
 <?php
 declare(strict_types=1);
+
 namespace DW\Trainingsplatz\Domain\Model;
 
 class User extends \In2code\Femanager\Domain\Model\User { 
 
-	/**
-	 * txTrainingsplatzMembership
-	 *
-	 * @var integer
-	 */
 	protected $txTrainingsplatzMembership = 0;
 
-	/**
-	 * txTrainingsplatzGuide
-	 *
-	 * @var boolean
-	 */
 	protected $txTrainingsplatzGuide = 0;
 
-	/**
-	 * txTrainingsplatzInfomail
-	 *
-	 * @var boolean
-	 */
 	protected $txTrainingsplatzInfomail = 0;
 
-	/**
-	 * txTrainingsplatzNewsletter
-	 *
-	 * @var boolean
-	 */
 	protected $txTrainingsplatzNewsletter = 0;
 
-	/**
-	 * txTrainingsplatzContest
-	 *
-	 * @var boolean
-	 */
 	protected $txTrainingsplatzContest = 0;
 
-	/**
-	 * txTrainingsplatzContestExtra
-	 *
-	 * @var integer
-	 */
 	protected $txTrainingsplatzContestExtra = 0;
 
-	/**
-	 * txTrainingsplatzSports
-	 *
-	 * @var integer
-	 */
 	protected $txTrainingsplatzSports = 0;
 
-	/**
-	 * txTrainingsplatzMotivation
-	 *
-	 * @var \DW\Trainingsplatz\Domain\Model\Motivation
-	 */
 	protected $txTrainingsplatzMotivation = NULL;
 
-	/**
-	 * txTrainingsplatzClub1Name
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzClub1Name = '';
 
-	/**
-	 * txTrainingsplatzClub1Website
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzClub1Website = '';
 
-	/**
-	 * txTrainingsplatzClub2Name
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzClub2Name = '';
 
-	/**
-	 * txTrainingsplatzClub2Website
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzClub2Website = '';
 
-	/**
-	 * txTrainingsplatzPrivateGoal
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateGoal = '';
 
-	/**
-	 * txTrainingsplatzPrivateHobby
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateHobby = '';
 
-	/**
-	 * txTrainingsplatzPrivateMusic
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateMusic = '';
 
-	/**
-	 * txTrainingsplatzPrivateFood
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateFood = '';
 
-	/**
-	 * txTrainingsplatzPrivateLike
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateLike = '';
 
-	/**
-	 * txTrainingsplatzPrivateDislike
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateDislike = '';
 
-	/**
-	 * txTrainingsplatzPrivateJob
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateJob = '';
 
-	/**
-	 * txTrainingsplatzPrivateLove
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateLove = '';
 
-	/**
-	 * txTrainingsplatzPrivateMeaningsport
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateMeaningsport = '';
 
-	/**
-	 * txTrainingsplatzPrivateMotto
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateMotto = '';
 
-	/**
-	 * txTrainingsplatzPrivateSparetime
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateSparetime = '';
 
-	/**
-	 * txTrainingsplatzPrivateDream
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateDream = '';
 
-	/**
-	 * txTrainingsplatzPrivateNotdisclaim
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateNotdisclaim = '';
 
-	/**
-	 * txTrainingsplatzPrivateBook
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateBook = '';
 
-	/**
-	 * txTrainingsplatzPrivateWeakness
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateWeakness = '';
 
-	/**
-	 * txTrainingsplatzPrivateStrength
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateStrength = '';
 
-	/**
-	 * txTrainingsplatzPrivateAbility
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateAbility = '';
 
-	/**
-	 * txTrainingsplatzPrivateDrivecrazy
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateDrivecrazy = '';
 
-	/**
-	 * txTrainingsplatzPrivateLaugh
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateLaugh = '';
 
-	/**
-	 * txTrainingsplatzPrivateSpendmoney
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateSpendmoney = '';
 
-	/**
-	 * txTrainingsplatzPrivateDescription
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateDescription = '';
 
-	/**
-	 * txTrainingsplatzPrivatePain
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivatePain = '';
 
-	/**
-	 * txTrainingsplatzPrivateLuxury
-	 *
-	 * @var string
-	 */
 	protected $txTrainingsplatzPrivateLuxury = '';
 
-	/**
-	 * Returns the txTrainingsplatzMembership
-	 *
-	 * @return integer $txTrainingsplatzMembership
-	 */
-	public function getTxTrainingsplatzMembership() {
+	public function getTxTrainingsplatzMembership(): int 
+	{
 		return $this->txTrainingsplatzMembership;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzMembership
-	 *
-	 * @param integer $txTrainingsplatzMembership
-	 * @return void
-	 */
-	public function setTxTrainingsplatzMembership($txTrainingsplatzMembership) {
+	public function setTxTrainingsplatzMembership(int $txTrainingsplatzMembership): void 
+	{
 		$this->txTrainingsplatzMembership = $txTrainingsplatzMembership;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzGuide
-	 *
-	 * @return boolean $txTrainingsplatzGuide
-	 */
-	public function getTxTrainingsplatzGuide() {
+	public function getTxTrainingsplatzGuide(): bool 
+	{
 		return $this->txTrainingsplatzGuide;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzGuide
-	 *
-	 * @param boolean $txTrainingsplatzGuide
-	 * @return void
-	 */
-	public function setTxTrainingsplatzGuide($txTrainingsplatzGuide) {
+	public function setTxTrainingsplatzGuide(bool $txTrainingsplatzGuide): void 
+	{
 		$this->txTrainingsplatzGuide = $txTrainingsplatzGuide;
 	}
 
-	/**
-	 * Returns the boolean state of txTrainingsplatzGuide
-	 *
-	 * @return boolean
-	 */
-	public function isTxTrainingsplatzGuide() {
+	public function isTxTrainingsplatzGuide(): bool 
+	{
 		return $this->txTrainingsplatzGuide;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzInfomail
-	 *
-	 * @return boolean $txTrainingsplatzInfomail
-	 */
-	public function getTxTrainingsplatzInfomail() {
+	public function getTxTrainingsplatzInfomail(): bool 
+	{
 		return $this->txTrainingsplatzInfomail;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzInfomail
-	 *
-	 * @param boolean $txTrainingsplatzInfomail
-	 * @return void
-	 */
-	public function setTxTrainingsplatzInfomail($txTrainingsplatzInfomail) {
+	public function setTxTrainingsplatzInfomail(bool $txTrainingsplatzInfomail): void 
+	{
 		$this->txTrainingsplatzInfomail = $txTrainingsplatzInfomail;
 	}
 
-	/**
-	 * Returns the boolean state of txTrainingsplatzInfomail
-	 *
-	 * @return boolean
-	 */
-	public function isTxTrainingsplatzInfomail() {
+	public function isTxTrainingsplatzInfomail(): bool 
+	{
 		return $this->txTrainingsplatzInfomail;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzNewsletter
-	 *
-	 * @return boolean $txTrainingsplatzNewsletter
-	 */
-	public function getTxTrainingsplatzNewsletter() {
+	public function getTxTrainingsplatzNewsletter(): bool 
+	{
 		return $this->txTrainingsplatzNewsletter;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzNewsletter
-	 *
-	 * @param boolean $txTrainingsplatzNewsletter
-	 * @return void
-	 */
-	public function setTxTrainingsplatzNewsletter($txTrainingsplatzNewsletter) {
+	public function setTxTrainingsplatzNewsletter(bool $txTrainingsplatzNewsletter): void 
+	{
 		$this->txTrainingsplatzNewsletter = $txTrainingsplatzNewsletter;
 	}
 
-	/**
-	 * Returns the boolean state of txTrainingsplatzNewsletter
-	 *
-	 * @return boolean
-	 */
-	public function isTxTrainingsplatzNewsletter() {
+	public function isTxTrainingsplatzNewsletter(): bool 
+	{
 		return $this->txTrainingsplatzNewsletter;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzContest
-	 *
-	 * @return boolean $txTrainingsplatzContest
-	 */
-	public function getTxTrainingsplatzContest() {
+	public function getTxTrainingsplatzContest(): bool 
+	{
 		return $this->txTrainingsplatzContest;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzContest
-	 *
-	 * @param boolean $txTrainingsplatzContest
-	 * @return void
-	 */
-	public function setTxTrainingsplatzContest($txTrainingsplatzContest) {
+	public function setTxTrainingsplatzContest(bool $txTrainingsplatzContest): void 
+	{
 		$this->txTrainingsplatzContest = $txTrainingsplatzContest;
 	}
 
-	/**
-	 * Returns the boolean state of txTrainingsplatzContest
-	 *
-	 * @return boolean
-	 */
-	public function isTxTrainingsplatzContest() {
+	public function isTxTrainingsplatzContest(): bool 
+	{
 		return $this->txTrainingsplatzContest;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzContestExtra
-	 *
-	 * @return integer $txTrainingsplatzContestExtra
-	 */
-	public function getTxTrainingsplatzContestExtra() {
+	public function getTxTrainingsplatzContestExtra(): int 
+	{
 		return $this->txTrainingsplatzContestExtra;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzContestExtra
-	 *
-	 * @param integer $txTrainingsplatzContestExtra
-	 * @return void
-	 */
-	public function setTxTrainingsplatzContestExtra($txTrainingsplatzContestExtra) {
+	public function setTxTrainingsplatzContestExtra(int $txTrainingsplatzContestExtra): void 
+	{
 		$this->txTrainingsplatzContestExtra = $txTrainingsplatzContestExtra;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzSports
-	 *
-	 * @return integer $txTrainingsplatzSports
-	 */
-	public function getTxTrainingsplatzSports() {
+	public function getTxTrainingsplatzSports(): int 
+	{
 		return $this->txTrainingsplatzSports;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzSports
-	 *
-	 * @param integer $txTrainingsplatzSports
-	 * @return void
-	 */
-	public function setTxTrainingsplatzSports($txTrainingsplatzSports) {
+	public function setTxTrainingsplatzSports(int $txTrainingsplatzSports): void 
+	{
 		$this->txTrainingsplatzSports = $txTrainingsplatzSports;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzMotivation
-	 *
-	 * @return \DW\Trainingsplatz\Domain\Model\Motivation $txTrainingsplatzMotivation
-	 */
-	public function getTxTrainingsplatzMotivation() {
+	public function getTxTrainingsplatzMotivation(): \DW\Trainingsplatz\Domain\Model\Motivation 
+	{
 		return $this->txTrainingsplatzMotivation;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzMotivation
-	 *
-	 * @param \DW\Trainingsplatz\Domain\Model\Motivation $txTrainingsplatzMotivation
-	 * @return void
-	 */
-	public function setTxTrainingsplatzMotivation(\DW\Trainingsplatz\Domain\Model\Motivation $txTrainingsplatzMotivation) {
+	public function setTxTrainingsplatzMotivation(\DW\Trainingsplatz\Domain\Model\Motivation $txTrainingsplatzMotivation): void 
+	{
 		$this->txTrainingsplatzMotivation = $txTrainingsplatzMotivation;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzClub1Name
-	 *
-	 * @return string $txTrainingsplatzClub1Name
-	 */
-	public function getTxTrainingsplatzClub1Name() {
+	public function getTxTrainingsplatzClub1Name(): string 
+	{
 		return $this->txTrainingsplatzClub1Name;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzClub1Name
-	 *
-	 * @param string $txTrainingsplatzClub1Name
-	 * @return void
-	 */
-	public function setTxTrainingsplatzClub1Name($txTrainingsplatzClub1Name) {
+	public function setTxTrainingsplatzClub1Name(string $txTrainingsplatzClub1Name): void 
+	{
 		$this->txTrainingsplatzClub1Name = $txTrainingsplatzClub1Name;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzClub1Website
-	 *
-	 * @return string $txTrainingsplatzClub1Website
-	 */
-	public function getTxTrainingsplatzClub1Website() {
+	public function getTxTrainingsplatzClub1Website(): string 
+	{
 		return $this->txTrainingsplatzClub1Website;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzClub1Website
-	 *
-	 * @param string $txTrainingsplatzClub1Website
-	 * @return void
-	 */
-	public function setTxTrainingsplatzClub1Website($txTrainingsplatzClub1Website) {
+	public function setTxTrainingsplatzClub1Website(string $txTrainingsplatzClub1Website): void 
+	{
 		$this->txTrainingsplatzClub1Website = $txTrainingsplatzClub1Website;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzClub2Name
-	 *
-	 * @return string $txTrainingsplatzClub2Name
-	 */
-	public function getTxTrainingsplatzClub2Name() {
+	public function getTxTrainingsplatzClub2Name(): string 
+	{
 		return $this->txTrainingsplatzClub2Name;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzClub2Name
-	 *
-	 * @param string $txTrainingsplatzClub2Name
-	 * @return void
-	 */
-	public function setTxTrainingsplatzClub2Name($txTrainingsplatzClub2Name) {
+	public function setTxTrainingsplatzClub2Name(string $txTrainingsplatzClub2Name): void 
+	{
 		$this->txTrainingsplatzClub2Name = $txTrainingsplatzClub2Name;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzClub2Website
-	 *
-	 * @return string $txTrainingsplatzClub2Website
-	 */
-	public function getTxTrainingsplatzClub2Website() {
+	public function getTxTrainingsplatzClub2Website(): string 
+	{
 		return $this->txTrainingsplatzClub2Website;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzClub2Website
-	 *
-	 * @param string $txTrainingsplatzClub2Website
-	 * @return void
-	 */
-	public function setTxTrainingsplatzClub2Website($txTrainingsplatzClub2Website) {
+	public function setTxTrainingsplatzClub2Website(string $txTrainingsplatzClub2Website): void
+	{
 		$this->txTrainingsplatzClub2Website = $txTrainingsplatzClub2Website;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateGoal
-	 *
-	 * @return string $txTrainingsplatzPrivateGoal
-	 */
-	public function getTxTrainingsplatzPrivateGoal() {
+	public function getTxTrainingsplatzPrivateGoal(): string 
+	{
 		return $this->txTrainingsplatzPrivateGoal;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateGoal
-	 *
-	 * @param string $txTrainingsplatzPrivateGoal
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateGoal($txTrainingsplatzPrivateGoal) {
+	public function setTxTrainingsplatzPrivateGoal(string $txTrainingsplatzPrivateGoal): void 
+	{
 		$this->txTrainingsplatzPrivateGoal = $txTrainingsplatzPrivateGoal;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateHobby
-	 *
-	 * @return string $txTrainingsplatzPrivateHobby
-	 */
-	public function getTxTrainingsplatzPrivateHobby() {
+	public function getTxTrainingsplatzPrivateHobby(): string 
+	{
 		return $this->txTrainingsplatzPrivateHobby;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateHobby
-	 *
-	 * @param string $txTrainingsplatzPrivateHobby
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateHobby($txTrainingsplatzPrivateHobby) {
+	public function setTxTrainingsplatzPrivateHobby(string $txTrainingsplatzPrivateHobby): void 
+	{
 		$this->txTrainingsplatzPrivateHobby = $txTrainingsplatzPrivateHobby;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateMusic
-	 *
-	 * @return string $txTrainingsplatzPrivateMusic
-	 */
-	public function getTxTrainingsplatzPrivateMusic() {
+	public function getTxTrainingsplatzPrivateMusic(): string 
+	{
 		return $this->txTrainingsplatzPrivateMusic;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateMusic
-	 *
-	 * @param string $txTrainingsplatzPrivateMusic
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateMusic($txTrainingsplatzPrivateMusic) {
+	public function setTxTrainingsplatzPrivateMusic(string $txTrainingsplatzPrivateMusic): void 
+	{
 		$this->txTrainingsplatzPrivateMusic = $txTrainingsplatzPrivateMusic;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateFood
-	 *
-	 * @return string $txTrainingsplatzPrivateFood
-	 */
-	public function getTxTrainingsplatzPrivateFood() {
+	public function getTxTrainingsplatzPrivateFood(): string 
+	{
 		return $this->txTrainingsplatzPrivateFood;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateFood
-	 *
-	 * @param string $txTrainingsplatzPrivateFood
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateFood($txTrainingsplatzPrivateFood) {
+	public function setTxTrainingsplatzPrivateFood(string $txTrainingsplatzPrivateFood): void 
+	{
 		$this->txTrainingsplatzPrivateFood = $txTrainingsplatzPrivateFood;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateLike
-	 *
-	 * @return string $txTrainingsplatzPrivateLike
-	 */
-	public function getTxTrainingsplatzPrivateLike() {
+	public function getTxTrainingsplatzPrivateLike(): string 
+	{
 		return $this->txTrainingsplatzPrivateLike;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateLike
-	 *
-	 * @param string $txTrainingsplatzPrivateLike
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateLike($txTrainingsplatzPrivateLike) {
+	public function setTxTrainingsplatzPrivateLike(string $txTrainingsplatzPrivateLike): void 
+	{
 		$this->txTrainingsplatzPrivateLike = $txTrainingsplatzPrivateLike;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateDislike
-	 *
-	 * @return string $txTrainingsplatzPrivateDislike
-	 */
-	public function getTxTrainingsplatzPrivateDislike() {
+	public function getTxTrainingsplatzPrivateDislike(): string 
+	{
 		return $this->txTrainingsplatzPrivateDislike;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateDislike
-	 *
-	 * @param string $txTrainingsplatzPrivateDislike
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateDislike($txTrainingsplatzPrivateDislike) {
+	public function setTxTrainingsplatzPrivateDislike(string $txTrainingsplatzPrivateDislike): void 
+	{
 		$this->txTrainingsplatzPrivateDislike = $txTrainingsplatzPrivateDislike;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateJob
-	 *
-	 * @return string $txTrainingsplatzPrivateJob
-	 */
-	public function getTxTrainingsplatzPrivateJob() {
+	public function getTxTrainingsplatzPrivateJob(): string 
+	{
 		return $this->txTrainingsplatzPrivateJob;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateJob
-	 *
-	 * @param string $txTrainingsplatzPrivateJob
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateJob($txTrainingsplatzPrivateJob) {
+	public function setTxTrainingsplatzPrivateJob(string $txTrainingsplatzPrivateJob): void 
+	{
 		$this->txTrainingsplatzPrivateJob = $txTrainingsplatzPrivateJob;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateLove
-	 *
-	 * @return string $txTrainingsplatzPrivateLove
-	 */
-	public function getTxTrainingsplatzPrivateLove() {
+	public function getTxTrainingsplatzPrivateLove(): string 
+	{
 		return $this->txTrainingsplatzPrivateLove;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateLove
-	 *
-	 * @param string $txTrainingsplatzPrivateLove
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateLove($txTrainingsplatzPrivateLove) {
+	public function setTxTrainingsplatzPrivateLove(string $txTrainingsplatzPrivateLove): void 
+	{
 		$this->txTrainingsplatzPrivateLove = $txTrainingsplatzPrivateLove;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateMeaningsport
-	 *
-	 * @return string $txTrainingsplatzPrivateMeaningsport
-	 */
-	public function getTxTrainingsplatzPrivateMeaningsport() {
+	public function getTxTrainingsplatzPrivateMeaningsport(): string 
+	{
 		return $this->txTrainingsplatzPrivateMeaningsport;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateMeaningsport
-	 *
-	 * @param string $txTrainingsplatzPrivateMeaningsport
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateMeaningsport($txTrainingsplatzPrivateMeaningsport) {
+	public function setTxTrainingsplatzPrivateMeaningsport(string $txTrainingsplatzPrivateMeaningsport): void 
+	{
 		$this->txTrainingsplatzPrivateMeaningsport = $txTrainingsplatzPrivateMeaningsport;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateMotto
-	 *
-	 * @return string $txTrainingsplatzPrivateMotto
-	 */
-	public function getTxTrainingsplatzPrivateMotto() {
+	public function getTxTrainingsplatzPrivateMotto(): string 
+	{
 		return $this->txTrainingsplatzPrivateMotto;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateMotto
-	 *
-	 * @param string $txTrainingsplatzPrivateMotto
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateMotto($txTrainingsplatzPrivateMotto) {
+	public function setTxTrainingsplatzPrivateMotto(string $txTrainingsplatzPrivateMotto): void 
+	{
 		$this->txTrainingsplatzPrivateMotto = $txTrainingsplatzPrivateMotto;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateSparetime
-	 *
-	 * @return string $txTrainingsplatzPrivateSparetime
-	 */
-	public function getTxTrainingsplatzPrivateSparetime() {
+	public function getTxTrainingsplatzPrivateSparetime(): string 
+	{
 		return $this->txTrainingsplatzPrivateSparetime;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateSparetime
-	 *
-	 * @param string $txTrainingsplatzPrivateSparetime
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateSparetime($txTrainingsplatzPrivateSparetime) {
+	public function setTxTrainingsplatzPrivateSparetime(string $txTrainingsplatzPrivateSparetime): void 
+	{
 		$this->txTrainingsplatzPrivateSparetime = $txTrainingsplatzPrivateSparetime;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateDream
-	 *
-	 * @return string $txTrainingsplatzPrivateDream
-	 */
-	public function getTxTrainingsplatzPrivateDream() {
+	public function getTxTrainingsplatzPrivateDream(): string 
+	{
 		return $this->txTrainingsplatzPrivateDream;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateDream
-	 *
-	 * @param string $txTrainingsplatzPrivateDream
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateDream($txTrainingsplatzPrivateDream) {
+	public function setTxTrainingsplatzPrivateDream(string $txTrainingsplatzPrivateDream): void 
+	{
 		$this->txTrainingsplatzPrivateDream = $txTrainingsplatzPrivateDream;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateNotdisclaim
-	 *
-	 * @return string $txTrainingsplatzPrivateNotdisclaim
-	 */
-	public function getTxTrainingsplatzPrivateNotdisclaim() {
+	public function getTxTrainingsplatzPrivateNotdisclaim(): string 
+	{
 		return $this->txTrainingsplatzPrivateNotdisclaim;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateNotdisclaim
-	 *
-	 * @param string $txTrainingsplatzPrivateNotdisclaim
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateNotdisclaim($txTrainingsplatzPrivateNotdisclaim) {
+	public function setTxTrainingsplatzPrivateNotdisclaim(string $txTrainingsplatzPrivateNotdisclaim): void 
+	{
 		$this->txTrainingsplatzPrivateNotdisclaim = $txTrainingsplatzPrivateNotdisclaim;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateBook
-	 *
-	 * @return string $txTrainingsplatzPrivateBook
-	 */
-	public function getTxTrainingsplatzPrivateBook() {
+	public function getTxTrainingsplatzPrivateBook(): string 
+	{
 		return $this->txTrainingsplatzPrivateBook;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateBook
-	 *
-	 * @param string $txTrainingsplatzPrivateBook
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateBook($txTrainingsplatzPrivateBook) {
+	public function setTxTrainingsplatzPrivateBook(string $txTrainingsplatzPrivateBook): void 
+	{
 		$this->txTrainingsplatzPrivateBook = $txTrainingsplatzPrivateBook;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateWeakness
-	 *
-	 * @return string $txTrainingsplatzPrivateWeakness
-	 */
-	public function getTxTrainingsplatzPrivateWeakness() {
+	public function getTxTrainingsplatzPrivateWeakness(): string 
+	{
 		return $this->txTrainingsplatzPrivateWeakness;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateWeakness
-	 *
-	 * @param string $txTrainingsplatzPrivateWeakness
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateWeakness($txTrainingsplatzPrivateWeakness) {
+	public function setTxTrainingsplatzPrivateWeakness(string $txTrainingsplatzPrivateWeakness): void 
+	{
 		$this->txTrainingsplatzPrivateWeakness = $txTrainingsplatzPrivateWeakness;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateStrength
-	 *
-	 * @return string $txTrainingsplatzPrivateStrength
-	 */
-	public function getTxTrainingsplatzPrivateStrength() {
+	public function getTxTrainingsplatzPrivateStrength(): string 
+	{
 		return $this->txTrainingsplatzPrivateStrength;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateStrength
-	 *
-	 * @param string $txTrainingsplatzPrivateStrength
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateStrength($txTrainingsplatzPrivateStrength) {
+	public function setTxTrainingsplatzPrivateStrength(string $txTrainingsplatzPrivateStrength): void 
+	{
 		$this->txTrainingsplatzPrivateStrength = $txTrainingsplatzPrivateStrength;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateAbility
-	 *
-	 * @return string $txTrainingsplatzPrivateAbility
-	 */
-	public function getTxTrainingsplatzPrivateAbility() {
+	public function getTxTrainingsplatzPrivateAbility(): string 
+	{
 		return $this->txTrainingsplatzPrivateAbility;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateAbility
-	 *
-	 * @param string $txTrainingsplatzPrivateAbility
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateAbility($txTrainingsplatzPrivateAbility) {
+	public function setTxTrainingsplatzPrivateAbility(string $txTrainingsplatzPrivateAbility): void 
+	{
 		$this->txTrainingsplatzPrivateAbility = $txTrainingsplatzPrivateAbility;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateDrivecrazy
-	 *
-	 * @return string $txTrainingsplatzPrivateDrivecrazy
-	 */
-	public function getTxTrainingsplatzPrivateDrivecrazy() {
+	public function getTxTrainingsplatzPrivateDrivecrazy(): string 
+	{
 		return $this->txTrainingsplatzPrivateDrivecrazy;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateDrivecrazy
-	 *
-	 * @param string $txTrainingsplatzPrivateDrivecrazy
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateDrivecrazy($txTrainingsplatzPrivateDrivecrazy) {
+	public function setTxTrainingsplatzPrivateDrivecrazy(string $txTrainingsplatzPrivateDrivecrazy): void 
+	{
 		$this->txTrainingsplatzPrivateDrivecrazy = $txTrainingsplatzPrivateDrivecrazy;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateLaugh
-	 *
-	 * @return string $txTrainingsplatzPrivateLaugh
-	 */
-	public function getTxTrainingsplatzPrivateLaugh() {
+	public function getTxTrainingsplatzPrivateLaugh(): string 
+	{
 		return $this->txTrainingsplatzPrivateLaugh;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateLaugh
-	 *
-	 * @param string $txTrainingsplatzPrivateLaugh
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateLaugh($txTrainingsplatzPrivateLaugh) {
+	public function setTxTrainingsplatzPrivateLaugh(string $txTrainingsplatzPrivateLaugh): void 
+	{
 		$this->txTrainingsplatzPrivateLaugh = $txTrainingsplatzPrivateLaugh;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateSpendmoney
-	 *
-	 * @return string $txTrainingsplatzPrivateSpendmoney
-	 */
-	public function getTxTrainingsplatzPrivateSpendmoney() {
+	public function getTxTrainingsplatzPrivateSpendmoney(): string 
+	{
 		return $this->txTrainingsplatzPrivateSpendmoney;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateSpendmoney
-	 *
-	 * @param string $txTrainingsplatzPrivateSpendmoney
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateSpendmoney($txTrainingsplatzPrivateSpendmoney) {
+	public function setTxTrainingsplatzPrivateSpendmoney(string $txTrainingsplatzPrivateSpendmoney): void 
+	{
 		$this->txTrainingsplatzPrivateSpendmoney = $txTrainingsplatzPrivateSpendmoney;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateDescription
-	 *
-	 * @return string $txTrainingsplatzPrivateDescription
-	 */
-	public function getTxTrainingsplatzPrivateDescription() {
+	public function getTxTrainingsplatzPrivateDescription(): string 
+	{
 		return $this->txTrainingsplatzPrivateDescription;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateDescription
-	 *
-	 * @param string $txTrainingsplatzPrivateDescription
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateDescription($txTrainingsplatzPrivateDescription) {
+	public function setTxTrainingsplatzPrivateDescription(string $txTrainingsplatzPrivateDescription): void 
+	{
 		$this->txTrainingsplatzPrivateDescription = $txTrainingsplatzPrivateDescription;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivatePain
-	 *
-	 * @return string $txTrainingsplatzPrivatePain
-	 */
-	public function getTxTrainingsplatzPrivatePain() {
+	public function getTxTrainingsplatzPrivatePain(): string 
+	{
 		return $this->txTrainingsplatzPrivatePain;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivatePain
-	 *
-	 * @param string $txTrainingsplatzPrivatePain
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivatePain($txTrainingsplatzPrivatePain) {
+	public function setTxTrainingsplatzPrivatePain(string $txTrainingsplatzPrivatePain): void 
+	{
 		$this->txTrainingsplatzPrivatePain = $txTrainingsplatzPrivatePain;
 	}
 
-	/**
-	 * Returns the txTrainingsplatzPrivateLuxury
-	 *
-	 * @return string $txTrainingsplatzPrivateLuxury
-	 */
-	public function getTxTrainingsplatzPrivateLuxury() {
+	public function getTxTrainingsplatzPrivateLuxury(): string 
+	{
 		return $this->txTrainingsplatzPrivateLuxury;
 	}
 
-	/**
-	 * Sets the txTrainingsplatzPrivateLuxury
-	 *
-	 * @param string $txTrainingsplatzPrivateLuxury
-	 * @return void
-	 */
-	public function setTxTrainingsplatzPrivateLuxury($txTrainingsplatzPrivateLuxury) {
+	public function setTxTrainingsplatzPrivateLuxury(string $txTrainingsplatzPrivateLuxury): void 
+	{
 		$this->txTrainingsplatzPrivateLuxury = $txTrainingsplatzPrivateLuxury;
 	}
 
