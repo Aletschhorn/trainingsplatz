@@ -36,16 +36,17 @@ class NewController extends \In2code\Femanager\Controller\NewController {
 	*
     * @TYPO3\CMS\Extbase\Annotation\Validate("In2code\Femanager\Domain\Validator\ServersideValidator", param="user")
     * @TYPO3\CMS\Extbase\Annotation\Validate("In2code\Femanager\Domain\Validator\PasswordValidator", param="user")
+    * @TYPO3\CMS\Extbase\Annotation\Validate("In2code\Femanager\Domain\Validator\CaptchaValidator", param="captcha")
 	* @return void
 	*/
-	public function createAction(User $user) {
+	public function createAction(User $user, string $captcha = null): ResponseInterface {
 		// Default values
 		$user->setTxTrainingsplatzInfomail(1);
 		$user->setTxTrainingsplatzNewsletter(1);
 		$user->setTxTrainingsplatzContest(1);
 		$user->setName($user->getFirstName().' '.$user->getLastName());
 		
-		parent::createAction($user);
+		parent::createAction($user, $captcha);
 		return $this->htmlResponse();
 	}
 }

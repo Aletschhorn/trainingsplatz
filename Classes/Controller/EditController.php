@@ -38,10 +38,11 @@ class EditController extends \In2code\Femanager\Controller\EditController {
 	*
     * @TYPO3\CMS\Extbase\Annotation\Validate("In2code\Femanager\Domain\Validator\ServersideValidator", param="user")
     * @TYPO3\CMS\Extbase\Annotation\Validate("In2code\Femanager\Domain\Validator\PasswordValidator", param="user")
+    * @TYPO3\CMS\Extbase\Annotation\Validate("In2code\Femanager\Domain\Validator\CaptchaValidator", param="captcha")
     */
-    public function updateAction(User $user) {
+    public function updateAction(User $user, string $captcha = null) {
 		$user->setName($user->getFirstName().' '.$user->getLastName());
-		parent::updateAction($user);
+		parent::updateAction($user, $captcha);
 	}
 
     /**
