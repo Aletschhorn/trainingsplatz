@@ -1,11 +1,4 @@
-#
-# Table structure for table 'tx_trainingsplatz_domain_model_training'
-#
 CREATE TABLE tx_trainingsplatz_domain_model_training (
-
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-
 	author int(11) unsigned DEFAULT '0' NOT NULL,
 	leader int(11) unsigned DEFAULT '0' NOT NULL,
 	creation_date datetime DEFAULT '0000-00-00 00:00:00',
@@ -39,174 +32,22 @@ CREATE TABLE tx_trainingsplatz_domain_model_training (
 	series_period int(11) unsigned DEFAULT '0',
 	series_number int(11) unsigned DEFAULT '0',
 	series_weekday int(11) unsigned DEFAULT '0',
-
-	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
-	crdate int(11) unsigned DEFAULT '0' NOT NULL,
-	cruser_id int(11) unsigned DEFAULT '0' NOT NULL,
-	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	starttime int(11) unsigned DEFAULT '0' NOT NULL,
-	endtime int(11) unsigned DEFAULT '0' NOT NULL,
-
-	t3ver_oid int(11) DEFAULT '0' NOT NULL,
-	t3ver_id int(11) DEFAULT '0' NOT NULL,
-	t3ver_wsid int(11) DEFAULT '0' NOT NULL,
-	t3ver_label varchar(255) DEFAULT '' NOT NULL,
-	t3ver_state tinyint(4) DEFAULT '0' NOT NULL,
-	t3ver_stage int(11) DEFAULT '0' NOT NULL,
-	t3ver_count int(11) DEFAULT '0' NOT NULL,
-	t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
-	t3ver_move_id int(11) DEFAULT '0' NOT NULL,
-
-	PRIMARY KEY (uid),
-	KEY parent (pid),
-	KEY t3ver_oid (t3ver_oid,t3ver_wsid)
-
 );
 
-#
-# Table structure for table 'tx_trainingsplatz_domain_model_intensity'
-#
 CREATE TABLE tx_trainingsplatz_domain_model_intensity (
+	title varchar(255) DEFAULT '' NOT NULL,
+	description varchar(255) DEFAULT '' NOT NULL,
+	picture varchar(255) DEFAULT '' NOT NULL
+);
 
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-
+CREATE TABLE tx_trainingsplatz_domain_model_sport (
 	title varchar(255) DEFAULT '' NOT NULL,
 	description varchar(255) DEFAULT '' NOT NULL,
 	picture varchar(255) DEFAULT '' NOT NULL,
-
-	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
-	crdate int(11) unsigned DEFAULT '0' NOT NULL,
-	cruser_id int(11) unsigned DEFAULT '0' NOT NULL,
-	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	starttime int(11) unsigned DEFAULT '0' NOT NULL,
-	endtime int(11) unsigned DEFAULT '0' NOT NULL,
-
-	t3ver_oid int(11) DEFAULT '0' NOT NULL,
-	t3ver_id int(11) DEFAULT '0' NOT NULL,
-	t3ver_wsid int(11) DEFAULT '0' NOT NULL,
-	t3ver_label varchar(255) DEFAULT '' NOT NULL,
-	t3ver_state tinyint(4) DEFAULT '0' NOT NULL,
-	t3ver_stage int(11) DEFAULT '0' NOT NULL,
-	t3ver_count int(11) DEFAULT '0' NOT NULL,
-	t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
-	t3ver_move_id int(11) DEFAULT '0' NOT NULL,
-	sorting int(11) DEFAULT '0' NOT NULL,
-
-	sys_language_uid int(11) DEFAULT '0' NOT NULL,
-	l10n_parent int(11) DEFAULT '0' NOT NULL,
-	l10n_diffsource mediumblob,
-
-	PRIMARY KEY (uid),
-	KEY parent (pid),
-	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
- KEY language (l10n_parent,sys_language_uid)
-
+	picture_guided varchar(255) DEFAULT '' NOT NULL
 );
 
-#
-# Table structure for table 'tx_trainingsplatz_domain_model_sport'
-#
-CREATE TABLE tx_trainingsplatz_domain_model_sport (
-
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-
-	title varchar(255) DEFAULT '' NOT NULL,
-	description varchar(255) DEFAULT '' NOT NULL,
-	picture int(11) unsigned NOT NULL default '0',
-	picture_guided int(11) unsigned NOT NULL default '0',
-
-	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
-	crdate int(11) unsigned DEFAULT '0' NOT NULL,
-	cruser_id int(11) unsigned DEFAULT '0' NOT NULL,
-	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	starttime int(11) unsigned DEFAULT '0' NOT NULL,
-	endtime int(11) unsigned DEFAULT '0' NOT NULL,
-
-	t3ver_oid int(11) DEFAULT '0' NOT NULL,
-	t3ver_id int(11) DEFAULT '0' NOT NULL,
-	t3ver_wsid int(11) DEFAULT '0' NOT NULL,
-	t3ver_label varchar(255) DEFAULT '' NOT NULL,
-	t3ver_state tinyint(4) DEFAULT '0' NOT NULL,
-	t3ver_stage int(11) DEFAULT '0' NOT NULL,
-	t3ver_count int(11) DEFAULT '0' NOT NULL,
-	t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
-	t3ver_move_id int(11) DEFAULT '0' NOT NULL,
-	sorting int(11) DEFAULT '0' NOT NULL,
-
-	sys_language_uid int(11) DEFAULT '0' NOT NULL,
-	l10n_parent int(11) DEFAULT '0' NOT NULL,
-	l10n_diffsource mediumblob,
-
-	PRIMARY KEY (uid),
-	KEY parent (pid),
-	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
- KEY language (l10n_parent,sys_language_uid)
-
-);
-
-#
-# Table structure for table 'tx_trainingsplatz_domain_model_map'
-#
-CREATE TABLE tx_trainingsplatz_domain_model_map (
-
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-
-	title varchar(255) DEFAULT '' NOT NULL,
-	description text NOT NULL,
-	author varchar(255) DEFAULT '' NOT NULL,
-	maptype varchar(255) DEFAULT '' NOT NULL,
-	center varchar(255) DEFAULT '' NOT NULL,
-	zoom int(11) DEFAULT '0' NOT NULL,
-	route text NOT NULL,
-	length int(11) DEFAULT '0' NOT NULL,
-	milestones tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	sport int(11) unsigned DEFAULT '0',
-	public tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	last_change datetime DEFAULT '0000-00-00 00:00:00',
-
-	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
-	crdate int(11) unsigned DEFAULT '0' NOT NULL,
-	cruser_id int(11) unsigned DEFAULT '0' NOT NULL,
-	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	starttime int(11) unsigned DEFAULT '0' NOT NULL,
-	endtime int(11) unsigned DEFAULT '0' NOT NULL,
-
-	t3ver_oid int(11) DEFAULT '0' NOT NULL,
-	t3ver_id int(11) DEFAULT '0' NOT NULL,
-	t3ver_wsid int(11) DEFAULT '0' NOT NULL,
-	t3ver_label varchar(255) DEFAULT '' NOT NULL,
-	t3ver_state tinyint(4) DEFAULT '0' NOT NULL,
-	t3ver_stage int(11) DEFAULT '0' NOT NULL,
-	t3ver_count int(11) DEFAULT '0' NOT NULL,
-	t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
-	t3ver_move_id int(11) DEFAULT '0' NOT NULL,
-
-	sys_language_uid int(11) DEFAULT '0' NOT NULL,
-	l10n_parent int(11) DEFAULT '0' NOT NULL,
-	l10n_diffsource mediumblob,
-
-	PRIMARY KEY (uid),
-	KEY parent (pid),
-	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
- KEY language (l10n_parent,sys_language_uid)
-
-);
-
-#
-# Table structure for table 'tx_trainingsplatz_domain_model_answer'
-#
 CREATE TABLE tx_trainingsplatz_domain_model_answer (
-
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-
 	creation_date datetime DEFAULT '0000-00-00 00:00:00',
 	change_date datetime DEFAULT '0000-00-00 00:00:00',
 	author varchar(255) DEFAULT '' NOT NULL,
@@ -219,39 +60,10 @@ CREATE TABLE tx_trainingsplatz_domain_model_answer (
 	training int(11) unsigned DEFAULT '0',
 	points int(11) unsigned DEFAULT '0',
 	compensation int(11) unsigned DEFAULT '0',
-	hash varchar(255) DEFAULT '' NOT NULL,
-
-	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
-	crdate int(11) unsigned DEFAULT '0' NOT NULL,
-	cruser_id int(11) unsigned DEFAULT '0' NOT NULL,
-	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	starttime int(11) unsigned DEFAULT '0' NOT NULL,
-	endtime int(11) unsigned DEFAULT '0' NOT NULL,
-
-	t3ver_oid int(11) DEFAULT '0' NOT NULL,
-	t3ver_id int(11) DEFAULT '0' NOT NULL,
-	t3ver_wsid int(11) DEFAULT '0' NOT NULL,
-	t3ver_label varchar(255) DEFAULT '' NOT NULL,
-	t3ver_state tinyint(4) DEFAULT '0' NOT NULL,
-	t3ver_stage int(11) DEFAULT '0' NOT NULL,
-	t3ver_count int(11) DEFAULT '0' NOT NULL,
-	t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
-	t3ver_move_id int(11) DEFAULT '0' NOT NULL,
-
-	PRIMARY KEY (uid),
-	KEY parent (pid),
-	KEY t3ver_oid (t3ver_oid,t3ver_wsid)
+	hash varchar(255) DEFAULT '' NOT NULL
 );
 
-#
-# Table structure for table 'tx_trainingsplatz_domain_model_infomail'
-#
 CREATE TABLE tx_trainingsplatz_domain_model_infomail (
-
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-
 	training int(11) unsigned DEFAULT '0' NOT NULL,
 	status tinyint(4) unsigned DEFAULT '0' NOT NULL,
 	status_date datetime DEFAULT '0000-00-00 00:00:00',
@@ -259,118 +71,18 @@ CREATE TABLE tx_trainingsplatz_domain_model_infomail (
 	mail_body text NOT NULL,	
 	send_user int(11) unsigned DEFAULT '0' NOT NULL,
 	send_receiver int(11) unsigned DEFAULT '0' NOT NULL,
-
-	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
-	crdate int(11) unsigned DEFAULT '0' NOT NULL,
-	cruser_id int(11) unsigned DEFAULT '0' NOT NULL,
-	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	starttime int(11) unsigned DEFAULT '0' NOT NULL,
-	endtime int(11) unsigned DEFAULT '0' NOT NULL,
-
-	t3ver_oid int(11) DEFAULT '0' NOT NULL,
-	t3ver_id int(11) DEFAULT '0' NOT NULL,
-	t3ver_wsid int(11) DEFAULT '0' NOT NULL,
-	t3ver_label varchar(255) DEFAULT '' NOT NULL,
-	t3ver_state tinyint(4) DEFAULT '0' NOT NULL,
-	t3ver_stage int(11) DEFAULT '0' NOT NULL,
-	t3ver_count int(11) DEFAULT '0' NOT NULL,
-	t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
-	t3ver_move_id int(11) DEFAULT '0' NOT NULL,
-
-	sys_language_uid int(11) DEFAULT '0' NOT NULL,
-	l10n_parent int(11) DEFAULT '0' NOT NULL,
-	l10n_diffsource mediumblob,
-
-	PRIMARY KEY (uid),
-	KEY parent (pid),
-	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
- KEY language (l10n_parent,sys_language_uid)
-
 );
 
-#
-# Table structure for table 'tx_trainingsplatz_domain_model_motivation'
-#
 CREATE TABLE tx_trainingsplatz_domain_model_motivation (
-
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-
 	title varchar(255) DEFAULT '' NOT NULL,
-
-	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
-	crdate int(11) unsigned DEFAULT '0' NOT NULL,
-	cruser_id int(11) unsigned DEFAULT '0' NOT NULL,
-	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	starttime int(11) unsigned DEFAULT '0' NOT NULL,
-	endtime int(11) unsigned DEFAULT '0' NOT NULL,
-
-	t3ver_oid int(11) DEFAULT '0' NOT NULL,
-	t3ver_id int(11) DEFAULT '0' NOT NULL,
-	t3ver_wsid int(11) DEFAULT '0' NOT NULL,
-	t3ver_label varchar(255) DEFAULT '' NOT NULL,
-	t3ver_state tinyint(4) DEFAULT '0' NOT NULL,
-	t3ver_stage int(11) DEFAULT '0' NOT NULL,
-	t3ver_count int(11) DEFAULT '0' NOT NULL,
-	t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
-	t3ver_move_id int(11) DEFAULT '0' NOT NULL,
-
-	sorting int(11) DEFAULT '0' NOT NULL,
-	sys_language_uid int(11) DEFAULT '0' NOT NULL,
-	l10n_parent int(11) DEFAULT '0' NOT NULL,
-	l10n_diffsource mediumblob,
-
-	PRIMARY KEY (uid),
-	KEY parent (pid),
-	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
- KEY language (l10n_parent,sys_language_uid)
-
 );
 
-#
-# Table structure for table 'tx_trainingsplatz_domain_model_template'
-#
 CREATE TABLE tx_trainingsplatz_domain_model_template (
-
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-
 	title varchar(255) DEFAULT '' NOT NULL,
 	sport int(11) unsigned DEFAULT '0',
 	intensity int(11) unsigned DEFAULT '0',
 	guided tinyint(1) unsigned DEFAULT '0' NOT NULL,
 	templatetext text NOT NULL,
-
-	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
-	crdate int(11) unsigned DEFAULT '0' NOT NULL,
-	cruser_id int(11) unsigned DEFAULT '0' NOT NULL,
-	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	starttime int(11) unsigned DEFAULT '0' NOT NULL,
-	endtime int(11) unsigned DEFAULT '0' NOT NULL,
-
-	t3ver_oid int(11) DEFAULT '0' NOT NULL,
-	t3ver_id int(11) DEFAULT '0' NOT NULL,
-	t3ver_wsid int(11) DEFAULT '0' NOT NULL,
-	t3ver_label varchar(255) DEFAULT '' NOT NULL,
-	t3ver_state tinyint(4) DEFAULT '0' NOT NULL,
-	t3ver_stage int(11) DEFAULT '0' NOT NULL,
-	t3ver_count int(11) DEFAULT '0' NOT NULL,
-	t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
-	t3ver_move_id int(11) DEFAULT '0' NOT NULL,
-	sorting int(11) DEFAULT '0' NOT NULL,
-
-	sys_language_uid int(11) DEFAULT '0' NOT NULL,
-	l10n_parent int(11) DEFAULT '0' NOT NULL,
-	l10n_diffsource mediumblob,
-
-	PRIMARY KEY (uid),
-	KEY parent (pid),
-	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
- KEY language (l10n_parent,sys_language_uid)
-
 );
 
 #
