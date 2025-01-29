@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace DW\Trainingsplatz\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -27,7 +25,8 @@ final class InfomailCommand extends Command
     /**
      * Configure the command
      */
-    protected function configure() {
+    protected function configure():void 
+	{
 		$this->addArgument('limit',InputArgument::OPTIONAL,'Number of e-mails sent per run. Default: 50');
 		$this->addArgument('suppress',InputArgument::OPTIONAL,'Boolean. Suppress sending e-mails.');
 		$this->addArgument('sendOnlyTo',InputArgument::OPTIONAL,'Only one e-mail per execution is sent to this address');
@@ -39,10 +38,11 @@ final class InfomailCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      */
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output): int 
+	{
 		$limit = intval($input->getArgument('limit'));
 		$suppressMails = intval($input->getArgument('suppress'));
-		$sendOnlyTo = $input->getArgument('sendOnlyTo') ?? NULL;
+		$sendOnlyTo = $input->getArgument('sendOnlyTo');
 		if ($limit == 0) {
 			$limit = 50;
 		}
