@@ -1,389 +1,172 @@
 <?php
+declare(strict_types=1);
+
 namespace DW\Trainingsplatz\Domain\Model;
 
-/***************************************************************
- *
- *  Copyright notice
- *
- *  (c) 2015
- *
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
-
-/**
- * Answer
- */
 class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 
-	/**
-	 * creationDate
-	 *
-	 * @var \DateTime
-	 */
 	protected $creationDate = NULL;
 
-	/**
-	 * changeDate
-	 *
-	 * @var \DateTime
-	 */
 	protected $changeDate = NULL;
 
-	/**
-	 * author
-	 *
-	 * @var string
-	 */
 	protected $author = '';
 
-	/**
-	 * email
-	 *
-	 * @var string
-	 */
 	protected $email = '';
 
-	/**
-	 * feuser
-	 *
-	 * @var \In2code\Femanager\Domain\Model\User
-	 */
 	protected $feuser = '';
 
-	/**
-	 * owntraining
-	 *
-	 * @var int
-	 */
-	protected $owntraining = 0;
+	protected $owntraining = FALSE;
 
-	/**
-	 * title
-	 *
-	 * @var string
-	 */
 	protected $title = '';
 
-	/**
-	 * description
-	 *
-	 * @var string
-	 */
 	protected $description = '';
 
-	/**
-	 * cancelled
-	 *
-	 * @var boolean
-	 */
 	protected $cancelled = FALSE;
 
-	/**
-	 * points
-	 *
-	 * @var int
-	 */
 	protected $points = 0;
 
-	/**
-	 * compensation
-	 *
-	 * @var int
-	 */
 	protected $compensation = 0;
 
-	/**
-	 * training
-	 *
-	 * @var \DW\Trainingsplatz\Domain\Model\Training
-	 */
 	protected $training = NULL;
 
-	/**
-	 * hash
-	 *
-	 * @var string
-	 */
 	protected $hash = '';
 
-	/**
-	 * Returns the creationDate
-	 *
-	 * @return \DateTime $creationDate
-	 */
-	public function getCreationDate() {
+	public function getCreationDate(): \DateTime 
+	{
 		return $this->creationDate;
 	}
 
-	/**
-	 * Sets the creationDate
-	 *
-	 * @param \DateTime $creationDate
-	 * @return void
-	 */
-	public function setCreationDate(\DateTime $creationDate) {
+	public function setCreationDate(\DateTime $creationDate): void 
+	{
 		$this->creationDate = $creationDate;
 	}
 
-	/**
-	 * Returns the changeDate
-	 *
-	 * @return \DateTime $changeDate
-	 */
-	public function getChangeDate() {
+	public function getChangeDate(): \DateTime 
+	{
 		return $this->changeDate;
 	}
 
-	/**
-	 * Sets the changeDate
-	 *
-	 * @param \DateTime $changeDate
-	 * @return void
-	 */
-	public function setChangeDate(\DateTime $changeDate) {
+	public function setChangeDate(\DateTime $changeDate): void 
+	{
 		$this->changeDate = $changeDate;
 	}
 
-	/**
-	 * Returns the author
-	 *
-	 * @return string $author
-	 */
-	public function getAuthor() {
+	public function getAuthor(): string 
+	{
 		return $this->author;
 	}
 
-	/**
-	 * Sets the author
-	 *
-	 * @param string $author
-	 * @return void
-	 */
-	public function setAuthor($author) {
+	public function setAuthor($author): void 
+	{
 		$this->author = $author;
 	}
 
-	/**
-	 * Returns the email
-	 *
-	 * @return string $email
-	 */
-	public function getEmail() {
+	public function getEmail(): string 
+	{
 		return $this->email;
 	}
 
-	/**
-	 * Sets the email
-	 *
-	 * @param string $email
-	 * @return void
-	 */
-	public function setEmail($email) {
+	public function setEmail($email): void 
+	{
 		$this->email = $email;
 	}
 
-	/**
-	 * Returns the feuser
-	 *
-	 * @return \In2code\Femanager\Domain\Model\User feuser
-	 */
-	public function getFeuser() {
+	public function getFeuser(): \In2code\Femanager\Domain\Model\User 
+	{
 		return $this->feuser;
 	}
 
-	/**
-	 * Sets the feuser
-	 *
-	 * @param \In2code\Femanager\Domain\Model\User $feuser
-	 * @return void
-	 */
-	public function setFeuser(\In2code\Femanager\Domain\Model\User $feuser) {
+	public function setFeuser(\In2code\Femanager\Domain\Model\User $feuser): void 
+	{
 		$this->feuser = $feuser;
 	}
 
-	/**
-	 * Returns the owntraining
-	 *
-	 * @return boolean $owntraining
-	 */
-	public function getOwntraining() {
+	public function getOwntraining(): bool 
+	{
 		return $this->owntraining;
 	}
 
-	/**
-	 * Sets the owntraining
-	 *
-	 * @param boolean $owntraining
-	 * @return void
-	 */
-	public function setOwntraining($owntraining) {
+	public function setOwntraining(bool $owntraining): void 
+	{
 		$this->owntraining = $owntraining;
 	}
 
-	/**
-	 * Returns the boolean state of owntraining
-	 *
-	 * @return boolean
-	 */
-	public function isOwntraining() {
+	public function isOwntraining(): bool 
+	{
 		return $this->owntraining;
 	}
 
-	/**
-	 * Returns the title
-	 *
-	 * @return string $title
-	 */
-	public function getTitle() {
+	public function getTitle(): string 
+	{
 		return $this->title;
 	}
 
-	/**
-	 * Sets the title
-	 *
-	 * @param string $title
-	 * @return void
-	 */
-	public function setTitle($title) {
+	public function setTitle(string $title): void 
+	{
 		$this->title = $title;
 	}
 
-	/**
-	 * Returns the description
-	 *
-	 * @return string $description
-	 */
-	public function getDescription() {
+	public function getDescription(): string 
+	{
 		return $this->description;
 	}
 
-	/**
-	 * Sets the description
-	 *
-	 * @param string $description
-	 * @return void
-	 */
-	public function setDescription($description) {
+	public function setDescription(string $description): void {
 		$this->description = $description;
 	}
 
-	/**
-	 * Returns the cancelled
-	 *
-	 * @return boolean $cancelled
-	 */
-	public function getCancelled() {
+	public function getCancelled(): bool 
+	{
 		return $this->cancelled;
 	}
 
-	/**
-	 * Sets the cancelled
-	 *
-	 * @param boolean $cancelled
-	 * @return void
-	 */
-	public function setCancelled($cancelled) {
+	public function setCancelled(bool $cancelled): void 
+	{
 		$this->cancelled = $cancelled;
 	}
 
-	/**
-	 * Returns the boolean state of cancelled
-	 *
-	 * @return boolean
-	 */
-	public function isCancelled() {
+	public function isCancelled(): bool 
+	{
 		return $this->cancelled;
 	}
 
-	/**
-	 * Returns the points
-	 *
-	 * @return int $points
-	 */
-	public function getPoints() {
+	public function getPoints(): int 
+	{
 		return $this->points;
 	}
 
-	/**
-	 * Sets the points
-	 *
-	 * @param int $points
-	 * @return void
-	 */
-	public function setPoints($points) {
+	public function setPoints(int $points): void 
+	{
 		$this->points = $points;
 	}
 
-	/**
-	 * Returns the compensation
-	 *
-	 * @return int $compensation
-	 */
-	public function getCompensation() {
+	public function getCompensation(): int 
+	{
 		return $this->compensation;
 	}
 
-	/**
-	 * Sets the compensation
-	 *
-	 * @param int $compensation
-	 * @return void
-	 */
-	public function setCompensation($compensation) {
+	public function setCompensation(int $compensation): void 
+	{
 		$this->compensation = $compensation;
 	}
 
-	/**
-	 * Returns the training
-	 *
-	 * @return \DW\Trainingsplatz\Domain\Model\Training $training
-	 */
-	public function getTraining() {
+	public function getTraining(): \DW\Trainingsplatz\Domain\Model\Training 
+	{
 		return $this->training;
 	}
 
-	/**
-	 * Sets the training
-	 *
-	 * @param \DW\Trainingsplatz\Domain\Model\Training $training
-	 * @return void
-	 */
-	public function setTraining(\DW\Trainingsplatz\Domain\Model\Training $training) {
+	public function setTraining(\DW\Trainingsplatz\Domain\Model\Training $training): void 
+	{
 		$this->training = $training;
 	}
 
-	/**
-	 * Returns the hash
-	 *
-	 * @return int $hash
-	 */
-	public function getHash() {
+	public function getHash(): int 
+	{
 		return $this->hash;
 	}
 
-	/**
-	 * Sets the hash
-	 *
-	 * @param int $hash
-	 * @return void
-	 */
-	public function setHash($hash) {
+	public function setHash(int $hash): void 
+	{
 		$this->hash = $hash;
 	}
 

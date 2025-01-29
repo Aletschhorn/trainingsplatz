@@ -1,44 +1,30 @@
 <?php
-declare(strict_types=1);
-
 namespace DW\Trainingsplatz\Domain\Repository;
+
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 class UserRepository extends \In2code\Femanager\Domain\Repository\UserRepository {
 	
-    /**
-     * Find FE_Users by their group
-     *
-     * @param int $uid fe_groups UID
-     * @return QueryResult
-     */
-    public function findByUsergroup($uid) {
+    public function findByUsergroup(int $uid): QueryResultInterface 
+	{
         $query = $this->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(false);
         $query->matching($query->contains('usergroup', $uid));
-		$query->setOrderings(array('name' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
+		$query->setOrderings(array('name' => QueryInterface::ORDER_ASCENDING));
         return $query->execute();
     }
 
-     /**
-     * findInfomail
-     *
-     * @return QueryResult
-     */
-    public function findInfomail() {
+    public function findInfomail(): QueryResultInterface 
+	{
         $query = $this->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(false);
         $query->matching($query->equals('txTrainingsplatzInfomail', 1));
         return $query->execute();
     }
 
-     /**
-     * findInfomailSlice
-     *
-     * @param int $limit Limit
-     * @param int $offset Offset
-     * @return QueryResult
-     */
-    public function findInfomailSlice($limit = 100, $offset = 0) {
+    public function findInfomailSlice(int $limit = 100, int $offset = 0): QueryResultInterface 
+	{
         $query = $this->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(false);
         $query->matching($query->equals('txTrainingsplatzInfomail', 1));
@@ -48,32 +34,22 @@ class UserRepository extends \In2code\Femanager\Domain\Repository\UserRepository
         return $query->setLimit($limit)->execute();
     }
 
-    /**
-     * Find users with contest extra points
-     *
-     * @return QueryResult
-     */
-    public function findContestExtraPoints() {
+    public function findContestExtraPoints(): QueryResultInterface 
+	{
         $query = $this->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(false);
         $query->matching($query->greaterThan('txTrainingsplatzContestExtra', 0));
         return $query->execute();
     }
 
-    /**
-     * Find users having birthday today + n days
-     *
-     * @param int $offset
-	 * @param array $usergroups
-     * @return QueryResult
-     */
-    public function findBirthdayToday($offset = 0, $usergroups = array()) {
+    public function findBirthdayToday(int $offset = 0, array $usergroups = []): QueryResultInterface 
+	{
 		date_default_timezone_set('Europe/Berlin');
 		$date = new \DateTime ('+'.intval($offset).' days');
 		
 		$allUsers = parent::findAll();
 		
-		$result = array ();
+		$result = [];
 		foreach ($allUsers as $key => $user) {
 			$currentgroups = array();
 			foreach ($user->getUsergroup() as $group) {

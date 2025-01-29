@@ -1,29 +1,19 @@
 <?php
-declare(strict_types=1);
 namespace DW\Trainingsplatz\Domain\Repository;
+
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 class TrainingRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 
-	/**
-	* defaultOrderings
-	*
-	* @var array
-	*/
-	protected $defaultOrderings = array(
-		'trainingDate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING, 
-		'title' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING
-	);
+	protected $defaultOrderings = [
+		'trainingDate' => QueryInterface::ORDER_ASCENDING, 
+		'title' => QueryInterface::ORDER_ASCENDING
+	];
 	
 
-	/**
-	* findFuture
-	*
-    * @param int $limit
-    * @param boolean $inclCancelled
-	* @return
-	*/
-	public function findFuture($limit = 0, $inclCancelled = 1) {
-
+	public function findFuture(int $limit = 0, bool $inclCancelled = 1): QueryResultInterface
+	{
 		$today = new \DateTime('today');
 		$query = $this->createQuery();
 		
@@ -43,16 +33,8 @@ class TrainingRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		return $query->execute();
 	}
 
-	/**
-	* findFutureFiltered
-	*
-    * @param int $sportsUid
-    * @param int $limit
-    * @param boolean $inclCancelled
-	* @return
-	*/
-	public function findFutureFiltered($sportsUid, $limit = 0, $inclCancelled = 1) {
-
+	public function findFutureFiltered(int $sportsUid, int $limit = 0, bool $inclCancelled = 1): QueryResultInterface 
+	{
 		$today = new \DateTime('today');
 		$query = $this->createQuery();
 
@@ -73,33 +55,21 @@ class TrainingRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		return $query->execute();
 	}
 
-	/**
-	* findPast
-	*
-	* @return
-	*/
-	public function findPast() {
-
+	public function findPast(): QueryResultInterface 
+	{
 		$today = new \DateTime('today');
 		$query = $this->createQuery();
-		$result = $query->matching(
+		return $query->matching(
 			$query->logicalAnd(
 				$query->equals('public',1),
 				$query->lessThan('trainingDate',$today->format('Y-m-d H-i-s')),
 				$query->equals('closed',0)
 			)
 		)->execute();
-
-		return $result;
 	}
 
-	/**
-	* findClosed
-	*
-    * @param DateTime $startDate
-	* @return
-	*/
-	public function findClosed($startDate = NULL) {
+	public function findClosed(\DateTime $startDate = NULL): QueryResultInterface
+	{
 		$today = new \DateTime('today');
 		$query = $this->createQuery();
 		$constraints = array(
@@ -110,22 +80,15 @@ class TrainingRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		if ($startDate) {
 			$constraints[] = $query->greaterThanOrEqual('trainingDate',$startDate->format('Y-m-d H-i-s'));
 		}
-		$query->matching($query->logicalAnd($constraints));
-		return $query->execute();
+		return $query->matching($query->logicalAnd($constraints))->execute();
 	}
 
-	/**
-	* findClosedPerUser
-	*
-    * @param int $user ID of frontend user
-    * @param DateTime $startDate
-	* @return
-	*/
-	public function findClosedPerUser($user, $startDate = NULL) {
+	public function findClosedPerUser(int $userId, \DateTime $startDate = NULL): QueryResultInterface 
+	{
 		$today = new \DateTime('today');
 		$query = $this->createQuery();
 		$constraints = array(
-			$query->equals('author',$user),
+			$query->equals('author',$userId),
 			$query->equals('cancelled',0),
 			$query->lessThan('trainingDate',$today->format('Y-m-d H-i-s')),
 			$query->equals('closed',1),
@@ -133,25 +96,16 @@ class TrainingRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		if ($startDate) {
 			$constraints[] = $query->greaterThanOrEqual('trainingDate',$startDate->format('Y-m-d H-i-s'));
 		}
-		$query->matching($query->logicalAnd($constraints));
-		return $query->execute();
+		return $query->matching($query->logicalAnd($constraints))->execute();
 	}
 	
-	/**
-	* findPerYear
-	*
-    * @param int $year
-    * @param boolean $inclCancelled
-	* @return
-	*/
-	public function findPerYear($year, $inclCancelled = 1) {
-		
+	public function findPerYear(int $year, bool $inclCancelled = 1): QueryResultInterface
+	{
 		if ($year < 2016 or $year > date('Y')) {
 			return false;
 		}
 		
 		$query = $this->createQuery();
-		
 		$constraints = array (
 			$query->equals('public',1),
 			$query->greaterThanOrEqual('trainingDate',$year.'-01-01 00:00:00'),
@@ -160,10 +114,7 @@ class TrainingRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		if ($inclCancelled == false) {
 			$constraints[] = $query->equals('cancelled',0);
 		}
-		
-		$query->matching($query->logicalAnd($constraints));
-
-		return $query->execute();
+		return $query->matching($query->logicalAnd($constraints))->execute();
 	}
 
 }
