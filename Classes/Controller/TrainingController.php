@@ -5,7 +5,7 @@ use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Context\Context;
 
 use Symfony\Component\Mime\Address;
@@ -25,7 +25,6 @@ use DW\Trainingsplatz\Domain\Repository\InfomailRepository;
 use DW\Trainingsplatz\Domain\Model\Training;
 use DW\Trainingsplatz\Domain\Model\Answer;
 use In2code\Femanager\Domain\Repository\UserRepository;
-use GeorgRinger\News\Domain\Repository\NewsRepository;
 
 /**
  * TrainingController
@@ -46,8 +45,6 @@ class TrainingController extends ActionController {
 	
 	private $userRepository;
 	
-    private $newsRepository;
-	
 	protected $timezone;
 
 	public function __construct (
@@ -58,7 +55,6 @@ class TrainingController extends ActionController {
 			MapRepository $mapRepository,
 			InfomailRepository $infomailRepository,
 			UserRepository $userRepository,
-			NewsRepository $newsRepository,
 			private readonly Context $context
 	) {
 		$this->trainingRepository = $trainingRepository;
@@ -68,7 +64,6 @@ class TrainingController extends ActionController {
 		$this->mapRepository = $mapRepository;
 		$this->infomailRepository = $infomailRepository;
 		$this->userRepository = $userRepository;
-		$this->newsRepository = $newsRepository;
 		$this->timezone = new \DateTimeZone($this->context->getPropertyFromAspect('date', 'timezone'));
 	}
 	
@@ -233,39 +228,39 @@ class TrainingController extends ActionController {
 		$failue = false;
 		if ($training->getSeries() == 0) {
 			if ($training->getTrainingDate() == NULL) {
-				$this->addFlashMessage('Trainingsdatum ist ungültig', '', AbstractMessage::ERROR);
+				$this->addFlashMessage('Trainingsdatum ist ungültig', '', ContextualFeedbackSeverity::ERROR);
 				$failure = true;
 			} else {
 				$training->setTrainingDate($this->adjustYear($training->getTrainingDate()));
 				if ($training->getTrainingDate()->format('U') < $today->format('U')) {
-					$this->addFlashMessage('Trainingsdatum liegt in der Vergangenheit', '', AbstractMessage::ERROR);
+					$this->addFlashMessage('Trainingsdatum liegt in der Vergangenheit', '', ContextualFeedbackSeverity::ERROR);
 					$failure = true;
 				}
 			}
 		} else {
 			if ($training->getSeriesStart() == NULL or $training->getSeriesEnd() == NULL) {
-				$this->addFlashMessage('Trainingsdaten der Serie sind ungültig', '', AbstractMessage::ERROR);
+				$this->addFlashMessage('Trainingsdaten der Serie sind ungültig', '', ContextualFeedbackSeverity::ERROR);
 				$failure = true;
 			} else {
 				$training->setSeriesStart($this->adjustYear($training->getSeriesStart()));
 				$training->setSeriesEnd($this->adjustYear($training->getSeriesEnd()));
 				if ($training->getSeriesStart()->format('U') < $today->format('U')) {
-					$this->addFlashMessage('Startdatum der Serie liegt in der Vergangenheit', '', AbstractMessage::ERROR);
+					$this->addFlashMessage('Startdatum der Serie liegt in der Vergangenheit', '', ContextualFeedbackSeverity::ERROR);
 					$failure = true;
 				} elseif ($training->getSeriesStart()->format('U') > $training->getSeriesEnd()->format('U')) {
-					$this->addFlashMessage('Startdatum ist nach dem Enddatum der Serie', '', AbstractMessage::ERROR);
+					$this->addFlashMessage('Startdatum ist nach dem Enddatum der Serie', '', ContextualFeedbackSeverity::ERROR);
 					$failure = true;
 				} else {
 					$seriesDates = $this->getSeriesDates($training);
 					if (count($seriesDates) == 0) {
-						$this->addFlashMessage('Kein Trainingsdatum zwischen Start- und Enddatum möglich', '', AbstractMessage::ERROR);
+						$this->addFlashMessage('Kein Trainingsdatum zwischen Start- und Enddatum möglich', '', ContextualFeedbackSeverity::ERROR);
 						$failure = true;
 					} else {
 						foreach ($seriesDates as $seriesDate) {
 							$seriesDatesFormated[] = date('d.m.Y',$seriesDate->format('U'));
 						}
 						$message = 'Trainings werden für folgende Daten erstellt: '.implode(', ',$seriesDatesFormated);
-						$this->addFlashMessage($message, '', AbstractMessage::INFO);
+						$this->addFlashMessage($message, '', ContextualFeedbackSeverity::INFO);
 						$training->setTrainingDate($seriesDates[0]);
 					}
 				}
@@ -331,39 +326,39 @@ class TrainingController extends ActionController {
 		if ($step == 1) {
 			if ($training->getSeries() == 0) {
 				if ($training->getTrainingDate() == NULL) {
-					$this->addFlashMessage('Trainingsdatum ist ungültig', '', AbstractMessage::ERROR);
+					$this->addFlashMessage('Trainingsdatum ist ungültig', '', ContextualFeedbackSeverity::ERROR);
 					return $this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
 				} else {
 					$training->setTrainingDate($this->adjustYear($training->getTrainingDate()));
 					if ($training->getTrainingDate()->format('U') < $today->format('U')) {
-						$this->addFlashMessage('Trainingsdatum liegt in der Vergangenheit', '', AbstractMessage::ERROR);
+						$this->addFlashMessage('Trainingsdatum liegt in der Vergangenheit', '', ContextualFeedbackSeverity::ERROR);
 						return $this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
 					}
 				}
 			} else {
 				if ($training->getSeriesStart() == NULL or $training->getSeriesEnd() == NULL) {
-					$this->addFlashMessage('Trainingsdaten der Serie sind ungültig', '', AbstractMessage::ERROR);
+					$this->addFlashMessage('Trainingsdaten der Serie sind ungültig', '', ContextualFeedbackSeverity::ERROR);
 					return $this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
 				} else {
 					$training->setSeriesStart($this->adjustYear($training->getSeriesStart()));
 					$training->setSeriesEnd($this->adjustYear($training->getSeriesEnd()));
 					if ($training->getSeriesStart()->format('U') < $today->format('U')) {
-						$this->addFlashMessage('Startdatum der Serie liegt in der Vergangenheit', '', AbstractMessage::ERROR);
+						$this->addFlashMessage('Startdatum der Serie liegt in der Vergangenheit', '', ContextualFeedbackSeverity::ERROR);
 						return $this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
 					} elseif ($training->getSeriesStart()->format('U') > $training->getSeriesEnd()->format('U')) {
-						$this->addFlashMessage('Startdatum ist nach dem Enddatum der Serie', '', AbstractMessage::ERROR);
+						$this->addFlashMessage('Startdatum ist nach dem Enddatum der Serie', '', ContextualFeedbackSeverity::ERROR);
 						return $this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
 					} else {
 						$seriesDates = $this->getSeriesDates($training);
 						if (count($seriesDates) == 0) {
-							$this->addFlashMessage('Kein Trainingsdatum zwischen Start- und Enddatum möglich', '', AbstractMessage::ERROR);
+							$this->addFlashMessage('Kein Trainingsdatum zwischen Start- und Enddatum möglich', '', ContextualFeedbackSeverity::ERROR);
 							return $this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
 						} else {
 							foreach ($seriesDates as $seriesDate) {
 								$seriesDatesFormated[] = date('d.m.Y',$seriesDate->format('U'));
 							}
 							$message = 'Trainings werden für folgende Daten erstellt: '.implode(', ',$seriesDatesFormated);
-							$this->addFlashMessage($message, '', AbstractMessage::INFO);
+							$this->addFlashMessage($message, '', ContextualFeedbackSeverity::INFO);
 							$training->setTrainingDate($seriesDates[0]);
 						}
 					}
@@ -373,7 +368,7 @@ class TrainingController extends ActionController {
 
 		if ($step == 2) {
 			if (! $training->getTitle() or ! $training->getDescription()) {
-				$this->addFlashMessage('Titel und Beschreibung müssen ausgefüllt sein', '', AbstractMessage::ERROR);
+				$this->addFlashMessage('Titel und Beschreibung müssen ausgefüllt sein', '', ContextualFeedbackSeverity::ERROR);
 				return $this->redirect('edit','Training','trainingsplatz',array('training' => $training, 'step' => $step));
 			}
 		}
@@ -540,7 +535,7 @@ class TrainingController extends ActionController {
 				}
 			}
 			
-			$this->addFlashMessage('Training wurde abgesagt und die eingetragenen Teilnehmer per Mail informiert.', '', AbstractMessage::OK);
+			$this->addFlashMessage('Training wurde abgesagt und die eingetragenen Teilnehmer per Mail informiert.', '', ContextualFeedbackSeverity::OK);
 		}
 		return $this->redirect('show','Training','trainingsplatz',array('training' => $training->getUid()));
 	}
@@ -552,7 +547,7 @@ class TrainingController extends ActionController {
 		$training->setCancelled(false);
 		$this->trainingRepository->update($training);
 
-		$this->addFlashMessage('Training wurde wieder aktiviert. Es wurden keine Mails versendet.', '', AbstractMessage::OK);
+		$this->addFlashMessage('Training wurde wieder aktiviert. Es wurden keine Mails versendet.', '', ContextualFeedbackSeverity::OK);
 		return $this->redirect('show','Training','trainingsplatz',array('training' => $training->getUid()));
 	}
 
@@ -674,7 +669,7 @@ class TrainingController extends ActionController {
 		if ($answer->getTraining()->isNotification()) {
 			$this->sendNotification($answer, 3);
 		}
-		$this->addFlashMessage('Teilnahme abgesagt', '', AbstractMessage::OK);
+		$this->addFlashMessage('Teilnahme abgesagt', '', ContextualFeedbackSeverity::OK);
 		return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
 	}
 
@@ -687,7 +682,7 @@ class TrainingController extends ActionController {
 		if ($answer->getTraining()->isNotification()) {
 			$this->sendNotification($answer, 4);
 		}
-		$this->addFlashMessage('Teilnahme wieder aktiviert', '', AbstractMessage::OK);
+		$this->addFlashMessage('Teilnahme wieder aktiviert', '', ContextualFeedbackSeverity::OK);
 		return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
 	}
 
@@ -737,23 +732,23 @@ class TrainingController extends ActionController {
 										'note' => 'Dies ist eine automatisch erstellte Nachricht. Bitte nicht darauf antworten.'
 									]);
 								if ($this->settings['emails']['suppress']) {
-									$this->addFlashMessage('Weil der Versand von E-Mails unterdrückt ist, ist keine Nachtricht versendet worden.', '', AbstractMessage::WARNING);
+									$this->addFlashMessage('Weil der Versand von E-Mails unterdrückt ist, ist keine Nachtricht versendet worden.', '', ContextualFeedbackSeverity::WARNING);
 								} else {
 									$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
 									$mailerInterface->send($mail);
-									$this->addFlashMessage('Der Abmelde-Link wurde dir per E-Mail zugesendet.', '', AbstractMessage::OK);
+									$this->addFlashMessage('Der Abmelde-Link wurde dir per E-Mail zugesendet.', '', ContextualFeedbackSeverity::OK);
 								}
 							}
 						}
 					} else {
-						$this->addFlashMessage('Die angegebene Mailadresse wurde in keinem der Teilnahme-Einträgen gefunden.', '', AbstractMessage::WARNING);
+						$this->addFlashMessage('Die angegebene Mailadresse wurde in keinem der Teilnahme-Einträgen gefunden.', '', ContextualFeedbackSeverity::WARNING);
 					}
 				} else {
-					$this->addFlashMessage('Die angegebene Mailadresse ist ungültig.', '', AbstractMessage::WARNING);
+					$this->addFlashMessage('Die angegebene Mailadresse ist ungültig.', '', ContextualFeedbackSeverity::WARNING);
 				}
 				return $this->redirect('show','Training','trainingsplatz',['training' => $training]);
 			}
-			$this->addFlashMessage('Die anggeebene Mailadresse wurde in keiner der Teilnahme-Einträgen gefunden.', '', AbstractMessage::WARNING);
+			$this->addFlashMessage('Die anggeebene Mailadresse wurde in keiner der Teilnahme-Einträgen gefunden.', '', ContextualFeedbackSeverity::WARNING);
 			return $this->redirect('show','Training','trainingsplatz',['training' => $training]);
 		}
 		return $this->redirect('list');
@@ -767,7 +762,7 @@ class TrainingController extends ActionController {
 				return $this->redirect('cancelAnswer','Training','trainingsplatz',['answer' => $answer]);
 			}
 		}
-		$this->addFlashMessage('Absage-Link ungültig', '', AbstractMessage::ERROR);
+		$this->addFlashMessage('Absage-Link ungültig', '', ContextualFeedbackSeverity::ERROR);
 		if ($this->request->hasArgument('training')) {
 			$training = $this->trainingRepository->findByUid($this->request->getArgument('training'));
 			if ($training) {
@@ -886,16 +881,16 @@ class TrainingController extends ActionController {
 							}							
 						}
 						
-						$this->addFlashMessage('E-Mail wurde versendet, eine Kopie davon auch an dich','', AbstractMessage::OK);
+						$this->addFlashMessage('E-Mail wurde versendet, eine Kopie davon auch an dich','', ContextualFeedbackSeverity::OK);
 						return $this->redirect('show','Training','trainingsplatz',array('training' => $training));
 					} else {
-						$this->addFlashMessage('Betreff und Inhalt dürfen nicht leer sein','', AbstractMessage::WARNING);
+						$this->addFlashMessage('Betreff und Inhalt dürfen nicht leer sein','', ContextualFeedbackSeverity::WARNING);
 						return $this->redirect('message','Training','trainingsplatz',array('training' => $training));
 					}
 				}
 			}
 		}
-		$this->addFlashMessage('E-Mail konnte nicht versendet werden','', AbstractMessage::WARNING);
+		$this->addFlashMessage('E-Mail konnte nicht versendet werden','', ContextualFeedbackSeverity::WARNING);
 		return $this->redirect('list');
 	}
 
@@ -1208,7 +1203,8 @@ class TrainingController extends ActionController {
 		$demand->setYear($year);
 		$demand->setCategories(['Bericht']);
 		$demand->setStoragePage(98);
-		$reports = $this->newsRepository->findDemanded($demand);
+		$newsRepository = new \GeorgRinger\News\Domain\Repository\NewsRepository;
+		$reports = $newsRepository->findDemanded($demand);
 		
 		for ($i=2016; $i<=date('Y'); $i++) {
 			$navigation[] = $i;

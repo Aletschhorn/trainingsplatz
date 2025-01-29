@@ -1,6 +1,7 @@
 <?php
 namespace DW\Trainingsplatz\Controller;
 
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Context\Context;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\FluidEmail;
@@ -89,26 +90,26 @@ class UserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 							$mailerInterface = GeneralUtility::makeInstance(Mailer::class);
 							$mailerInterface->send($mail);
 						
-							$this->addFlashMessage('E-Mail wurde versendet','',\TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+							$this->addFlashMessage('E-Mail wurde versendet','',ContextualFeedbackSeverity::OK);
 							$this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 1));
 						} else {
-							$this->addFlashMessage('Betreff und Inhalt dürfen nicht leer sein','',\TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+							$this->addFlashMessage('Betreff und Inhalt dürfen nicht leer sein','',ContextualFeedbackSeverity::WARNING);
 							$this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 0));
 						}
 					} else {
-						$this->addFlashMessage('E-Mail konnte nicht versendet werden','',\TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+						$this->addFlashMessage('E-Mail konnte nicht versendet werden','',ContextualFeedbackSeverity::WARNING);
 						$this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 1));
 					}
 				} else {
-					$this->addFlashMessage('E-Mail konnte nicht versendet werden','',\TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+					$this->addFlashMessage('E-Mail konnte nicht versendet werden','',ContextualFeedbackSeverity::WARNING);
 					$this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 1));
 				}
 			} else {
-				$this->addFlashMessage('E-Mail konnte nicht versendet werden','',\TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+				$this->addFlashMessage('E-Mail konnte nicht versendet werden','',ContextualFeedbackSeverity::WARNING);
 				$this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 1));
 			}
 		} else {
-			$this->addFlashMessage('E-Mail konnte nicht versendet werden','',\TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+			$this->addFlashMessage('E-Mail konnte nicht versendet werden','',ContextualFeedbackSeverity::WARNING);
 			$this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 1));
 		}
 	}

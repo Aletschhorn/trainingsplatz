@@ -5,6 +5,7 @@ use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -87,7 +88,7 @@ class InfomailController extends ActionController {
 				$infomail->setSendUser($senduser);
 		
 				$this->infomailRepository->update($infomail);
-				$this->addFlashMessage('InfoMail für den Versand vorbereitet.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+				$this->addFlashMessage('InfoMail für den Versand vorbereitet.', '', ContextualFeedbackSeverity::OK);
 			}
 		}
 		$this->redirect('list');
@@ -108,7 +109,7 @@ class InfomailController extends ActionController {
 				$infomail->setStatus(2);
 				$infomail->setSendUser($senduser);
 				$this->infomailRepository->update($infomail);
-				$this->addFlashMessage('Der InfoMail-Antrag wurde entfernt', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+				$this->addFlashMessage('Der InfoMail-Antrag wurde entfernt', '', ContextualFeedbackSeverity::OK);
 			}
 		}
 		$this->redirect('list');
@@ -125,9 +126,9 @@ class InfomailController extends ActionController {
 					$infomail->setStatus(0);
 					$infomail->setSendUser($senduser);
 					$this->infomailRepository->update($infomail);
-					$this->addFlashMessage('Das InfoMail wurde zu den pendenten InfoMails zurückverschoben.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+					$this->addFlashMessage('Das InfoMail wurde zu den pendenten InfoMails zurückverschoben.', '', ContextualFeedbackSeverity::OK);
 				} else {
-					$this->addFlashMessage('Der Status des InfoMails wurde inzwischen geändert; der Versand konnte nicht gestoppt werden.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+					$this->addFlashMessage('Der Status des InfoMails wurde inzwischen geändert; der Versand konnte nicht gestoppt werden.', '', ContextualFeedbackSeverity::ERROR);
 				}
 			}
 		}
