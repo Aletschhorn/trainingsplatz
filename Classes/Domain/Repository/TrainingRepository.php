@@ -12,7 +12,7 @@ class TrainingRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	];
 	
 
-	public function findFuture(int $limit = 0, bool $inclCancelled = 1): QueryResultInterface
+	public function findFuture(int $limit = 0, bool $inclCancelled = true): QueryResultInterface
 	{
 		$today = new \DateTime('today');
 		$query = $this->createQuery();
@@ -33,7 +33,7 @@ class TrainingRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		return $query->execute();
 	}
 
-	public function findFutureFiltered(int $sportsUid, int $limit = 0, bool $inclCancelled = 1): QueryResultInterface 
+	public function findFutureFiltered(int $sportsUid, int $limit = 0, bool $inclCancelled = true): QueryResultInterface 
 	{
 		$today = new \DateTime('today');
 		$query = $this->createQuery();
@@ -99,7 +99,7 @@ class TrainingRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		return $query->matching($query->logicalAnd($constraints))->execute();
 	}
 	
-	public function findPerYear(int $year, bool $inclCancelled = 1): QueryResultInterface
+	public function findPerYear(int $year, bool $inclCancelled = true): QueryResultInterface
 	{
 		if ($year < 2016 or $year > date('Y')) {
 			return false;
