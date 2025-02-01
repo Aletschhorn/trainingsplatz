@@ -2,26 +2,20 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
-    public: true
+    public: false
 
   DW\Trainingsplatz\:
     resource: '../Classes/*'
-    exclude: 
-      - '../Classes/Domain/Model/Answer'
-      - '../Classes/Domain/Model/Infomail'
-      - '../Classes/Domain/Model/Intensity'
-      - '../Classes/Domain/Model/Map'
-      - '../Classes/Domain/Model/Motivation'
-      - '../Classes/Domain/Model/Sport'
-      - '../Classes/Domain/Model/Template'
-      - '../Classes/Domain/Model/Training'
+    exclude: '../Classes/Domain/Model/*'
 
   DW\Trainingsplatz\Domain\Repository\UserRepository:
+    public: true
+  DW\Trainingsplatz\Domain\Model\User:
     public: true
 
   DW\Trainingsplatz\Command\InfomailCommand:
     tags:
-      - name: 'console.command'
+      - name: console.command
         command: 'trainingsplatz:infomail'
         description: 'Send Training InfoMails'
         hidden: false
@@ -32,7 +26,7 @@ services:
         priority: 100
         target: int
         sources: array,int
-  
+
   In2code\Femanager\Controller\EditController: '@DW\Trainingsplatz\Controller\EditController'
   In2code\Femanager\Controller\NewController: '@DW\Trainingsplatz\Controller\NewController'
   In2code\Femanager\Domain\Model\User: '@DW\Trainingsplatz\Domain\Model\User'
