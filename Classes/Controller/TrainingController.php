@@ -20,7 +20,6 @@ use DW\Trainingsplatz\Domain\Repository\TrainingRepository;
 use DW\Trainingsplatz\Domain\Repository\AnswerRepository;
 use DW\Trainingsplatz\Domain\Repository\SportRepository;
 use DW\Trainingsplatz\Domain\Repository\IntensityRepository;
-use DW\Trainingsplatz\Domain\Repository\MapRepository;
 use DW\Trainingsplatz\Domain\Repository\InfomailRepository;
 use DW\Trainingsplatz\Domain\Model\Training;
 use DW\Trainingsplatz\Domain\Model\Answer;
@@ -39,8 +38,6 @@ class TrainingController extends ActionController {
 	
 	private $intensityRepository;
 
-	private $mapRepository;
-	
 	private $infomailRepository;
 	
 	private $userRepository;
@@ -52,7 +49,6 @@ class TrainingController extends ActionController {
 			AnswerRepository $answerRepository,
 			SportRepository $sportRepository,
 			IntensityRepository $intensityRepository,
-			MapRepository $mapRepository,
 			InfomailRepository $infomailRepository,
 			UserRepository $userRepository,
 			private readonly Context $context
@@ -61,7 +57,6 @@ class TrainingController extends ActionController {
 		$this->answerRepository = $answerRepository;
 		$this->sportRepository = $sportRepository;
 		$this->intensityRepository = $intensityRepository;
-		$this->mapRepository = $mapRepository;
 		$this->infomailRepository = $infomailRepository;
 		$this->userRepository = $userRepository;
 		$this->timezone = new \DateTimeZone($this->context->getPropertyFromAspect('date', 'timezone'));
