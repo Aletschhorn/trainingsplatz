@@ -7,61 +7,61 @@ defined('TYPO3') or die();
 
 (static function (): void {
 	ExtensionUtility::registerPlugin(
-		'trainingsplatz',
+		'Trainingsplatz',
 		'TrainingList',
 		'Training List'
 	);
 
 	ExtensionUtility::registerPlugin(
-		'trainingsplatz',
+		'Trainingsplatz',
 		'TrainingEvaluation',
 		'Training Evaluation'
 	);
 
 	ExtensionUtility::registerPlugin(
-		'trainingsplatz',
+		'Trainingsplatz',
 		'TrainingParticipation',
 		'Training Participation'
 	);
 
 	ExtensionUtility::registerPlugin(
-		'trainingsplatz',
+		'Trainingsplatz',
 		'TrainingParticipationUser',
 		'Training Participation User View'
 	);
 
 	ExtensionUtility::registerPlugin(
-		'trainingsplatz',
+		'Trainingsplatz',
 		'CompetitionRanking',
 		'Competition Ranking'
 	);
 
 	ExtensionUtility::registerPlugin(
-		'trainingsplatz',
+		'Trainingsplatz',
 		'CompetitionUser',
 		'Competition User View'
 	);
 
 	ExtensionUtility::registerPlugin(
-		'trainingsplatz',
+		'Trainingsplatz',
 		'Admin',
 		'Trainingsplatz Admin Tools'
 	);
 		
 	ExtensionUtility::registerPlugin(
-		'trainingsplatz',
+		'Trainingsplatz',
 		'Infomail',
 		'Training Infomails'
 	);
 		
 	ExtensionUtility::registerPlugin(
-		'trainingsplatz',
+		'Trainingsplatz',
 		'Birthday',
 		'Member Birthdays'
 	);
 		
 	ExtensionUtility::registerPlugin(
-		'trainingsplatz',
+		'Trainingsplatz',
 		'Messaging',
 		'Member Messaging'
 	);

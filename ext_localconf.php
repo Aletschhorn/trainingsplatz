@@ -13,7 +13,6 @@ ExtensionUtility::configurePlugin(
 	'TrainingList',
 	[TrainingController::class => 'list, show, new, create, edit, update, delete, cancel, activate, addAnswer, editAnswer, modifyAnswer, cancelAnswer, reactivateAnswer, deleteAnswer, message, messageSend, cancelRequestAnswer, cancelPublicAnswer'],
 	[TrainingController::class => 'new, create, edit, update, delete, cancel, activate, addAnswer, editAnswer, modifyAnswer, cancelAnswer, reactivateAnswer, deleteAnswer, message, messageSend, cancelRequestAnswer, cancelPublicAnswer'],
-	ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
 ExtensionUtility::configurePlugin(
@@ -21,7 +20,6 @@ ExtensionUtility::configurePlugin(
 	'TrainingEvaluation',
 	[TrainingController::class => 'evaluate, close, billing, discount, finalize'],
 	[TrainingController::class => 'close, billing, discount, finalize'],
-	ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
 ExtensionUtility::configurePlugin(
@@ -29,7 +27,6 @@ ExtensionUtility::configurePlugin(
 	'TrainingParticipation',
 	[TrainingController::class => 'participation, userParticipation'],
 	[TrainingController::class => 'userParticipation'],
-	ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
 ExtensionUtility::configurePlugin(
@@ -37,7 +34,6 @@ ExtensionUtility::configurePlugin(
 	'TrainingParticipationUser',
 	[TrainingController::class => 'userParticipation'],
 	[TrainingController::class => 'userParticipation'],
-	ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
 ExtensionUtility::configurePlugin(
@@ -45,7 +41,6 @@ ExtensionUtility::configurePlugin(
 	'CompetitionRanking',
 	[TrainingController::class => 'ranking'],
 	[TrainingController::class => ''],
-	ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
 ExtensionUtility::configurePlugin(
@@ -53,7 +48,6 @@ ExtensionUtility::configurePlugin(
 	'CompetitionUser',
 	[TrainingController::class => 'userCompetition'],
 	[TrainingController::class => ''],
-	ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
 ExtensionUtility::configurePlugin(
@@ -61,7 +55,6 @@ ExtensionUtility::configurePlugin(
 	'Admin',
 	[TrainingController::class => 'analysis, ranking, reports, single'],
 	[TrainingController::class => ''],
-	ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
 ExtensionUtility::configurePlugin(
@@ -69,7 +62,6 @@ ExtensionUtility::configurePlugin(
 	'Infomail',
 	[InfomailController::class => 'list, show, review, copy, send, delete, deny, cancel'],
 	[InfomailController::class => 'create, copy, send, delete, deny, cancel'],
-	ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
 ExtensionUtility::configurePlugin(
@@ -77,7 +69,6 @@ ExtensionUtility::configurePlugin(
 	'Birthday',
 	[UserController::class => 'birthday'],
 	[UserController::class => ''],
-	ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
 ExtensionUtility::configurePlugin(
@@ -85,5 +76,4 @@ ExtensionUtility::configurePlugin(
 	'Messaging',
 	[UserController::class => 'message, messageSend'],
 	[UserController::class => 'message, messageSend'],
-	ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
