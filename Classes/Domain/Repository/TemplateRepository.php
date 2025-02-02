@@ -12,7 +12,7 @@ class TemplateRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 			$query->equals('intensity',$intensity),
 			$query->equals('guided',$guided)
 		];
-		return $query->matching($query->logicalAnd($constraints))->execute()->getFirst();
+		return $query->matching($query->logicalAnd(...$constraints))->execute()->getFirst();
 	}
 
 }

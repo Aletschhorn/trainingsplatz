@@ -94,7 +94,7 @@ class AnswerRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		if ($endDate) {
 			$contraints[] = $query->lessThan('training.trainingDate',$endDate->format('Y-m-d H-i-s'));
 		}
-		$query->matching($query->logicalAnd($contraints));
+		$query->matching($query->logicalAnd(...$contraints));
 		return $query->execute();
 	}
 	
@@ -110,7 +110,7 @@ class AnswerRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		if ($startDate) {
 			$constraints[] = $query->greaterThanOrEqual('training.trainingDate',$startDate->format('Y-m-d H-i-s'));
 		}
-		$query->matching($query->logicalAnd($constraints));
+		$query->matching($query->logicalAnd(...$constraints));
 		return $query->execute();
 	}
 	
@@ -127,7 +127,7 @@ class AnswerRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		if ($startDate) {
 			$constraints[] = $query->greaterThanOrEqual('training.trainingDate',$startDate->format('Y-m-d H-i-s'));
 		}
-		$query->matching($query->logicalAnd($constraints));
+		$query->matching($query->logicalAnd(...$constraints));
 		return $query->count();
 	}
 
@@ -144,7 +144,7 @@ class AnswerRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		if ($startDate) {
 			$constraints[] = $query->greaterThanOrEqual('training.trainingDate',$startDate->format('Y-m-d H-i-s'));
 		}
-		$query->matching($query->logicalAnd($constraints));
+		$query->matching($query->logicalAnd(...$constraints));
 		return $query->execute();
 	}
 	
@@ -162,7 +162,7 @@ class AnswerRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		if ($startDate) {
 			$constraints[] = $query->greaterThanOrEqual('training.trainingDate',$startDate->format('Y-m-d H-i-s'));
 		}
-		$query->matching($query->logicalAnd($constraints));
+		$query->matching($query->logicalAnd(...$constraints));
 		$query->setOrderings(array('training.trainingDate' => QueryInterface::ORDER_ASCENDING));
 		return $query->execute();
 	}
@@ -181,7 +181,7 @@ class AnswerRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		if ($startDate) {
 			$constraints[] = $query->greaterThanOrEqual('training.trainingDate',$startDate->format('Y-m-d H-i-s'));
 		}
-		$query->matching($query->logicalAnd($constraints));
+		$query->matching($query->logicalAnd(...$constraints));
 		return $query->count();
 	}
 

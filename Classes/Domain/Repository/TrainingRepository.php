@@ -25,7 +25,7 @@ class TrainingRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 			$constraints[] = $query->equals('cancelled',0);
 		}
 		
-		$query->matching($query->logicalAnd($constraints));
+		$query->matching($query->logicalAnd(...$constraints));
 		if ($limit > 0) {
 			$query->setLimit($limit);
 		}
@@ -47,7 +47,7 @@ class TrainingRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 			$constraints[] = $query->equals('cancelled',0);
 		}
 
-		$query->matching($query->logicalAnd($constraints));
+		$query->matching($query->logicalAnd(...$constraints));
 		if ($limit > 0) {
 			$query->setLimit($limit);
 		}
@@ -80,7 +80,7 @@ class TrainingRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		if ($startDate) {
 			$constraints[] = $query->greaterThanOrEqual('trainingDate',$startDate->format('Y-m-d H-i-s'));
 		}
-		return $query->matching($query->logicalAnd($constraints))->execute();
+		return $query->matching($query->logicalAnd(...$constraints))->execute();
 	}
 
 	public function findClosedPerUser(int $userId, \DateTime $startDate = NULL): QueryResultInterface 
@@ -96,7 +96,7 @@ class TrainingRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		if ($startDate) {
 			$constraints[] = $query->greaterThanOrEqual('trainingDate',$startDate->format('Y-m-d H-i-s'));
 		}
-		return $query->matching($query->logicalAnd($constraints))->execute();
+		return $query->matching($query->logicalAnd(...$constraints))->execute();
 	}
 	
 	public function findPerYear(int $year, bool $inclCancelled = true): QueryResultInterface
@@ -114,7 +114,7 @@ class TrainingRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		if ($inclCancelled == false) {
 			$constraints[] = $query->equals('cancelled',0);
 		}
-		return $query->matching($query->logicalAnd($constraints))->execute();
+		return $query->matching($query->logicalAnd(...$constraints))->execute();
 	}
 
 }
