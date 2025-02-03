@@ -81,7 +81,7 @@ class Training extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		$this->author = $author;
 	}
 
-	public function getLeader(): \In2code\Femanager\Domain\Model\User 
+	public function getLeader(): null|\In2code\Femanager\Domain\Model\User 
 	{
 		return $this->leader;
 	}
