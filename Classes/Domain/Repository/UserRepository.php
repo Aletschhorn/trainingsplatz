@@ -42,7 +42,7 @@ class UserRepository extends \In2code\Femanager\Domain\Repository\UserRepository
         return $query->execute();
     }
 
-    public function findBirthdayToday(int $offset = 0, array $usergroups = []): QueryResultInterface 
+    public function findBirthdayToday(int $offset = 0, array $usergroups = []): array 
 	{
 		date_default_timezone_set('Europe/Berlin');
 		$date = new \DateTime ('+'.intval($offset).' days');
