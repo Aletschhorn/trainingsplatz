@@ -1,12 +1,15 @@
 <?php
 namespace DW\Trainingsplatz\Controller;
 
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Context\Context;
+
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\FluidEmail;
 use TYPO3\CMS\Core\Mail\Mailer;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 use In2code\Femanager\Domain\Repository\UserRepository;
 
 /**
@@ -24,7 +27,7 @@ class UserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 	}
 	
 
-	public function birthdayAction() {
+	public function birthdayAction(): ResponseInterface {
 		$usergroups = explode (',', $this->settings['usergroups']);
 		$todayDate = new \DateTime ('today');
 		$tomorrowDate = new \DateTime ('tomorrow');
@@ -36,10 +39,11 @@ class UserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 			'todayDate' => $todayDate,
 			'tomorrowDate' => $tomorrowDate,
 		]);
+		return $this->htmlResponse();
 	}
 
 
-	public function messageAction() {
+	public function messageAction(): ResponseInterface {
 		if ($this->request->hasArgument('member')) {
 			$memberId = intval($this->request->getArgument('member'));
 			$member = $this->userRepository->findByUid($memberId);
@@ -54,10 +58,11 @@ class UserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 			'sent' => $sent,
 			'settings' => $this->settings,
 		]);
+		return $this->htmlResponse();
 	}
 
 
-	public function messageSendAction() {
+	public function messageSendAction(): ResponseInterface {
 		$arguments = $this->request->getArguments();
 		if ($arguments['member']) {
 			$recipient = $this->userRepository->findByUid(intval($arguments['member']));
@@ -91,26 +96,26 @@ class UserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 							$mailerInterface->send($mail);
 						
 							$this->addFlashMessage('E-Mail wurde versendet','',ContextualFeedbackSeverity::OK);
-							$this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 1));
+							return $this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 1));
 						} else {
 							$this->addFlashMessage('Betreff und Inhalt dürfen nicht leer sein','',ContextualFeedbackSeverity::WARNING);
-							$this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 0));
+							return $this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 0));
 						}
 					} else {
 						$this->addFlashMessage('E-Mail konnte nicht versendet werden','',ContextualFeedbackSeverity::WARNING);
-						$this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 1));
+						return $this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 1));
 					}
 				} else {
 					$this->addFlashMessage('E-Mail konnte nicht versendet werden','',ContextualFeedbackSeverity::WARNING);
-					$this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 1));
+					return $this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 1));
 				}
 			} else {
 				$this->addFlashMessage('E-Mail konnte nicht versendet werden','',ContextualFeedbackSeverity::WARNING);
-				$this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 1));
+				return $this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 1));
 			}
 		} else {
 			$this->addFlashMessage('E-Mail konnte nicht versendet werden','',ContextualFeedbackSeverity::WARNING);
-			$this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 1));
+			return $this->redirect('message','User','trainingsplatz',array('member' => $arguments['member'], 'sent' => 1));
 		}
 	}
 
