@@ -24,11 +24,11 @@
         <f:for each="{sports}" as="sport">
             <f:if condition="{filter}=={sport.uid}">
                 <f:then>
-                    <f:image image="{sport.picture.0}" alt="Nur {sport.title}-Trainings anzeigen" additionalAttributes="{title:'Nur {sport.title}-Trainings anzeigen'}" class="active" />
+                    <f:image image="{sport.picture}" alt="Nur {sport.title}-Trainings anzeigen" additionalAttributes="{title:'Nur {sport.title}-Trainings anzeigen'}" class="active" />
                 </f:then>
                 <f:else>
                     <f:link.action action="list" arguments="{filter:sport.uid}">
-                        <f:image image="{sport.picture.0}" alt="Nur {sport.title}-Trainings anzeigen" additionalAttributes="{title:'Nur {sport.title}-Trainings anzeigen'}" />
+                        <f:image image="{sport.picture}" alt="Nur {sport.title}-Trainings anzeigen" additionalAttributes="{title:'Nur {sport.title}-Trainings anzeigen'}" />
                     </f:link.action>
                 </f:else>
             </f:if>
