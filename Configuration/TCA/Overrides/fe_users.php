@@ -3,20 +3,18 @@ defined('TYPO3') or die();
 
 $temporaryColumns = [
         'tx_trainingsplatz_membership' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_membership',
 			'config' => [
 				'type' => 'radio',
 				'default' => 2,
 				'items' => [
-					['label' => '(offen)'],
-					['label' => 'B-Mitglied'],
-					['label' => 'A-Mitglied']
+					['label' => '(offen)', 'value' => 0],
+					['label' => 'B-Mitglied', 'value' => 1],
+					['label' => 'A-Mitglied', 'value' => 2]
 				],
 			]
         ],
         'tx_trainingsplatz_guide' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_guide',
 			'config' => [
 				'type' => 'check',
@@ -25,7 +23,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_infomail' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_infomail',
 			'config' => [
 				'type' => 'check',
@@ -34,7 +31,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_newsletter' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_newsletter',
 			'config' => [
 				'type' => 'check',
@@ -43,7 +39,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_contest' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_contest',
 			'config' => [
 				'type' => 'check',
@@ -52,16 +47,13 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_contest_extra' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_contest_extra',
 			'config' => [
-				'type' => 'input',
-				'eval' => 'int',
-				'size' => 5,
+				'type' => 'number',
+				'size' => 10,
 			]
         ],
         'tx_trainingsplatz_sports' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_sports',
 			'config' => [
 				'type' => 'check',
@@ -77,19 +69,17 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_motivation' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_motivation',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'foreign_table' => 'tx_trainingsplatz_domain_model_motivation',
 				'items' => [
-					['(none)', 0]
+					['label' => '(none)', 'value' => 0]
 				],		
 			]
         ],
         'tx_trainingsplatz_club1_name' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_club1_name',
 			'config' => [
 				'type' => 'input',
@@ -97,7 +87,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_club1_website' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_club1_website',
 			'config' => [
 				'type' => 'input',
@@ -105,7 +94,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_club2_name' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_club2_name',
 			'config' => [
 				'type' => 'input',
@@ -113,7 +101,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_club2_website' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_club2_website',
 			'config' => [
 				'type' => 'input',
@@ -121,7 +108,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_goal' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_goal',
 			'config' => [
 				'type' => 'input',
@@ -129,7 +115,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_hobby' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_hobby',
 			'config' => [
 				'type' => 'input',
@@ -137,7 +122,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_music' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_music',
 			'config' => [
 				'type' => 'input',
@@ -145,7 +129,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_food' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_food',
 			'config' => [
 				'type' => 'input',
@@ -153,7 +136,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_like' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_like',
 			'config' => [
 				'type' => 'input',
@@ -161,7 +143,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_dislike' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_dislike',
 			'config' => [
 				'type' => 'input',
@@ -169,7 +150,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_job' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_job',
 			'config' => [
 				'type' => 'input',
@@ -177,7 +157,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_love' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_love',
 			'config' => [
 				'type' => 'input',
@@ -185,7 +164,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_meaningsport' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_meaningsport',
 			'config' => [
 				'type' => 'input',
@@ -193,7 +171,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_motto' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_motto',
 			'config' => [
 				'type' => 'input',
@@ -201,7 +178,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_sparetime' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_sparetime',
 			'config' => [
 				'type' => 'input',
@@ -209,7 +185,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_dream' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_dream',
 			'config' => [
 				'type' => 'input',
@@ -217,7 +192,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_notdisclaim' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_notdisclaim',
 			'config' => [
 				'type' => 'input',
@@ -225,7 +199,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_book' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_book',
 			'config' => [
 				'type' => 'input',
@@ -233,7 +206,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_weakness' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_weakness',
 			'config' => [
 				'type' => 'input',
@@ -241,7 +213,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_strength' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_strength',
 			'config' => [
 				'type' => 'input',
@@ -249,7 +220,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_ability' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_ability',
 			'config' => [
 				'type' => 'input',
@@ -257,7 +227,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_drivecrazy' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_drivecrazy',
 			'config' => [
 				'type' => 'input',
@@ -265,7 +234,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_laugh' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_laugh',
 			'config' => [
 				'type' => 'input',
@@ -273,7 +241,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_spendmoney' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_spendmoney',
 			'config' => [
 				'type' => 'input',
@@ -281,7 +248,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_description' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_description',
 			'config' => [
 				'type' => 'input',
@@ -289,7 +255,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_pain' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_pain',
 			'config' => [
 				'type' => 'input',
@@ -297,7 +262,6 @@ $temporaryColumns = [
 			]
         ],
         'tx_trainingsplatz_private_luxury' => [
-			'exclude' => 0,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_private_luxury',
 			'config' => [
 				'type' => 'input',

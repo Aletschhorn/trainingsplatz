@@ -5,19 +5,13 @@ return [
 		'label' => 'mail_subject',
 		'tstamp' => 'tstamp',
 		'crdate' => 'crdate',
-		'cruser_id' => 'cruser_id',
-		'dividers2tabs' => TRUE,
-		'versioningWS' => TRUE,
-		'versioning_followPages' => TRUE,
 		'delete' => 'deleted',
+		'versioningWS' => true,
 		'enablecolumns' => [
 			'disabled' => 'hidden',
 		],
-		'searchFields' => 'status,status_date,training,mail_subject,mail_body,send_user',
+		'searchFields' => 'training,mail_subject,mail_body',
 		'iconfile' => 'EXT:trainingsplatz/Resources/Public/Icons/tx_trainingsplatz_domain_model_infomail.gif'
-	],
-	'interface' => [
-		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, training, status, status_date, mail_subject, mail_body, send_user, send_receiver',
 	],
 	'types' => [
 		'1' => ['showitem' => 'hidden;;1, training, status, status_date, mail_subject, mail_body, send_user, send_receiver'],
@@ -26,15 +20,6 @@ return [
 		'1' => ['showitem' => ''],
 	],
 	'columns' => [
-		't3ver_label' => [
-			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.versionLabel',
-			'config' => [
-				'type' => 'input',
-				'size' => 30,
-				'max' => 255,
-			]
-		],
-	
 		'hidden' => [
 			'exclude' => 1,
 			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
@@ -61,11 +46,11 @@ return [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'items' => [
-					['Waiting', 0],
-					['Sent', 1],
-					['Refused', 2],
-					['Queued', 3],
-					['In progress', 4]
+					['label' => 'Waiting', 'value' => 0],
+					['label' => 'Sent', 'value' => 1],
+					['label' => 'Refused', 'value' => 2],
+					['label' => 'Queued', 'value' => 3],
+					['label' => 'In progress', 'value' => 4]
 				]
 			],
 		],
@@ -108,7 +93,7 @@ return [
 				'renderType' => 'selectSingle',
 				'foreign_table' => 'fe_users',
 				'items' => [
-					['(Nobody)', 0]
+					['label' => '(Nobody)', 'value' => 0]
 				],
 			],
 		],
@@ -116,9 +101,8 @@ return [
 			'exclude' => 1,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_infomail.send_receiver',
 			'config' => [
-				'type' => 'input',
-				'size' => 5,
-				'eval' => 'int'
+				'type' => 'number',
+				'size' => 10,
 			],
 		],
 		
