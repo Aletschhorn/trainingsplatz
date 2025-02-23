@@ -77,3 +77,9 @@ ExtensionUtility::configurePlugin(
 	[UserController::class => 'message, messageSend'],
 	[UserController::class => 'message, messageSend'],
 );
+
+// Overwrite object classes to extend femanager fields
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Controller\NewController::class] = ['className' => \DW\Trainingsplatz\Controller\NewController::class];
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Controller\EditController::class] = ['className' => \DW\Trainingsplatz\Controller\EditController::class];
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Domain\Model\User::class] = ['className' => \DW\Trainingsplatz\Domain\Model\User::class];
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Domain\Repository\UserRepository::class] = ['className' => \DW\Trainingsplatz\Domain\Repository\UserRepository::class];

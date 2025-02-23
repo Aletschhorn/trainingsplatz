@@ -69,7 +69,7 @@ class InfomailController extends ActionController {
 				$newInfomail->setStatusDate($now);
 				
 				$this->infomailRepository->add($newInfomail);
-				$persistenceManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+				$persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
 				$persistenceManager->persistAll();
 				$this->redirect('show','Infomail','trainingsplatz',array('infomail' => $newInfomail));
 			}
