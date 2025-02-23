@@ -286,7 +286,6 @@ class TrainingController extends ActionController {
 		$this->view->assignMultiple([
 			'training' => $training,
 			'intensities' => $this->intensityRepository->findAll(),
-			'maps' => $this->mapRepository->findPublic(),
 			'sports' => $this->sportRepository->findAll(),
 			'sportcoaches' => $this->userRepository->findByUsergroup($this->settings['usergroupSportcoach']),
 			'members' =>  $this->userRepository->findByUsergroup($this->settings['usergroupMember']),
@@ -395,7 +394,6 @@ class TrainingController extends ActionController {
 						if ($value = $training->getPicture()) { $newTraining->setPicture($value); }
 						if ($value = $training->getIntensity()) { $newTraining->setIntensity($value); }
 						if ($value = $training->getSport()) { $newTraining->setSport($value); }
-						if ($value = $training->getMap()) { $newTraining->setMap($value); }
 						if ($value = $training->getMapCenter()) { $newTraining->setMapCenter($value); }
 						if ($value = $training->getMapZoom()) { $newTraining->setMapZoom($value); }
 						if ($value = $training->getMapType()) { $newTraining->setMapType($value); }
@@ -753,6 +751,7 @@ class TrainingController extends ActionController {
 	public function cancelPublicAnswerAction(): ResponseInterface {
 		if ($this->request->hasArgument('answer') and $this->request->hasArgument('hash')) {
 			$answer = $this->answerRepository->findByUid($this->request->getArgument('answer'));
+			$test .= '('.$answer->getHash().' / '.$this->request->getArgument('hash').') ';
 			if ($answer->getHash() == $this->request->getArgument('hash')) {
 				return $this->redirect('cancelAnswer','Training','trainingsplatz',['answer' => $answer]);
 			}
