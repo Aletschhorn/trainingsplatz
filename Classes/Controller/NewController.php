@@ -3,9 +3,16 @@ namespace DW\Trainingsplatz\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use DW\Trainingsplatz\Domain\Repository\MotivationRepository;
+use DW\Trainingsplatz\Property\TypeConverter\BitConverter;
 use In2code\Femanager\Domain\Model\User;
 
 class NewController extends \In2code\Femanager\Controller\NewController {
+	
+	private $bitConverter;
+	
+	public function injectBitConverter (BitConverter $bitConverter) {
+		$this->bitConverter = $bitConverter;
+	}
 
     /**
      * action new
@@ -25,9 +32,7 @@ class NewController extends \In2code\Femanager\Controller\NewController {
 	*/
 	public function initializeCreateAction(): void {
 		if ($this->arguments->hasArgument('user')) {
-			$this->arguments->getArgument('user')->getPropertyMappingConfiguration()->forProperty('txTrainingsplatzSports')->setTypeConverter(
-				$this->objectManager->get(\DW\Trainingsplatz\Property\TypeConverter\BitConverter::class)
-			);
+			$this->arguments->getArgument('user')->getPropertyMappingConfiguration()->forProperty('txTrainingsplatzSports')->setTypeConverter($this->bitConverter);
 		}
 	}
 
@@ -41,13 +46,13 @@ class NewController extends \In2code\Femanager\Controller\NewController {
 	*/
 	public function createAction(User $user, string $captcha = null): ResponseInterface {
 		// Default values
-		$user->setTxTrainingsplatzInfomail(1);
-		$user->setTxTrainingsplatzNewsletter(1);
-		$user->setTxTrainingsplatzContest(1);
+		$user->setTxTrainingsplatzInfomail(true);
+		$user->setTxTrainingsplatzNewsletter(true);
+		$user->setTxTrainingsplatzContest(true);
 		$user->setName($user->getFirstName().' '.$user->getLastName());
 		
-		parent::createAction($user, $captcha);
-		return $this->htmlResponse();
+		return parent::createAction($user, $captcha);
+
 	}
 }
 ?>
