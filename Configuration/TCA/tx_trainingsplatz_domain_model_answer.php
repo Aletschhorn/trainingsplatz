@@ -31,24 +31,18 @@ return [
 			'exclude' => true,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_answer.creation_date',
 			'config' => [
+				'type' => 'datetime',
 				'dbType' => 'datetime',
-				'type' => 'input',
-				'size' => 12,
-				'eval' => 'datetime',
-				'checkbox' => 0,
-				'default' => '0000-00-00 00:00:00'
+				'nullable' => true,
 			],
 		],
 		'change_date' => [
 			'exclude' => true,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_answer.change_date',
 			'config' => [
+				'type' => 'datetime',
 				'dbType' => 'datetime',
-				'type' => 'input',
-				'size' => 12,
-				'eval' => 'datetime',
-				'checkbox' => 0,
-				'default' => '0000-00-00 00:00:00'
+				'nullable' => true,
 			],
 		],
 		'author' => [

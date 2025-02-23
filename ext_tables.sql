@@ -1,8 +1,8 @@
 CREATE TABLE tx_trainingsplatz_domain_model_training (
 	author int(11) unsigned DEFAULT '0' NOT NULL,
 	leader int(11) unsigned DEFAULT '0' NOT NULL,
-	creation_date datetime DEFAULT '0000-00-00 00:00:00',
-	last_change datetime DEFAULT '0000-00-00 00:00:00',
+	creation_date datetime DEFAULT NULL,
+	last_change datetime DEFAULT NULL,
 	training_date date DEFAULT NULL,
 	guided tinyint(1) unsigned DEFAULT '0' NOT NULL,
 	title varchar(255) DEFAULT '' NOT NULL,
@@ -48,8 +48,8 @@ CREATE TABLE tx_trainingsplatz_domain_model_sport (
 );
 
 CREATE TABLE tx_trainingsplatz_domain_model_answer (
-	creation_date datetime DEFAULT '0000-00-00 00:00:00',
-	change_date datetime DEFAULT '0000-00-00 00:00:00',
+	creation_date datetime DEFAULT NULL,
+	change_date datetime DEFAULT NULL,
 	author varchar(255) DEFAULT '' NOT NULL,
 	email varchar(255) DEFAULT '' NOT NULL,
 	feuser int(11) unsigned DEFAULT '0' NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE tx_trainingsplatz_domain_model_answer (
 CREATE TABLE tx_trainingsplatz_domain_model_infomail (
 	training int(11) unsigned DEFAULT '0' NOT NULL,
 	status tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	status_date datetime DEFAULT '0000-00-00 00:00:00',
+	status_date datetime DEFAULT NULL,
 	mail_subject varchar(255) DEFAULT '' NOT NULL,
 	mail_body text NOT NULL,	
 	send_user int(11) unsigned DEFAULT '0' NOT NULL,

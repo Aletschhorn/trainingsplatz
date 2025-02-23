@@ -10,7 +10,7 @@ return [
 		'enablecolumns' => [
 			'disabled' => 'hidden',
 		],
-		'searchFields' => 'training,mail_subject,mail_body',
+		'searchFields' => 'mail_subject,mail_body',
 		'iconfile' => 'EXT:trainingsplatz/Resources/Public/Icons/tx_trainingsplatz_domain_model_infomail.gif'
 	],
 	'types' => [
@@ -22,7 +22,7 @@ return [
 	'columns' => [
 		'hidden' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
+			'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
 			'config' => [
 				'type' => 'check',
 			],
@@ -58,12 +58,9 @@ return [
 			'exclude' => 1,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_infomail.status_date',
 			'config' => [
+				'type' => 'datetime',
 				'dbType' => 'datetime',
-				'type' => 'input',
-				'size' => 12,
-				'eval' => 'datetime',
-				'checkbox' => 0,
-				'default' => '0000-00-00 00:00:00'
+				'nullable' => true,
 			],
 		],
 		'mail_subject' => [

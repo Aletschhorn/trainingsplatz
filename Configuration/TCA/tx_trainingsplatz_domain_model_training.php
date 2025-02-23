@@ -79,8 +79,8 @@ return [
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_training.creation_date',
 			'config' => [
 				'type' => 'datetime',
-				'format' => 'datetime',
-				'default' => '0000-00-00 00:00:00'
+				'dbType' => 'datetime',
+				'nullable' => true,
 			],
 		],
 		'last_change' => [
@@ -88,8 +88,8 @@ return [
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_training.last_change',
 			'config' => [
 				'type' => 'datetime',
-				'format' => 'datetime',
-				'default' => '0000-00-00 00:00:00'
+				'dbType' => 'datetime',
+				'nullable' => true,
 			]
 		],
 		'training_date' => [
@@ -97,7 +97,9 @@ return [
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_training.training_date',
 			'config' => [
 				'type' => 'datetime',
-				'format' => 'datetime',
+				'dbType' => 'date',
+				'format' => 'date',
+				'nullable' => true,
 			]
 		],
 		'guided' => [
@@ -269,8 +271,10 @@ return [
 			'exclude' => true,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_training.series_start',
 			'config' => [
-				'type' => 'dateime',
+				'type' => 'datetime',
+				'dbType' => 'date',
 				'format' => 'date',
+				'nullable' => true,
 			],
 		],
 		'series_end' => [
@@ -278,8 +282,10 @@ return [
 			'exclude' => true,
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:tx_trainingsplatz_domain_model_training.series_end',
 			'config' => [
-				'type' => 'dateime',
+				'type' => 'datetime',
+				'dbType' => 'date',
 				'format' => 'date',
+				'nullable' => true,
 			],
 		],
 		'series_period' => [
