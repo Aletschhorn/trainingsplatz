@@ -3,12 +3,6 @@
 <f:section name="main">
 <h2>Mail-Nachricht an alle Teilnehmer</h2>
 
-<f:flashMessages as="flashMessages">
-	<f:for each="{flashMessages}" as="flashMessage">
-		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
-	</f:for>
-</f:flashMessages>
-
 <f:form action="messageSend" name="message" class="form-horizontal">
 	<f:form.hidden name="training" value="{training.uid}" />
 	<div class="row">

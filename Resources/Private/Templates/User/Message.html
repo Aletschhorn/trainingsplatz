@@ -5,12 +5,6 @@
 	<f:then>
 		<h2>Mail-Nachricht an {member.name}</h2>
 		
-		<f:flashMessages as="flashMessages">
-			<f:for each="{flashMessages}" as="flashMessage">
-				<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
-			</f:for>
-		</f:flashMessages>
-		
 		<f:if condition="{sent}==0">
 			<f:then>
 				<f:form action="messageSend" name="message" class="form-horizontal">

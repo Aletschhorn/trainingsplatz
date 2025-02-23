@@ -3,12 +3,6 @@
 <f:layout name="Default" />
 <f:section name="main">
 
-<f:flashMessages as="flashMessages">
-	<f:for each="{flashMessages}" as="flashMessage">
-		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
-	</f:for>
-</f:flashMessages>
-
 <f:if condition="{endDate}">
 	<f:then>
 		<h3>Statistische Auswertung der Trainings von {user.name} zwischen {startDate->f:format.date(format:'d.m.Y')} und {endDate->f:format.date(format:'d.m.Y')}</h3>

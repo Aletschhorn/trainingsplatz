@@ -3,12 +3,6 @@
 <f:layout name="Default" />
 <f:section name="main">
 
-<f:flashMessages as="flashMessages">
-	<f:for each="{flashMessages}" as="flashMessage">
-		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
-	</f:for>
-</f:flashMessages>
-
 <div class="row">
 	<div class="col-lg-7 col-md-12">
 		<h3>Statistische Auswertung der Trainings im Jahr {year}</h3>

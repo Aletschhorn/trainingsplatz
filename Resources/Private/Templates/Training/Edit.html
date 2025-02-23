@@ -18,12 +18,6 @@
 
 <p>&nbsp;</p>
 
-<f:flashMessages as="flashMessages">
-	<f:for each="{flashMessages}" as="flashMessage">
-		<f:render partial="Alert" arguments="{severity:flashMessage.severity,title:flashMessage.title,message:flashMessage.message}" />
-	</f:for>
-</f:flashMessages>
-
 <f:form action="update" name="training" object="{training}" class="form-horizontal">
 <f:form.hidden property="step" value="{step}" id="step" />
 
