@@ -39,7 +39,7 @@ class Infomail extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		$this->status = $status;
 	}
 
-	public function getStatusDate(): \DateTime 
+	public function getStatusDate(): null|\DateTime 
 	{
 		return $this->statusDate;
 	}

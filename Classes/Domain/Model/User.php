@@ -7,19 +7,19 @@ class User extends \In2code\Femanager\Domain\Model\User {
 
 	protected $txTrainingsplatzMembership = 0;
 
-	protected $txTrainingsplatzGuide = 0;
+	protected $txTrainingsplatzGuide = false;
 
-	protected $txTrainingsplatzInfomail = 0;
+	protected $txTrainingsplatzInfomail = true;
 
-	protected $txTrainingsplatzNewsletter = 0;
+	protected $txTrainingsplatzNewsletter = true;
 
-	protected $txTrainingsplatzContest = 0;
+	protected $txTrainingsplatzContest = true;
 
 	protected $txTrainingsplatzContestExtra = 0;
 
 	protected $txTrainingsplatzSports = 0;
 
-	protected $txTrainingsplatzMotivation = NULL;
+	protected $txTrainingsplatzMotivation = null;
 
 	protected $txTrainingsplatzClub1Name = '';
 

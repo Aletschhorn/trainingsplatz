@@ -13,7 +13,7 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 
 	protected $email = '';
 
-	protected $feuser = '';
+	protected $feuser = NULL;
 
 	protected $owntraining = FALSE;
 
@@ -31,7 +31,7 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 
 	protected $hash = '';
 
-	public function getCreationDate(): \DateTime 
+	public function getCreationDate(): null|\DateTime 
 	{
 		return $this->creationDate;
 	}
@@ -41,7 +41,7 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		$this->creationDate = $creationDate;
 	}
 
-	public function getChangeDate(): \DateTime 
+	public function getChangeDate(): null|\DateTime 
 	{
 		return $this->changeDate;
 	}
@@ -71,7 +71,7 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		$this->email = $email;
 	}
 
-	public function getFeuser(): \In2code\Femanager\Domain\Model\User 
+	public function getFeuser(): null|\In2code\Femanager\Domain\Model\User 
 	{
 		return $this->feuser;
 	}
@@ -160,12 +160,12 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		$this->training = $training;
 	}
 
-	public function getHash(): int 
+	public function getHash(): string 
 	{
-		return $this->hash;
+		return strval($this->hash);
 	}
 
-	public function setHash(int $hash): void 
+	public function setHash(string $hash): void 
 	{
 		$this->hash = $hash;
 	}

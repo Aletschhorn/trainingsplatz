@@ -71,7 +71,7 @@ class Training extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 
 	protected $step = 0;
 
-	public function getAuthor(): \In2code\Femanager\Domain\Model\User 
+	public function getAuthor(): null|\In2code\Femanager\Domain\Model\User 
 	{
 		return $this->author;
 	}
@@ -91,7 +91,7 @@ class Training extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		$this->leader = $leader;
 	}
 
-	public function getCreationDate(): \DateTime 
+	public function getCreationDate(): null|\DateTime 
 	{
 		return $this->creationDate;
 	}
@@ -101,7 +101,7 @@ class Training extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		$this->creationDate = $creationDate;
 	}
 
-	public function getLastChange(): \DateTime 
+	public function getLastChange(): null|\DateTime 
 	{
 		return $this->lastChange;
 	}
@@ -111,12 +111,12 @@ class Training extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		$this->lastChange = $lastChange;
 	}
 
-	public function getTrainingDate(): \DateTime 
+	public function getTrainingDate(): null|\DateTime 
 	{
 		return $this->trainingDate;
 	}
 
-	public function setTrainingDate(\DateTime $trainingDate): void 
+	public function setTrainingDate(null|\DateTime $trainingDate): void 
 	{
 		$this->trainingDate = $trainingDate;
 	}
@@ -206,12 +206,12 @@ class Training extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		$this->distance = $distance;
 	}
 
-	public function getSpeed(): float 
+	public function getSpeed(): string 
 	{
 		return $this->speed;
 	}
 
-	public function setSpeed(float $speed): void 
+	public function setSpeed(string $speed): void 
 	{
 		$this->speed = $speed;
 	}
@@ -250,7 +250,7 @@ class Training extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		return $this->cancelled;
 	}
 
-	public function getIntensity(): \DW\Trainingsplatz\Domain\Model\Intensity 
+	public function getIntensity(): null|\DW\Trainingsplatz\Domain\Model\Intensity 
 	{
 		return $this->intensity;
 	}
@@ -260,7 +260,7 @@ class Training extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		$this->intensity = $intensity;
 	}
 
-	public function getSport(): \DW\Trainingsplatz\Domain\Model\Sport 
+	public function getSport(): null|\DW\Trainingsplatz\Domain\Model\Sport 
 	{
 		return $this->sport;
 	}
@@ -375,22 +375,22 @@ class Training extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		return $this->series;
 	}
 
-	public function getSeriesStart(): \DateTime 
+	public function getSeriesStart(): null|\DateTime 
 	{
 		return $this->seriesStart;
 	}
 
-	public function setSeriesStart(\DateTime $seriesStart): void 
+	public function setSeriesStart(null|\DateTime $seriesStart): void 
 	{
 		$this->seriesStart = $seriesStart;
 	}
 
-	public function getSeriesEnd(): \DateTime 
+	public function getSeriesEnd(): null|\DateTime 
 	{
 		return $this->seriesEnd;
 	}
 
-	public function setSeriesEnd(\DateTime $seriesEnd): void 
+	public function setSeriesEnd(null|\DateTime $seriesEnd): void 
 	{
 		$this->seriesEnd = $seriesEnd;
 	}

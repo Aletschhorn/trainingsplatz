@@ -5,7 +5,7 @@ class InUsergroupViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractCo
 
 	public function initializeArguments() {
 		$this->registerArgument('role', 'string', 'Usergroup (either the usergroup uid or its title)');
-		$this->registerArgument('user', '\TYPO3\CMS\Extbase\Domain\Model\FrontendUser', 'Frontend user');
+		$this->registerArgument('user', '\DW\Trainingsplatz\Domain\Model\User', 'Frontend user');
 	}
 	
 	protected static function evaluateCondition($arguments = null) {

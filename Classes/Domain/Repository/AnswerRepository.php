@@ -148,13 +148,13 @@ class AnswerRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		return $query->execute();
 	}
 	
-	public function findCompensatedByTrainer(int $userId, \DateTime $startDate = NULL): QueryResultInterface 
+	public function findCompensatedByTrainer(\DW\Trainingsplatz\Domain\Model\User $user, \DateTime $startDate = NULL): QueryResultInterface 
 	{	
 		$today = new \DateTime('today');
 		$query = $this->createQuery();
 		$constraints = array(
 			$query->equals('compensation',2),
-			$query->logicalOr($query->equals('training.author',$userId),$query->equals('training.leader',$userId)),
+			$query->logicalOr($query->equals('training.author',$userId),$query->equals('training.leader',$user)),
 			$query->equals('training.cancelled',0),
 			$query->equals('training.closed',1),
 			$query->lessThan('training.trainingDate',$today->format('Y-m-d H-i-s'))		
