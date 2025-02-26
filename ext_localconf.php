@@ -4,7 +4,7 @@ declare(strict_types=1);
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 use DW\Trainingsplatz\Controller\TrainingController;
 use DW\Trainingsplatz\Controller\InfomailController;
-use DW\Trainingsplatz\Controller\UserController;
+use DW\Trainingsplatz\Controller\MemberController;
 
 defined('TYPO3') or die();
 
@@ -67,19 +67,20 @@ ExtensionUtility::configurePlugin(
 ExtensionUtility::configurePlugin(
 	'Trainingsplatz',
 	'Birthday',
-	[UserController::class => 'birthday'],
-	[UserController::class => ''],
+	[MemberController::class => 'birthday'],
+	[MemberController::class => ''],
 );
 
 ExtensionUtility::configurePlugin(
 	'Trainingsplatz',
 	'Messaging',
-	[UserController::class => 'message, messageSend'],
-	[UserController::class => 'message, messageSend'],
+	[MemberController::class => 'message, messageSend'],
+	[MemberController::class => 'message, messageSend'],
 );
 
 // Overwrite object classes to extend femanager fields
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Controller\NewController::class] = ['className' => \DW\Trainingsplatz\Controller\NewController::class];
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Controller\EditController::class] = ['className' => \DW\Trainingsplatz\Controller\EditController::class];
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Controller\UserController::class] = ['className' => \DW\Trainingsplatz\Controller\UserController::class];
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Domain\Model\User::class] = ['className' => \DW\Trainingsplatz\Domain\Model\User::class];
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\In2code\Femanager\Domain\Repository\UserRepository::class] = ['className' => \DW\Trainingsplatz\Domain\Repository\UserRepository::class];

@@ -24,5 +24,6 @@ services:
 
   In2code\Femanager\Controller\EditController: '@DW\Trainingsplatz\Controller\EditController'
   In2code\Femanager\Controller\NewController: '@DW\Trainingsplatz\Controller\NewController'
+  In2code\Femanager\Controller\UserController: '@DW\Trainingsplatz\Controller\UserController'
   In2code\Femanager\Domain\Model\User: '@DW\Trainingsplatz\Domain\Model\User'
   In2code\Femanager\Domain\Repository\UserRepository: '@DW\Trainingsplatz\Domain\Repository\UserRepository'
