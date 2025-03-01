@@ -29,6 +29,9 @@ use In2code\Femanager\Domain\Repository\UserRepository;
  * TrainingController
  */
 class TrainingController extends ActionController {
+	
+	protected $emailLogoUrl = 'https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_10jahre_full.png';
+	protected $emailLogoHeight = 50;
 
 	private $trainingRepository;
 
@@ -452,9 +455,9 @@ class TrainingController extends ActionController {
 						->subject('Infomail für Training pendent')
 						->format(FluidEmail::FORMAT_BOTH)
 						->setTemplate('Training')
-						->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
+						->embed(fopen($this->emailLogoUrl, 'r'), 'logo')
 						->assignMultiple([
-							'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+							'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$this->emailLogoHeight.'" />',
 							'headline' => 'Infomail für Training pendent',
 							'content' => $mailtext,
 							'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
@@ -499,10 +502,10 @@ class TrainingController extends ActionController {
 					->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
 					->subject($subject)
 					->format(FluidEmail::FORMAT_BOTH)
-					->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
+					->embed(fopen($this->emailLogoUrl, 'r'), 'logo')
 					->setTemplate('Training')
 					->assignMultiple([
-						'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+						'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$this->emailLogoHeight.'" />',
 						'headline' => $subject,
 						'content' => $mailtext,
 						'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
@@ -715,10 +718,10 @@ class TrainingController extends ActionController {
 									->to(new Address('daniel.widmer@dotter.ch'))
 									->subject($subject)
 									->format(FluidEmail::FORMAT_BOTH)
-									->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
+									->embed(fopen($this->emailLogoUrl, 'r'), 'logo')
 									->setTemplate('Training')
 									->assignMultiple([
-										'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+										'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$this->emailLogoHeight.'" />',
 										'headline' => $subject,
 										'content' => $mailtext,
 										'contentHtml' => str_replace(chr(10),'<br />',$mailtext),
@@ -803,10 +806,10 @@ class TrainingController extends ActionController {
 							->replyTo(new Address($user->getEmail(), $user->getName()))
 							->subject($subject)
 							->format(FluidEmail::FORMAT_BOTH)
-							->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
+							->embed(fopen($this->emailLogoUrl, 'r'), 'logo')
 							->setTemplate('Training')
 							->assignMultiple([
-								'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+								'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$this->emailLogoHeight.'" />',
 								'headline' => $subject,
 								'content' => $content,
 								'contentHtml' => str_replace(chr(10),'<br />',$content),
@@ -1270,10 +1273,10 @@ class TrainingController extends ActionController {
 				->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
 				->format(FluidEmail::FORMAT_BOTH)
 				->subject($subject)
-				->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
+				->embed(fopen($this->emailLogoUrl, 'r'), 'logo')
 				->setTemplate('Training')
 				->assignMultiple([
-					'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+					'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$this->emailLogoHeight.'" />',
 					'headline' => $subject,
 					'content' => $mailtext,
 					'contentHtml' => str_replace(chr(10),'<br />',$mailtext),

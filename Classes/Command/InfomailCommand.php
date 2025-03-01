@@ -16,6 +16,9 @@ use In2code\Femanager\Domain\Repository\UserRepository;
 
 final class InfomailCommand extends Command
 {
+	protected $emailLogoUrl = 'https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_10jahre_full.png';
+	protected $emailLogoHeight = 50;
+
     public function __construct(
         private readonly InfomailRepository $infomailRepository
     ) {
@@ -58,10 +61,10 @@ final class InfomailCommand extends Command
 				->replyTo(new Address('info@freizeitsportler.ch', 'freizeitsportler.ch'))
 				->subject($infomail->getMailSubject())
 				->format(FluidEmail::FORMAT_BOTH)
-				->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
+				->embed(fopen($this->emailLogoUrl, 'r'), 'logo')
 				->setTemplate('Training')
 				->assignMultiple([
-					'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+					'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$this->emailLogoHeight.'" />',
 					'headline' => $infomail->getMailSubject(),
 					'content' => $infomail->getMailBody(),
 					'contentHtml' => str_replace(chr(10),'<br />',$infomail->getMailBody()),
@@ -110,10 +113,10 @@ final class InfomailCommand extends Command
 					->replyTo(new Address('info@freizeitsportler.ch', 'freizeitsportler.ch'))
 					->subject($infomail->getMailSubject())
 					->format(FluidEmail::FORMAT_BOTH)
-					->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
+					->embed(fopen($this->emailLogoUrl, 'r'), 'logo')
 					->setTemplate('Training')
 					->assignMultiple([
-						'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+						'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$this->emailLogoHeight.'" />',
 						'headline' => $infomail->getMailSubject(),
 						'content' => $infomail->getMailBody(),
 						'contentHtml' => str_replace(chr(10),'<br />',$infomail->getMailBody()),

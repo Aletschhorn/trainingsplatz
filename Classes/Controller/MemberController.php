@@ -14,6 +14,9 @@ use In2code\Femanager\Domain\Repository\UserRepository;
 
 class MemberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 
+	protected $emailLogoUrl = 'https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_10jahre_full.png';
+	protected $emailLogoHeight = 50;
+
 	private $userRepository;	
 	
 	public function __construct (
@@ -80,10 +83,10 @@ class MemberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 								->replyTo(new Address($sender->getEmail(), $sender->getName()))
 								->subject($subject)
 								->format(FluidEmail::FORMAT_BOTH)
-								->embed(fopen('https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_full.svg', 'r'), 'logo')
+								->embed(fopen($this->emailLogoUrl, 'r'), 'logo')
 								->setTemplate('Training')
 								->assignMultiple([
-									'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="76" />',
+									'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$this->emailLogoHeight.'" />',
 									'headline' => $subject,
 									'content' => $content,
 									'contentHtml' => str_replace(chr(10),'<br />',$content),
@@ -108,11 +111,11 @@ class MemberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				}
 			} else {
 				$this->addFlashMessage('E-Mail konnte nicht versendet werden','',ContextualFeedbackSeverity::WARNING);
-				return $this->redirect('message','Member','trainingsplatz',['member' => $arguments['member'], 'sent' => 1)];
+				return $this->redirect('message','Member','trainingsplatz',['member' => $arguments['member'], 'sent' => 1]);
 			}
 		} else {
 			$this->addFlashMessage('E-Mail konnte nicht versendet werden','',ContextualFeedbackSeverity::WARNING);
-			return $this->redirect('message','Member','trainingsplatz',['member' => $arguments['member'], 'sent' => 1)];
+			return $this->redirect('message','Member','trainingsplatz',['member' => $arguments['member'], 'sent' => 1]);
 		}
 	}
 
