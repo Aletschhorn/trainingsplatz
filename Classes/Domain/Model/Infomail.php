@@ -15,7 +15,7 @@ class Infomail extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 
 	protected $mailBody = '';
 
-	protected $sendUser = '';
+	protected $sendUser = NULL;
 
 	protected $sendReceiver = 0;
 
@@ -69,7 +69,7 @@ class Infomail extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		$this->mailBody = $mailBody;
 	}
 
-	public function getSendUser(): \In2code\Femanager\Domain\Model\User
+	public function getSendUser(): null|\In2code\Femanager\Domain\Model\User
 	{
 		return $this->sendUser;
 	}

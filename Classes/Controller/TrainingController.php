@@ -715,7 +715,6 @@ class TrainingController extends ActionController {
 								}
 								$mail
 									->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
-									->to(new Address('daniel.widmer@dotter.ch'))
 									->subject($subject)
 									->format(FluidEmail::FORMAT_BOTH)
 									->embed(fopen($this->emailLogoUrl, 'r'), 'logo')

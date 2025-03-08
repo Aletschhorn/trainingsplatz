@@ -74,7 +74,7 @@ class InfomailController extends ActionController {
 				$this->redirect('show','Infomail','trainingsplatz',array('infomail' => $newInfomail));
 			}
 		}
-		$this->redirect('list');
+		return $this->redirect('list');
 	}
 
 
@@ -91,12 +91,12 @@ class InfomailController extends ActionController {
 				$this->addFlashMessage('InfoMail für den Versand vorbereitet.', '', ContextualFeedbackSeverity::OK);
 			}
 		}
-		$this->redirect('list');
+		return $this->redirect('list');
 	}
 
 
 	public function deleteAction(Infomail $infomail): ResponseInterface {
-		$this->redirect('list');
+		return $this->redirect('list');
 	}
 
 
@@ -112,7 +112,7 @@ class InfomailController extends ActionController {
 				$this->addFlashMessage('Der InfoMail-Antrag wurde entfernt', '', ContextualFeedbackSeverity::OK);
 			}
 		}
-		$this->redirect('list');
+		return $this->redirect('list');
 	}
 
 
@@ -132,11 +132,11 @@ class InfomailController extends ActionController {
 				}
 			}
 		}
-		$this->redirect('list');
+		return $this->redirect('list');
 	}
 
 
-	protected static function getAllUsergroups (\TYPO3\CMS\Extbase\Persistence\ObjectStorage $usergroups, array &$usergroupArray) {
+	protected static function getAllUsergroups (\TYPO3\CMS\Extbase\Persistence\ObjectStorage $usergroups, array &$usergroupArray): void {
 		foreach ($usergroups as $usergroup) {
 			$usergroupArray[] = $usergroup->getUid();
 			$subUsergroups = $usergroup->getSubgroup();
