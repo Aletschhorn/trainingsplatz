@@ -455,7 +455,7 @@ class TrainingController extends ActionController {
 						->subject('Infomail für Training pendent')
 						->format(FluidEmail::FORMAT_BOTH)
 						->setTemplate('Training')
-						->embed(fopen($this->emailLogoUrl, 'r'), 'logo')
+						->embedFromPath($this->emailLogoUrl, 'logo')
 						->assignMultiple([
 							'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$this->emailLogoHeight.'" />',
 							'headline' => 'Infomail für Training pendent',
@@ -502,7 +502,7 @@ class TrainingController extends ActionController {
 					->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
 					->subject($subject)
 					->format(FluidEmail::FORMAT_BOTH)
-					->embed(fopen($this->emailLogoUrl, 'r'), 'logo')
+					->embedFromPath($this->emailLogoUrl, 'logo')
 					->setTemplate('Training')
 					->assignMultiple([
 						'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$this->emailLogoHeight.'" />',
@@ -717,7 +717,7 @@ class TrainingController extends ActionController {
 									->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
 									->subject($subject)
 									->format(FluidEmail::FORMAT_BOTH)
-									->embed(fopen($this->emailLogoUrl, 'r'), 'logo')
+									->embedFromPath($this->emailLogoUrl, 'logo')
 									->setTemplate('Training')
 									->assignMultiple([
 										'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$this->emailLogoHeight.'" />',
@@ -805,7 +805,7 @@ class TrainingController extends ActionController {
 							->replyTo(new Address($user->getEmail(), $user->getName()))
 							->subject($subject)
 							->format(FluidEmail::FORMAT_BOTH)
-							->embed(fopen($this->emailLogoUrl, 'r'), 'logo')
+							->embedFromPath($this->emailLogoUrl, 'logo')
 							->setTemplate('Training')
 							->assignMultiple([
 								'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$this->emailLogoHeight.'" />',
@@ -1272,7 +1272,7 @@ class TrainingController extends ActionController {
 				->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
 				->format(FluidEmail::FORMAT_BOTH)
 				->subject($subject)
-				->embed(fopen($this->emailLogoUrl, 'r'), 'logo')
+				->embedFromPath($this->emailLogoUrl, 'logo')
 				->setTemplate('Training')
 				->assignMultiple([
 					'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$this->emailLogoHeight.'" />',

@@ -16,9 +16,6 @@ use In2code\Femanager\Domain\Repository\UserRepository;
 
 final class InfomailCommand extends Command
 {
-	protected $emailLogoUrl = 'https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_10jahre_full.png';
-	protected $emailLogoHeight = 50;
-
     public function __construct(
         private readonly InfomailRepository $infomailRepository
     ) {
@@ -43,6 +40,9 @@ final class InfomailCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int 
 	{
+		$emailLogoUrl = 'https://freizeitsportler.ch/typo3conf/ext/sitepackage_fsch/Resources/Public/Images/logo_10jahre_full.png';
+		$emailLogoHeight = 50;
+
 		$limit = intval($input->getArgument('limit'));
 		$suppressMails = intval($input->getArgument('suppress'));
 		$sendOnlyTo = $input->getArgument('sendOnlyTo');
@@ -61,10 +61,10 @@ final class InfomailCommand extends Command
 				->replyTo(new Address('info@freizeitsportler.ch', 'freizeitsportler.ch'))
 				->subject($infomail->getMailSubject())
 				->format(FluidEmail::FORMAT_BOTH)
-				->embed(fopen($this->emailLogoUrl, 'r'), 'logo')
+				->embedFromPath($emailLogoUrl, 'logo')
 				->setTemplate('Training')
 				->assignMultiple([
-					'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$this->emailLogoHeight.'" />',
+					'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$emailLogoHeight.'" />',
 					'headline' => $infomail->getMailSubject(),
 					'content' => $infomail->getMailBody(),
 					'contentHtml' => str_replace(chr(10),'<br />',$infomail->getMailBody()),
@@ -113,10 +113,10 @@ final class InfomailCommand extends Command
 					->replyTo(new Address('info@freizeitsportler.ch', 'freizeitsportler.ch'))
 					->subject($infomail->getMailSubject())
 					->format(FluidEmail::FORMAT_BOTH)
-					->embed(fopen($this->emailLogoUrl, 'r'), 'logo')
+					->embedFromPath($emailLogoUrl, 'logo')
 					->setTemplate('Training')
 					->assignMultiple([
-						'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$this->emailLogoHeight.'" />',
+						'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$emailLogoHeight.'" />',
 						'headline' => $infomail->getMailSubject(),
 						'content' => $infomail->getMailBody(),
 						'contentHtml' => str_replace(chr(10),'<br />',$infomail->getMailBody()),

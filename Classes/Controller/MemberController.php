@@ -83,7 +83,7 @@ class MemberController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 								->replyTo(new Address($sender->getEmail(), $sender->getName()))
 								->subject($subject)
 								->format(FluidEmail::FORMAT_BOTH)
-								->embed(fopen($this->emailLogoUrl, 'r'), 'logo')
+								->embedFromPath($this->emailLogoUrl, 'logo')
 								->setTemplate('Training')
 								->assignMultiple([
 									'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$this->emailLogoHeight.'" />',
