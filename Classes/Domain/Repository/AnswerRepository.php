@@ -154,7 +154,7 @@ class AnswerRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		$query = $this->createQuery();
 		$constraints = array(
 			$query->equals('compensation',2),
-			$query->logicalOr($query->equals('training.author',$userId),$query->equals('training.leader',$user)),
+			$query->logicalOr($query->equals('training.author',$user),$query->equals('training.leader',$user)),
 			$query->equals('training.cancelled',0),
 			$query->equals('training.closed',1),
 			$query->lessThan('training.trainingDate',$today->format('Y-m-d H-i-s'))		

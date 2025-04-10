@@ -3,7 +3,7 @@ namespace DW\Trainingsplatz\Domain\Repository;
 
 class TemplateRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 
-	public function findOne(int $sport, int $intensity, bool $guided): \DW\Trainingsplatz\Domain\Model\Template
+	public function findOne(int $sport, int $intensity, bool $guided): null|\DW\Trainingsplatz\Domain\Model\Template
 	{
 		$query = $this->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(false);

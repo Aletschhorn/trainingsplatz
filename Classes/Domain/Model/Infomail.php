@@ -19,7 +19,7 @@ class Infomail extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 
 	protected $sendReceiver = 0;
 
-	public function getTraining(): \DW\Trainingsplatz\Domain\Model\Training 
+	public function getTraining(): null|\DW\Trainingsplatz\Domain\Model\Training 
 	{
 		return $this->training;
 	}
