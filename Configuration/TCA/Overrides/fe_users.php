@@ -18,7 +18,7 @@ $temporaryColumns = [
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_guide',
 			'config' => [
 				'type' => 'check',
-				'renderType' => 'default',
+				'renderType' => 'checkboxToggle',
 				'default' => 0,
 			]
         ],
@@ -26,7 +26,7 @@ $temporaryColumns = [
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_infomail',
 			'config' => [
 				'type' => 'check',
-				'renderType' => 'default',
+				'renderType' => 'checkboxToggle',
 				'default' => 1,
 			]
         ],
@@ -34,7 +34,7 @@ $temporaryColumns = [
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_newsletter',
 			'config' => [
 				'type' => 'check',
-				'renderType' => 'default',
+				'renderType' => 'checkboxToggle',
 				'default' => 1,
 			]
         ],
@@ -42,7 +42,7 @@ $temporaryColumns = [
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_contest',
 			'config' => [
 				'type' => 'check',
-				'renderType' => 'default',
+				'renderType' => 'checkboxToggle',
 				'default' => 1,
 			]
         ],
@@ -57,7 +57,6 @@ $temporaryColumns = [
 			'label' => 'LLL:EXT:trainingsplatz/Resources/Private/Language/locallang_db.xlf:fe_users.tx_trainingsplatz_sports',
 			'config' => [
 				'type' => 'check',
-				'renderType' => 'default',
 				'cols' => 5,
 				'items' => [
 					['label' => 'Joggen'],
