@@ -55,6 +55,7 @@ final class InfomailCommand extends Command
 		
 		$infomail = $this->infomailRepository->findFutureByStatus(4)->getFirst();
 		if ($infomail) {
+			// Handle InfoMail for which a first slice was already sent
 			$mail = GeneralUtility::makeInstance(FluidEmail::class);
 			$mail
 				->from(new Address('donotreply@freizeitsportler.ch', 'freizeitsportler.ch'))
@@ -105,6 +106,7 @@ final class InfomailCommand extends Command
 			}
 			
 		} else {
+			// Handle InfoMail for which a was queued
 			$infomail = $this->infomailRepository->findFutureByStatus(3)->getFirst();
 			if ($infomail) {
 				$mail = GeneralUtility::makeInstance(FluidEmail::class);
@@ -124,8 +126,7 @@ final class InfomailCommand extends Command
 					]);
 				$userRepository = GeneralUtility::makeInstance(UserRepository::class);
 				$recipients = $userRepository->findInfomailSlice($limit, 0);
-				$newReceived = $received + $recipients->count();
-				$infomail->setSendReceiver($newReceived);
+				$infomail->setSendReceiver($recipients->count());
 				$infomail->setStatusDate($now);
 				$infomail->setStatus(4);
 				if ($recipients->count() < $limit) {
