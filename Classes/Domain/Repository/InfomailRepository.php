@@ -13,7 +13,9 @@ class InfomailRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		$query = $this->createQuery();
 		return $query
 			->matching(
-				$query->greaterThanOrEqual('training.trainingDate',$today->format('Y-m-d H-i-s'))
+				$query->greaterThanOrEqual('training.trainingDate',$today->format('Y-m-d H-i-s')),
+				$query->equals('training.cancelled',0),
+				$query->equals('training.deleted',0)
 			)
 			->setOrderings(['training.trainingDate' => QueryInterface::ORDER_ASCENDING])
 			->execute();
@@ -28,7 +30,9 @@ class InfomailRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 			->matching(
 				$query->logicalAnd(
 					$query->equals('status',$status),
-					$query->greaterThanOrEqual('training.trainingDate',$today->format('Y-m-d H-i-s'))
+					$query->greaterThanOrEqual('training.trainingDate',$today->format('Y-m-d H-i-s')),
+					$query->equals('training.cancelled',0),
+					$query->equals('training.deleted',0)
 				)
 			)
 			->setOrderings(['training.trainingDate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING])
