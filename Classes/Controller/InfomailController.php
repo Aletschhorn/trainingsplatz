@@ -45,12 +45,22 @@ class InfomailController extends ActionController {
 
 
 	public function showAction(Infomail $infomail): ResponseInterface {
+		$today = new \DateTime('today', $this->timezone);
+		if ($infomail->getTraining() === null or $infomail->getTraining()->getTrainingDate() < $today) {
+			$this->addFlashMessage('Das ausgewählte InfoMail ist nicht verfügbar.', '', ContextualFeedbackSeverity::WARNING);
+			return $this->redirect('list');
+		}
 		$this->view->assign('infomail', $infomail);
 		return $this->htmlResponse();
 	}
 
 
 	public function reviewAction(Infomail $infomail): ResponseInterface {
+		$today = new \DateTime('today', $this->timezone);
+		if ($infomail->getTraining() === null or $infomail->getTraining()->getTrainingDate() < $today) {
+			$this->addFlashMessage('Das ausgewählte InfoMail ist nicht verfügbar.', '', ContextualFeedbackSeverity::WARNING);
+			return $this->redirect('list');
+		}
 		$this->view->assign('infomail', $infomail);
 		return $this->htmlResponse();
 	}
