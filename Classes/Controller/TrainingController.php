@@ -909,6 +909,10 @@ class TrainingController extends ActionController {
 
 
 	public function billingAction(Training $training): ResponseInterface {
+		if ($training->isClosed() == true or $training->isPublic() == false or $training->getAuthor() === null) {
+			$this->addFlashMessage('Für das gewählte Training ist keine Abrechnung möglich.','', ContextualFeedbackSeverity::WARNING);
+			return $this->redirect('evaluate');
+		}
 		// Check if author of training did not write an answer to create automatically answer for that person
 		// if training is guided, a SportCoach was leader who never participates the competition
 		if ($training->isGuided() == false) {
