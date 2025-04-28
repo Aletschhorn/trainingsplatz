@@ -560,9 +560,11 @@ class TrainingController extends ActionController {
 	public function addAnswerAction(?Answer $answer = NULL): ResponseInterface {
 		// Validate some fields
 		$error = false;
-		if ($this->request->getArgument('zusatz') <> "") {
-			// Robot filled hidden text field (honey pot)
-			$error = true;
+		if ($this->request->hasArgument('zusatz')) {
+			if ($this->request->getArgument('zusatz') <> "") {
+				// Robot filled hidden text field (honey pot)
+				$error = true;
+			}
 		}
 		if ($this->isTrainingOutdated($answer->getTraining())) {
 			// Only allow adding an answer for today's and future trainings, not for outdated ones
