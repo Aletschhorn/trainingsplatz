@@ -62,7 +62,7 @@ final class InfomailCommand extends Command
 				->replyTo(new Address('info@freizeitsportler.ch', 'freizeitsportler.ch'))
 				->subject($infomail->getMailSubject())
 				->format(FluidEmail::FORMAT_BOTH)
-				->embedFromPath($emailLogoUrl, 'logo')
+				->embedFromPath($emailLogoUrl, 'logo', 'image/png')
 				->setTemplate('Training')
 				->assignMultiple([
 					'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$emailLogoHeight.'" />',
@@ -115,7 +115,7 @@ final class InfomailCommand extends Command
 					->replyTo(new Address('info@freizeitsportler.ch', 'freizeitsportler.ch'))
 					->subject($infomail->getMailSubject())
 					->format(FluidEmail::FORMAT_BOTH)
-					->embedFromPath($emailLogoUrl, 'logo')
+					->embedFromPath($emailLogoUrl, 'logo', 'image/png')
 					->setTemplate('Training')
 					->assignMultiple([
 						'logo' => '<img src="cid:logo" alt="freizeitsportler.ch-Logo" height="'.$emailLogoHeight.'" />',
