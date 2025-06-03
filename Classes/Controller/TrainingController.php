@@ -853,7 +853,7 @@ class TrainingController extends ActionController {
 										}
 									} else {
 										if ($answer->getEmail()) {
-											$mail->to(new Address($answer->getEmail(), $answer->getName()));
+											$mail->to(new Address($answer->getEmail(), $answer->getAuthor()));
 											$mailerInterface->send($mail);
 										}
 									}
