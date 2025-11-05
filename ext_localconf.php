@@ -13,6 +13,7 @@ ExtensionUtility::configurePlugin(
 	'TrainingList',
 	[TrainingController::class => 'list, show, new, create, edit, update, delete, cancel, activate, addAnswer, editAnswer, modifyAnswer, cancelAnswer, reactivateAnswer, deleteAnswer, message, messageSend, cancelRequestAnswer, cancelPublicAnswer'],
 	[TrainingController::class => 'new, create, edit, update, delete, cancel, activate, addAnswer, editAnswer, modifyAnswer, cancelAnswer, reactivateAnswer, deleteAnswer, message, messageSend, cancelRequestAnswer, cancelPublicAnswer'],
+	'CType'
 );
 
 ExtensionUtility::configurePlugin(
@@ -20,6 +21,7 @@ ExtensionUtility::configurePlugin(
 	'TrainingEvaluation',
 	[TrainingController::class => 'evaluate, close, billing, discount, finalize'],
 	[TrainingController::class => 'close, billing, discount, finalize'],
+	'CType'
 );
 
 ExtensionUtility::configurePlugin(
@@ -27,6 +29,7 @@ ExtensionUtility::configurePlugin(
 	'TrainingParticipation',
 	[TrainingController::class => 'participation, userParticipation'],
 	[TrainingController::class => 'userParticipation'],
+	'CType'
 );
 
 ExtensionUtility::configurePlugin(
@@ -34,6 +37,7 @@ ExtensionUtility::configurePlugin(
 	'TrainingParticipationUser',
 	[TrainingController::class => 'userParticipation'],
 	[TrainingController::class => 'userParticipation'],
+	'CType'
 );
 
 ExtensionUtility::configurePlugin(
@@ -41,6 +45,7 @@ ExtensionUtility::configurePlugin(
 	'CompetitionRanking',
 	[TrainingController::class => 'ranking'],
 	[TrainingController::class => ''],
+	'CType'
 );
 
 ExtensionUtility::configurePlugin(
@@ -48,6 +53,7 @@ ExtensionUtility::configurePlugin(
 	'CompetitionUser',
 	[TrainingController::class => 'userCompetition'],
 	[TrainingController::class => ''],
+	'CType'
 );
 
 ExtensionUtility::configurePlugin(
@@ -55,6 +61,7 @@ ExtensionUtility::configurePlugin(
 	'Admin',
 	[TrainingController::class => 'analysis, ranking, reports, single'],
 	[TrainingController::class => ''],
+	'CType'
 );
 
 ExtensionUtility::configurePlugin(
@@ -62,6 +69,7 @@ ExtensionUtility::configurePlugin(
 	'Infomail',
 	[InfomailController::class => 'list, show, review, copy, send, delete, deny, cancel'],
 	[InfomailController::class => 'create, copy, send, delete, deny, cancel'],
+	'CType'
 );
 
 ExtensionUtility::configurePlugin(
@@ -69,6 +77,7 @@ ExtensionUtility::configurePlugin(
 	'Birthday',
 	[MemberController::class => 'birthday'],
 	[MemberController::class => ''],
+	'CType'
 );
 
 ExtensionUtility::configurePlugin(
@@ -76,6 +85,7 @@ ExtensionUtility::configurePlugin(
 	'Messaging',
 	[MemberController::class => 'message, messageSend'],
 	[MemberController::class => 'message, messageSend'],
+	'CType'
 );
 
 // Overwrite object classes to extend femanager fields

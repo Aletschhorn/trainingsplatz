@@ -5,22 +5,18 @@
 	<sheets>
 		<sDEF>
 			<ROOT>
-				<TCEforms>
-					<sheetTitle>Settings</sheetTitle>
-				</TCEforms>
+				<sheetTitle>Settings</sheetTitle>
 				<type>array</type>
 				<el>
 					<settings.usergroups>
-						<TCEforms>
-							<label>Included usergroups</label>
-							<config>
-								<type>select</type>
-								<renderType>selectMultipleSideBySide</renderType>
-								<foreign_table>fe_groups</foreign_table>
-								<minitems>1</minitems>
-								<maxitems>100</maxitems>
-							</config>
-						</TCEforms>
+						<label>Included usergroups</label>
+						<config>
+							<type>select</type>
+							<renderType>selectMultipleSideBySide</renderType>
+							<foreign_table>fe_groups</foreign_table>
+							<minitems>1</minitems>
+							<maxitems>100</maxitems>
+						</config>
 					</settings.usergroups>
 				</el>
 			</ROOT>

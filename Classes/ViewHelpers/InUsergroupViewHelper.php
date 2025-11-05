@@ -1,14 +1,16 @@
 <?php
+declare(strict_types=1);
+
 namespace DW\Trainingsplatz\ViewHelpers;
 
 class InUsergroupViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper {
 
-	public function initializeArguments() {
+	public function initializeArguments(): void {
 		$this->registerArgument('role', 'string', 'Usergroup (either the usergroup uid or its title)');
 		$this->registerArgument('user', '\DW\Trainingsplatz\Domain\Model\User', 'Frontend user');
 	}
 	
-	protected static function evaluateCondition($arguments = null) {
+	protected static function evaluateCondition($arguments = null): bool {
 		$role = $arguments['role'];
 		$feuser = $arguments['user'];
 
@@ -30,7 +32,7 @@ class InUsergroupViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractCo
 	 * @param array $groupTitle
 	 * @return
 	 */
-	protected static function getGroups(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $groups, &$groupId, &$groupTitle) {
+	protected static function getGroups(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $groups, &$groupId, &$groupTitle): void {
 		foreach ($groups as $group) {
 			$groupId[] = $group->getUid();
 			$groupTitle[] = $group->getTitle();
@@ -39,7 +41,6 @@ class InUsergroupViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractCo
 				self::getGroups($subgroups, $groupId, $groupTitle);
 			}
 		}
-		return true;
 	}
 }
 

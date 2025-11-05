@@ -5,67 +5,55 @@
 	<sheets>
 		<sDEF>
 			<ROOT>
-				<TCEforms>
-					<sheetTitle>Settings</sheetTitle>
-				</TCEforms>
+				<sheetTitle>Settings</sheetTitle>
 				<type>array</type>
 				<el>
 					<settings.format>
-						<TCEforms>
-							<label>Format for training items</label>
-							<config>
-								<type>select</type>
-								<renderType>selectSingle</renderType>
-								<items type="array">
-									<numIndex index="1" type="array">
-										<numIndex index="0">Complete information</numIndex>
-										<numIndex index="1">0</numIndex>
-									</numIndex>
-									<numIndex index="2" type="array">
-										<numIndex index="0">Compact format</numIndex>
-										<numIndex index="1">1</numIndex>
-									</numIndex>
-								</items>
-							</config>
-						</TCEforms>
+						<label>Format for training items</label>
+						<config>
+							<type>select</type>
+							<renderType>selectSingle</renderType>
+							<items type="array">
+								<numIndex index="1" type="array">
+									<numIndex index="0">Complete information</numIndex>
+									<numIndex index="1">0</numIndex>
+								</numIndex>
+								<numIndex index="2" type="array">
+									<numIndex index="0">Compact format</numIndex>
+									<numIndex index="1">1</numIndex>
+								</numIndex>
+							</items>
+						</config>
 					</settings.format>
 					<settings.limitation>
-						<TCEforms>
-							<label>Max. number of items to be shown (0 = all)</label>
-							<config>
-								<type>input</type>
-								<size>5</size>
-								<eval>int</eval>
-							</config>
-						</TCEforms>
+						<label>Max. number of items to be shown (0 = all)</label>
+						<config>
+							<type>input</type>
+							<size>5</size>
+							<eval>int</eval>
+						</config>
 					</settings.limitation>
 					<settings.itemsPerPage>
-						<TCEforms>
-							<label>Number of items per page (0 = all)</label>
-							<config>
-								<type>input</type>
-								<size>5</size>
-								<eval>int</eval>
-							</config>
-						</TCEforms>
+						<label>Number of items per page (0 = all)</label>
+						<config>
+							<type>input</type>
+							<size>5</size>
+							<eval>int</eval>
+						</config>
 					</settings.itemsPerPage>
 					<settings.includeCancelled>
-						<TCEforms>
-							<label>Include cancelled trainings</label>
-							<config>
-								<type>check</type>
-								<renderType>checkboxToggle</renderType>
-							</config>
-						</TCEforms>
+						<label>Include cancelled trainings</label>
+						<config>
+							<type>check</type>
+							<renderType>checkboxToggle</renderType>
+						</config>
 					</settings.includeCancelled>
 					<settings.showNavigation>
-						<TCEforms>
-							<label>Show navigation</label>
-							<config>
-								<type>check</type>
-								<renderType>checkboxToggle</renderType>
-							</config>
-						</TCEforms>
+						<label>Show navigation</label>
+						<config>
+							<type>check</type>
+							<renderType>checkboxToggle</renderType>
+						</config>
 					</settings.showNavigation>
 				</el>
 			</ROOT>

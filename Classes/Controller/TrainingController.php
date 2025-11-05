@@ -71,7 +71,7 @@ class TrainingController extends ActionController {
 		$includeCancelled = intval($this->settings['includeCancelled']);
 
 		$filter = $this->request->hasArgument('filter') ? intval($this->request->getArgument('filter')) : 0;
-		$GLOBALS['TSFE']->fe_user->setKey('ses','tpFilter',$filter);
+		
 		if ($filter > 0) {
 			$trainings = $this->trainingRepository->findFutureFiltered($filter, $limit, $includeCancelled);
 		} else {
@@ -82,8 +82,12 @@ class TrainingController extends ActionController {
 		if ($this->request->hasArgument('currentPage')) {
 			$currentPage = max([1, intval($this->request->getArgument('currentPage'))]);
 		}
-		$GLOBALS['TSFE']->fe_user->setKey('ses','tpListPageNo',$currentPage);
-
+		
+		$fe_user = $this->request->getAttribute('frontend.user');
+		$fe_user->setKey('ses', 'tpFilter', $filter);
+		$fe_user->setKey('ses', 'tpListPageNo', $currentPage);
+		$fe_user->storeSessionData();
+		
 		$itemsPerPage = intval($this->settings['itemsPerPage']);
 		if ($itemsPerPage == 0) {
 			// no pagination
@@ -135,11 +139,15 @@ class TrainingController extends ActionController {
 	
 
 	public function showAction(Training $training): ResponseInterface {
-		$filter = intval($GLOBALS['TSFE']->fe_user->getKey('ses','tpFilter'));
-		$listPageNo = intval($GLOBALS['TSFE']->fe_user->getKey('ses','tpListPageNo'));
+		$fe_user = $this->request->getAttribute('frontend.user');
+		$filter = intval($fe_user->getKey('ses', 'tpFilter'));
+		$listPageNo = intval($fe_user->getKey('ses', 'tpListPageNo'));
+
 		$answers = $this->answerRepository->findPerTraining($training);
 		$countPublicAnswers = $this->answerRepository->countPerTrainingAndNotMember($training);
-		$userId = $this->context->getPropertyFromAspect('frontend.user', 'id');
+		// The "good" way to get the user ID is the following command: $userId = $this->context->getPropertyFromAspect('frontend.user', 'id');
+		// Since the frontend user object is already gathered above, only its ID is extracted with the following line
+		$userId = $fe_user?->user['uid'] ?? 0;
 		$newAnswer = new \DW\Trainingsplatz\Domain\Model\Answer();
 		$newAnswer->setTitle('Bin dabei');
 		$newAnswer->setDescription('Ich mache bei diesem Training mit.');
@@ -180,7 +188,7 @@ class TrainingController extends ActionController {
 	}
 
 
-	protected function getErrorFlashMessage() {
+	protected function getErrorFlashMessage(): bool|string {
 		switch ($this->actionMethodName) {
 			case 'createAction':
 	   			return 'Bitte Datumfeld korrekt ausfüllen';

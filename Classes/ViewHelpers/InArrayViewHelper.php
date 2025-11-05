@@ -1,15 +1,17 @@
 <?php
+declare(strict_types=1);
+
 namespace DW\Trainingsplatz\ViewHelpers;
 
 class InArrayViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper {
 
-    public function initializeArguments() {
+    public function initializeArguments(): void {
         $this->registerArgument('needle', 'string', 'Item to be looked for', true);
         $this->registerArgument('haystack', 'mixed', 'Array to be looked in', true);
         parent::initializeArguments();
     }
 	
-    protected static function evaluateCondition($arguments = NULL) {
+    protected static function evaluateCondition($arguments = NULL): bool {
 		$needle = $arguments['needle'];
 		$haystack = $arguments['haystack'];
 
