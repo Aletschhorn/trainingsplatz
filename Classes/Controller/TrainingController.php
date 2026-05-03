@@ -24,6 +24,7 @@ use DW\Trainingsplatz\Domain\Repository\InfomailRepository;
 use DW\Trainingsplatz\Domain\Model\Training;
 use DW\Trainingsplatz\Domain\Model\Answer;
 use In2code\Femanager\Domain\Repository\UserRepository;
+use GeorgRinger\News\Domain\Repository\NewsRepository;
 
 /**
  * TrainingController
@@ -45,6 +46,8 @@ class TrainingController extends ActionController {
 	
 	private $userRepository;
 	
+	protected NewsRepository $newsRepository;
+	
 	protected $timezone;
 
 	public function __construct (
@@ -54,6 +57,7 @@ class TrainingController extends ActionController {
 			IntensityRepository $intensityRepository,
 			InfomailRepository $infomailRepository,
 			UserRepository $userRepository,
+			NewsRepository $newsRepository,
 			private readonly Context $context
 	) {
 		$this->trainingRepository = $trainingRepository;
@@ -62,6 +66,7 @@ class TrainingController extends ActionController {
 		$this->intensityRepository = $intensityRepository;
 		$this->infomailRepository = $infomailRepository;
 		$this->userRepository = $userRepository;
+		$this->newsRepository = $newsRepository;
 		$this->timezone = new \DateTimeZone($this->context->getPropertyFromAspect('date', 'timezone'));
 	}
 	
@@ -1213,8 +1218,7 @@ class TrainingController extends ActionController {
 		$demand->setYear($year);
 		$demand->setCategories(['Bericht']);
 		$demand->setStoragePage(98);
-		$newsRepository = new \GeorgRinger\News\Domain\Repository\NewsRepository;
-		$reports = $newsRepository->findDemanded($demand);
+		$reports = $this->newsRepository->findDemanded($demand);
 		
 		for ($i=2016; $i<=date('Y'); $i++) {
 			$navigation[] = $i;
