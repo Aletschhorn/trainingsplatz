@@ -19,8 +19,6 @@ plugin.tx_trainingsplatz {
 		userlistPid = {$plugin.tx_trainingsplatz.settings.userlistPid}		
 		competitionStart = {$plugin.tx_trainingsplatz.settings.competitionStart}
 		googleMapsKey = {$plugin.tx_trainingsplatz.settings.googleMapsKey}
-		routeColor = {$plugin.tx_trainingsplatz.settings.routeColor}
-		routeWidth = {$plugin.tx_trainingsplatz.settings.routeWidth}
 		meetingpointIcon = {$plugin.tx_trainingsplatz.settings.meetingpointIcon}
 		meetingpointIconSize = {$plugin.tx_trainingsplatz.settings.meetingpointIconSize}
 		meetingpointIconAnchor = {$plugin.tx_trainingsplatz.settings.meetingpointIconAnchor}
