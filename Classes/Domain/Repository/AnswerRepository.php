@@ -110,7 +110,7 @@ class AnswerRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		if ($startDate) {
 			$constraints[] = $query->greaterThanOrEqual('training.trainingDate',$startDate->format('Y-m-d H-i-s'));
 		}
-		$query->matching($query->logicalAnd(...$constraints));
+		$query->matching($query->logicalAnd(...$constraints))->setOrderings(['training.trainingDate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING]);
 		return $query->execute();
 	}
 	
