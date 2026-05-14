@@ -74,6 +74,8 @@ defined('TYPO3') or die();
 		'Trainingsplatz',
 		'Various functions for admins only'
 	);
+	ExtensionManagementUtility::addToAllTCAtypes('tt_content', '--div--;Configuration,pi_flexform,', $pluginSignature, 'after:subheader');
+	ExtensionManagementUtility::addPiFlexFormValue('', 'FILE:EXT:trainingsplatz/Configuration/FlexForms/flexform_admin.xml', $pluginSignature);
 		
 	$pluginSignature = ExtensionUtility::registerPlugin(
 		'Trainingsplatz',

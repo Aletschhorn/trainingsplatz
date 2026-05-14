@@ -1001,14 +1001,16 @@ class TrainingController extends ActionController {
 	 * action ranking (Sportler des Jahres, all members)
 	 */
 	public function rankingAction(): ResponseInterface {
-		if ($this->request->hasArgument('year')) {
-			$year = intval($this->request->getArgument('year'));
-			if ($year < 2016 or $year > date('Y')+1) {
-				$year = NULL;
-			}
+		$fe_user = $this->request->getAttribute('frontend.user');
+		$year = $this->request->hasArgument('year') ? intval($this->request->getArgument('year')) : intval($fe_user->getKey('ses', 'reviewYear'));
+		if ($year < 2016 or $year > date('Y')+1) {
+			$year = NULL;
 		}
-		$arguments = $this->request->getArguments();
+		$fe_user->setKey('ses', 'reviewYear', $year);
+		$fe_user->setKey('ses', 'reviewSection', 'ranking');
+		$fe_user->storeSessionData();
 
+		$arguments = $this->request->getArguments();
 		$limit = $this->settings['limitation'];
 		$dates = $this->getRankingDateRange($year);
 		$answers = $this->answerRepository->findRated($dates['start'], $dates['end']);
@@ -1180,7 +1182,33 @@ class TrainingController extends ActionController {
 	}
 
 
+	public function annualReviewAction(): ResponseInterface {
+		$fe_user = $this->request->getAttribute('frontend.user');
+		$year = intval($fe_user->getKey('ses', 'reviewYear'));
+		switch ($fe_user->getKey('ses', 'reviewSection')) {
+			case 'trainings':
+				return $this->redirect('analysis', null, null, ['year' => $year]);
+			case 'reports':
+				return $this->redirect('reports', null, null, ['year' => $year]);
+			case 'ranking':
+				return $this->redirect('ranking', null, null, ['year' => $year]);
+			default:
+				return $this->redirect('analysis');
+		}
+		return false;
+	}
+	
+
 	public function analysisAction(): ResponseInterface {
+		$fe_user = $this->request->getAttribute('frontend.user');
+		$year = $this->request->hasArgument('year') ? intval($this->request->getArgument('year')) : intval($fe_user->getKey('ses', 'reviewYear'));
+		if ($year < 2016 or $year > date('Y')) {
+			$year = date('Y');
+		}
+		$fe_user->setKey('ses', 'reviewYear', $year);
+		$fe_user->setKey('ses', 'reviewSection', 'trainings');
+		$fe_user->storeSessionData();
+
 		if ($this->request->hasArgument('year')) {
 			$year = $this->request->getArgument('year');
 		}
@@ -1206,12 +1234,14 @@ class TrainingController extends ActionController {
 
 
 	public function reportsAction(): ResponseInterface {
-		if ($this->request->hasArgument('year')) {
-			$year = $this->request->getArgument('year');
-		}
+		$fe_user = $this->request->getAttribute('frontend.user');
+		$year = $this->request->hasArgument('year') ? intval($this->request->getArgument('year')) : intval($fe_user->getKey('ses', 'reviewYear'));
 		if ($year < 2016 or $year > date('Y')) {
 			$year = date('Y');
 		}
+		$fe_user->setKey('ses', 'reviewYear', $year);
+		$fe_user->setKey('ses', 'reviewSection', 'reports');
+		$fe_user->storeSessionData();
 		
 		$demand = new \GeorgRinger\News\Domain\Model\Dto\NewsDemand;
 		$demand->setDateField('datetime');

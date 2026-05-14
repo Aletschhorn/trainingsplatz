@@ -59,7 +59,7 @@ ExtensionUtility::configurePlugin(
 ExtensionUtility::configurePlugin(
 	'Trainingsplatz',
 	'Admin',
-	[TrainingController::class => 'analysis, ranking, reports, single'],
+	[TrainingController::class => 'annualReview, analysis, ranking, reports, single'],
 	[TrainingController::class => ''],
 	'CType'
 );

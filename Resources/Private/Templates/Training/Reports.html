@@ -1,3 +1,7 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:n="http://typo3.org/ns/GeorgRinger/News/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
 <f:layout name="Default" />
 <f:section name="main">
 
@@ -25,7 +29,6 @@
 <br />
 
 
-
 <f:if condition="{reports}">
 	<f:then>
 		<table class="table">
@@ -37,7 +40,11 @@
 			<f:for each="{reports}" as="report">
 				<tr>
 					<td>{report.datetime->f:format.date(format:'d.m.Y')}</td>
-					<td>{report.title}</td>
+					<td>
+                    	<f:link.action pageUid="{settings.detailPage}" action="detail" controller="News" extensionName="news" pluginName="pi1" arguments="{news:report.uid}" title="{report.title}">
+                    		{report.title}
+                        </f:link.action>
+                    </td>
 					<td>{report.author}</td>
 				</tr>
 			</f:for>					
