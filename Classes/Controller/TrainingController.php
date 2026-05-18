@@ -605,7 +605,7 @@ class TrainingController extends ActionController {
 		}
 		
 		if ($error) {
-			return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');			
+			return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$this->settings['mainPid']);			
 		} else {
 			$now = new \DateTime('now',$this->timezone);
 			$answer->setCreationDate($now);
@@ -620,7 +620,7 @@ class TrainingController extends ActionController {
 			if ($answer->getTraining()->isNotification()) {
 				$this->sendNotification($answer, 1);
 			}
-			return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
+			return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$this->settings['mainPid']);
 		}
 	}
 
@@ -658,7 +658,7 @@ class TrainingController extends ActionController {
 		}
 
 		if ($error) {
-			return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');			
+			return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$this->settings['mainPid']);			
 		} else {
 			$now = new \DateTime('now',$this->timezone);
 			$answer->setChangeDate($now);
@@ -666,7 +666,7 @@ class TrainingController extends ActionController {
 			if ($answer->getTraining()->isNotification()) {
 				$this->sendNotification($answer, 2);
 			}
-			return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
+			return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$this->settings['mainPid']);
 		}
 	}
 
@@ -681,7 +681,7 @@ class TrainingController extends ActionController {
 			$this->sendNotification($answer, 3);
 		}
 		$this->addFlashMessage('Teilnahme abgesagt', '', ContextualFeedbackSeverity::OK);
-		return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
+		return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$this->settings['mainPid']);
 	}
 
 
@@ -694,7 +694,7 @@ class TrainingController extends ActionController {
 			$this->sendNotification($answer, 4);
 		}
 		$this->addFlashMessage('Teilnahme wieder aktiviert', '', ContextualFeedbackSeverity::OK);
-		return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$settings->mainPid.'#userAnswer');
+		return $this->redirect('show','Training','trainingsplatz',array('training' => $answer->getTraining()->getUid()),$this->settings['mainPid']);
 	}
 
 
@@ -1048,6 +1048,9 @@ class TrainingController extends ActionController {
 		if (date('m') == 12) {
 			$navigation[] = date('Y')+1;
 		}
+		if (! $year) {
+			$year = end($navigation);
+		}
 
 		$this->view->assignMultiple([
 			'answers' => $answers,
@@ -1266,7 +1269,7 @@ class TrainingController extends ActionController {
 	/**
 	 * sendNotification
 	 *
-	 * $reason => Reason code: 1 = new answer, 2 = modification, 3 = cancellation, 4 = re-activation
+	 * $reason => Reason code: 1 = new answer, 2 = modification, 3 = cancellation, 4 = re-activation, 5 = deletion
 	 */
 	protected function sendNotification (Answer $answer, int $reason) {
 		if ($this->settings['emails']['suppress']) {

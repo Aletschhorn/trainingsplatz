@@ -31,7 +31,6 @@ class UserController extends \In2code\Femanager\Controller\UserController {
             'pagination' => $pagination,
             'paginator' => $paginator,
 		]);
-		$this->assignForAll();
 		
 		return $this->htmlResponse();
 	}
