@@ -44,6 +44,8 @@ defined('TYPO3') or die();
 		'Trainingsplatz',
 		'Person-dependent list in which trainings the user participated'
 	);
+	ExtensionManagementUtility::addToAllTCAtypes('tt_content', '--div--;Configuration,pi_flexform,', $pluginSignature, 'after:subheader');
+	ExtensionManagementUtility::addPiFlexFormValue('', 'FILE:EXT:trainingsplatz/Configuration/FlexForms/flexform_userParticipation.xml', $pluginSignature);
 
 	$pluginSignature = ExtensionUtility::registerPlugin(
 		'Trainingsplatz',

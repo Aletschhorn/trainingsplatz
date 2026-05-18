@@ -38,7 +38,9 @@
 	</f:else>
 </f:if>
 
-<f:link.action action="participation" class="btn btn-primary">Zurück zur Liste</f:link.action>
+<f:if condition="{settings.rankingListPage}">
+	<f:link.action pageUid="{settings.rankingListPage}" action="participation" title="Zurück zur Rangliste der Sportler des Jahres" class="btn btn-primary">Zurück zur Rangliste</f:link.action>
+</f:if>
 
 </f:section>
 
