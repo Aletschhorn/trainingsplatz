@@ -11,7 +11,7 @@
 			</f:then>
 			<f:else>
 				<f:if condition="{startDate}">
-					<f:then><h3>Aktuelle Rangliste für Trainings seit dem {startDate->f:format.date(format:'j.m.y')}</h3></f:then>
+					<f:then><h3>Aktuelle Rangliste für Trainings seit dem {startDate->f:format.date(format:'d.m.Y')}</h3></f:then>
 					<f:else><h3>Aktuelle Rangliste</h3></f:else>
 				</f:if>
 			</f:else>

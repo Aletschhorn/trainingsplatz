@@ -22,7 +22,7 @@
 			</tr>
 			<f:for each="{list}" as="line">
 				<tr>
-					<td>{line.training.trainingDate->f:format.date(format:'d.m.y')}</td>
+					<td>{line.training.trainingDate->f:format.date(format:'d.m.Y')}</td>
 					<td>{line.training.title}</td>
 					<td>
 						<f:for each="{line.answers}" as="answer">

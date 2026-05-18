@@ -7,7 +7,7 @@
 	<f:then>
 		<h3>
 			<f:if condition="{startDate}">
-				<f:then>Deine Auswertung seit dem {startDate->f:format.date(format:'j.m.y')}:</f:then>
+				<f:then>Deine Auswertung seit dem {startDate->f:format.date(format:'d.m.Y')}:</f:then>
 				<f:else>Deine Auswertung:</f:else>
 			</f:if>
 			<span class="label label-default">{total} <f:if condition="{total}==1"><f:then>Punkt</f:then><f:else>Punkte</f:else></f:if></span>
@@ -25,7 +25,7 @@
 			</f:if>
 			<f:for each="{answers}" as="answer" reverse="1">
 				<tr>
-					<td>{answer.training.trainingDate->f:format.date(format:'d.m.y')}</td>
+					<td>{answer.training.trainingDate->f:format.date(format:'d.m.Y')}</td>
 					<td>{answer.training.title}</td>
 					<td>
 						<f:if condition="{answer.cancelled}">
@@ -45,7 +45,7 @@
 			<f:then>
 				<h3>
 					<f:if condition="{startDate}">
-						<f:then>Deine Auswertung seit dem {startDate->f:format.date(format:'j.m.y')}:</f:then>
+						<f:then>Deine Auswertung seit dem {startDate->f:format.date(format:'d.m.Y')}:</f:then>
 						<f:else>Deine Auswertung:</f:else>
 					</f:if>
 					<span class="label label-default">{extra} <f:if condition="{extra}==1"><f:then>Punkt</f:then><f:else>Punkte</f:else></f:if></span> aus früheren Trainings.
