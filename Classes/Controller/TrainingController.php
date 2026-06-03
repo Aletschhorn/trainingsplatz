@@ -1002,14 +1002,15 @@ class TrainingController extends ActionController {
 	 */
 	public function rankingAction(): ResponseInterface {
 		$fe_user = $this->request->getAttribute('frontend.user');
-		$year = $this->request->hasArgument('year') ? intval($this->request->getArgument('year')) : intval($fe_user->getKey('ses', 'reviewYear'));
+		$year = $this->request->hasArgument('year') ? intval($this->request->getArgument('year')) : NULL;  // don't use year from session cookie to show the recent ranking list
 		if ($year < 2016 or $year > date('Y')+1) {
 			$year = NULL;
+		} else {
+			$fe_user->setKey('ses', 'reviewYear', $year);
+			$fe_user->setKey('ses', 'reviewSection', 'ranking');
+			$fe_user->storeSessionData();
 		}
-		$fe_user->setKey('ses', 'reviewYear', $year);
-		$fe_user->setKey('ses', 'reviewSection', 'ranking');
-		$fe_user->storeSessionData();
-
+		
 		$arguments = $this->request->getArguments();
 		$limit = $this->settings['limitation'];
 		$dates = $this->getRankingDateRange($year);
