@@ -8,20 +8,17 @@
 				<sheetTitle>Settings</sheetTitle>
 				<type>array</type>
 				<el>
-					<settings.thresholdTrainings>
-						<label>Threshold for number of trainings</label>
+					<settings.rankingListPage>
+						<label>Page for global competition ranking list</label>
 						<config>
-							<type>number</type>
-							<format>integer</format>
+							<type>group</type>
+							<allowed>pages</allowed>
+							<relationship>manyToOne</relationship>
+							<size>1</size>
+							<minitems>0</minitems>
+							<maxitems>1</maxitems>
 						</config>
-					</settings.thresholdTrainings>
-					<settings.thresholdAnswers>
-						<label>Threshold for number of answers</label>
-						<config>
-							<type>number</type>
-							<format>integer</format>
-						</config>
-					</settings.thresholdAnswers>
+					</settings.rankingListPage>
 					<settings.memberProfilPage>
 						<label>Page for member profil overview</label>
 						<config>

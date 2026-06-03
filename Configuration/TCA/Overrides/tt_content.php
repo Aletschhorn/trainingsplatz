@@ -67,6 +67,8 @@ defined('TYPO3') or die();
 		'Trainingsplatz',
 		'Person-dependent list of points for training competition'
 	);
+	ExtensionManagementUtility::addToAllTCAtypes('tt_content', '--div--;Configuration,pi_flexform,', $pluginSignature, 'after:subheader');
+	ExtensionManagementUtility::addPiFlexFormValue('', 'FILE:EXT:trainingsplatz/Configuration/FlexForms/flexform_userCompetition.xml', $pluginSignature);
 
 	$pluginSignature = ExtensionUtility::registerPlugin(
 		'Trainingsplatz',

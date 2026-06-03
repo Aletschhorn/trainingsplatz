@@ -3,14 +3,24 @@
 <f:layout name="Default" />
 <f:section name="main">
 
-<f:if condition="{endDate}">
-	<f:then>
-		<h3>Statistische Auswertung der Trainings von {user.name} zwischen {startDate->f:format.date(format:'d.m.Y')} und {endDate->f:format.date(format:'d.m.Y')}</h3>
-    </f:then>
-    <f:else>
-		<h3>Statistische Auswertung der Trainings von {user.name} seit {startDate->f:format.date(format:'d.m.Y')}</h3>
-    </f:else>
-</f:if>
+<h3>
+	<f:if condition="me">
+    	<f:then>Deine Auswertung</f:then>
+        <f:else>Auswertung von {user.name}</f:else>
+    </f:if>
+    <f:if condition="{endDate}">
+    	<f:then>zwischen {startDate->f:format.date(format:'d.m.Y')} und {endDate->f:format.date(format:'d.m.Y')}:</f:then>
+        <f:else>seit {startDate->f:format.date(format:'d.m.Y')}:</f:else>
+    </f:if>
+    <f:if condition="{settings.thresholdTrainings}>0">
+    	<f:then><span class="label label-{f:if(condition:"{count.trainings}<{settings.thresholdTrainings}",then:"default",else:"success")}">{count.trainings} Trainings</span></f:then>
+        <f:else>{count.trainings} Trainings</f:else>
+    </f:if>
+    <f:if condition="{settings.thresholdAnswers}>0">
+    	<f:then><span class="label label-{f:if(condition:"{count.answers}<{settings.thresholdAnswers}",then:"default",else:"success")}">{count.answers} Teilnehmer</span></f:then>
+        <f:else>{count.answers} Teilnehmer</f:else>
+    </f:if>
+</h3>
 
 <f:if condition="{list}">
 	<f:then>
@@ -38,8 +48,8 @@
 	</f:else>
 </f:if>
 
-<f:if condition="{settings.rankingListPage}">
-	<f:link.action pageUid="{settings.rankingListPage}" action="participation" title="Zurück zur Rangliste der Sportler des Jahres" class="btn btn-primary">Zurück zur Rangliste</f:link.action>
+<f:if condition="{settings.memberProfilPage}">
+	<f:link.page pageUid="{settings.memberProfilPage}" title="Zu meinem Mitglieder-Profil" class="btn btn-primary">Mein Profil</f:link.page> &nbsp; &nbsp;
 </f:if>
 
 </f:section>

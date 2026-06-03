@@ -59,5 +59,11 @@
 	</f:else>
 </f:if>
 
+<f:if condition="{settings.memberProfilPage}">
+	<f:link.page pageUid="{settings.memberProfilPage}" title="Zu meinem Mitglieder-Profil" class="btn btn-primary">Mein Profil</f:link.page> &nbsp; &nbsp;
+</f:if>
+<f:if condition="{settings.rankingListPage}">
+	<f:link.action pageUid="{settings.rankingListPage}" action="participation" title="Zur Rangliste der Sportler des Jahres" class="btn btn-default">Gesamte Rangliste</f:link.action>
+</f:if>
 
 </f:section>
