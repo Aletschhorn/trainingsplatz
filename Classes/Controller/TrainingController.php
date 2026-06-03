@@ -1147,13 +1147,18 @@ class TrainingController extends ActionController {
 			$year = date('Y');
 		}
 		$dates = $this->getRankingDateRange($year);
+		
+		$actualUserId = $this->context->getPropertyFromAspect('frontend.user', 'id');
+		$actualUser = $this->userRepository->findByUid($actualUserId);
+		
+		$me = false;
 		if ($this->request->hasArgument('user')) {
 			$userId = $this->request->getArgument('user');
 			$user = $this->userRepository->findByUid($userId);
 		}
 		if (! $user) {
-			$userId = $this->context->getPropertyFromAspect('frontend.user', 'id');
-			$user = $this->userRepository->findByUid($userId);
+			$user = $actualUser;
+			$me = true;
 		}
 		if ($user) {
 			$compensations = $this->answerRepository->findCompensatedByTrainer($user, $dates['start']);
@@ -1177,6 +1182,7 @@ class TrainingController extends ActionController {
 		
 		$this->view->assignMultiple([
 			'user' => $user,
+			'me' => $me,
 			'list' => $list,
 			'startDate' => $dates['start'],
 			'endDate' => $dates['end'],
