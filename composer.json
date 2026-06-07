@@ -3,10 +3,12 @@
    "description": "Training platform",
    "type": "typo3-cms-extension",
    "license": "GPL-2.0-or-later",
-   "authors": {
-      "name": "Daniel Widmer",
-      "email": "daniel.widmer@freizeitsportler.ch"
-   },
+   "authors": [
+     {
+        "name": "Daniel Widmer",
+        "email": "daniel.widmer@freizeitsportler.ch"
+     }
+   ],
    "require": {
       "typo3/cms-core": "^12.4 || ^13.4"
    },
