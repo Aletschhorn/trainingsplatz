@@ -15,6 +15,8 @@ class UserController extends \In2code\Femanager\Controller\UserController {
 		if ($this->request->hasArgument('currentPage')) {
 			$currentPage = max([1, intval($this->request->getArgument('currentPage'))]);
 		}
+		
+		parent::listAction($filter);
 
 		$users = $this->userRepository->findByUsergroups(
         	$this->settings['list']['usergroup'] ?? '',
@@ -26,7 +28,7 @@ class UserController extends \In2code\Femanager\Controller\UserController {
         $pagination = new SimplePagination($paginator);
 
 		$this->view->assignMultiple([
-			'users' => $users,
+//			'users' => $users,
 			'filter' => $filter,
             'pagination' => $pagination,
             'paginator' => $paginator,
