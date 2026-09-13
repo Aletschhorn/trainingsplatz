@@ -3,11 +3,11 @@
 <a name="top"></a>
 <div class="pull-right hidden-xs">
 	<f:render partial="Training/IconsMap" arguments="{training:training}" />
-	<f:render partial="Training/Avatar" arguments="{training:training,style:'margin-left:20px',settings:settings}" />
+	<f:render partial="Training/Avatar" arguments="{training:training,style:'margin-left:20px',showHashes:showHashes,settings:settings}" />
 </div>
 <div class="visible-xs">
 	<f:render partial="Training/IconsMap" arguments="{training:training}" />
-	<f:render partial="Training/Avatar" arguments="{training:training,style:'margin-left:20px',settings:settings}" />
+	<f:render partial="Training/Avatar" arguments="{training:training,style:'margin-left:20px',showHashes:showHashes,settings:settings}" />
 </div>
 
 <h2><f:if condition="{training.cancelled}">ABGESAGT: </f:if>{training.title}</h2>

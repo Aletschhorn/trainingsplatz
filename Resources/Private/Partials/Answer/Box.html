@@ -3,7 +3,7 @@
 		<a name="userAnswer"></a>
 		<div class="panel panel-primary">
 			<div class="panel-body">
-				<f:render partial="Answer/Content" arguments="{answer:answer,showDeleteButton:1}" />
+				<f:render partial="Answer/Content" arguments="{answer:answer,showHashes:showHashes,showDeleteButton:1}" />
                 <f:if condition="{training.cancelled}==0">
                     <f:if condition="{answer.cancelled}">
                         <f:then>
@@ -21,7 +21,7 @@
 	<f:else>
 		<div class="panel panel-default">
 			<div class="panel-body">
-				<f:render partial="Answer/Content" arguments="{answer:answer,showDeleteButton:1}" />
+				<f:render partial="Answer/Content" arguments="{answer:answer,showHashes:showHashes,showDeleteButton:1}" />
 			</div>
 		</div>
 	</f:else>

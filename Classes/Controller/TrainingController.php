@@ -127,13 +127,16 @@ class TrainingController extends ActionController {
 		}
 
 		$answers = [];
+		$showHashes = [];
 		foreach ($trainingsReduced as $training) {
 			$answers[$training->getUid()] = $this->answerRepository->findPerTrainingCorrected($training);
+			$showHashes[$training->getAuthor()->getUid()] = self::getUserHash($training->getAuthor());
 		}
 		
 		$this->view->assignMultiple([
 			'trainings' => $trainingsReduced,
 			'answers' => $answers,
+			'showHashes' => $showHashes,
 			'sports' => $this->sportRepository->findAll(),
 			'filter' => $filter,
 			'pagination' => $paginationArray,
@@ -161,6 +164,13 @@ class TrainingController extends ActionController {
 			$userAnswer = $this->answerRepository->findByTrainingAndUser($training,$userId);
 		}
 		$correctedAnswers = $this->answerRepository->findPerTrainingCorrected($training);
+		
+		$showHashes = [];
+		$showHashes[$training->getAuthor()->getUid()] = self::getUserHash($training->getAuthor());
+		foreach ($answers as $singleAnswer) {
+			$showHashes[$singleAnswer->getFeuser()->getUid()] = self::getUserHash($singleAnswer->getFeuser());
+		}
+		
 
 		$this->view->assignMultiple([
 			'training' => $training,
@@ -172,6 +182,7 @@ class TrainingController extends ActionController {
 			'correctedAnswers' => $correctedAnswers,
 			'outdated' => $this->isTrainingOutdated($training),
 			'filter' => $filter,
+			'showHashes' => $showHashes,
 			'listPageNo' => $listPageNo,
 			'settings' => $this->settings,
 		]);
@@ -1024,6 +1035,7 @@ class TrainingController extends ActionController {
 			if ($answer->getFeuser()) {
 				$points[$answer->getFeuser()->getUid()]++;
 				$userData[$answer->getFeuser()->getUid()] = $answer->getFeuser();
+				$showHashes[$answer->getFeuser()->getUid()] = self::getUserHash($answer->getFeuser());
 			}
 		}
 		foreach ($extra as $add) {
@@ -1062,6 +1074,7 @@ class TrainingController extends ActionController {
 			'limit' => $limit,
 			'extra' => $extra,
 			'navigation' => $navigation,
+			'showHashes' => $showHashes,
 		]);
 		return $this->htmlResponse();
 	}
@@ -1512,6 +1525,10 @@ class TrainingController extends ActionController {
 		} else {
 			return false;
 		}
+	}
+	
+	protected function getUserHash(\In2code\Femanager\Domain\Model\User $user) {
+		return substr(md5($user->getUsername().'show'.$GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']),0,16);
 	}
 
 }

@@ -24,7 +24,7 @@
 					</td>
 					<td>
 						<f:for each="{rank}" as="people" iteration="it">
-							<f:render partial="User/Avatar" arguments="{user:people.user}" />
+							<f:render partial="User/Avatar" arguments="{user:people.user,showHashes:showHashes}" />
 						</f:for>
 					</td>
 				</tr>
