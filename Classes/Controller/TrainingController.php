@@ -168,7 +168,9 @@ class TrainingController extends ActionController {
 		$showHashes = [];
 		$showHashes[$training->getAuthor()->getUid()] = self::getUserHash($training->getAuthor());
 		foreach ($answers as $singleAnswer) {
-			$showHashes[$singleAnswer->getFeuser()->getUid()] = self::getUserHash($singleAnswer->getFeuser());
+			if ($singleAnswer->getFeuser()) {
+				$showHashes[$singleAnswer->getFeuser()->getUid()] = self::getUserHash($singleAnswer->getFeuser());
+			}
 		}
 		
 
