@@ -196,10 +196,19 @@ class TrainingController extends ActionController {
 		$answers = $this->answerRepository->findPerTraining($training);
 		$correctedAnswers = $this->answerRepository->findPerTrainingCorrected($training);
 
+		$showHashes = [];
+		$showHashes[$training->getAuthor()->getUid()] = self::getUserHash($training->getAuthor());
+		foreach ($answers as $singleAnswer) {
+			if ($singleAnswer->getFeuser()) {
+				$showHashes[$singleAnswer->getFeuser()->getUid()] = self::getUserHash($singleAnswer->getFeuser());
+			}
+		}
+
 		$this->view->assignMultiple([
 			'training' => $training,
 			'answers' => $answers,
 			'correctedAnswers' => $correctedAnswers,
+			'showHashes' => $showHashes,
 			'settings' => $this->settings,
 		]);
 		return $this->htmlResponse();
