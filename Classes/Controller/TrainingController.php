@@ -321,6 +321,11 @@ class TrainingController extends ActionController {
 			$seriesDates = $this->getSeriesDates($training);
 		}
 		
+		$showHashes = [];
+		if ($training->getAuthor) {
+			$showHashes[$training->getAuthor()->getUid()] = self::getUserHash($training->getAuthor());
+		}
+
 		$this->view->assignMultiple([
 			'training' => $training,
 			'intensities' => $this->intensityRepository->findAll(),
@@ -329,6 +334,7 @@ class TrainingController extends ActionController {
 			'members' =>  $this->userRepository->findByUsergroup($this->settings['usergroupMember']),
 			'seriesDates' => $seriesDates,
 			'step' => $step,
+			'showHashes' => $showHashes,
 			'settings' => $this->settings,
 		]);
 		return $this->htmlResponse();
@@ -657,12 +663,22 @@ class TrainingController extends ActionController {
 			$userAnswer = $this->answerRepository->findByTrainingAndUser($training,$userId);
 		}
 		$correctedAnswers = $this->answerRepository->findPerTrainingCorrected($training);
+
+		$showHashes = [];
+		$showHashes[$training->getAuthor()->getUid()] = self::getUserHash($training->getAuthor());
+		foreach ($answers as $singleAnswer) {
+			if ($singleAnswer->getFeuser()) {
+				$showHashes[$singleAnswer->getFeuser()->getUid()] = self::getUserHash($singleAnswer->getFeuser());
+			}
+		}
+
 		$this->view->assignMultiple([
 			'training' => $training,
 			'answers' => $answers,
 			'feuser' => $feuser,
 			'userAnswer' => $answer,
 			'correctedAnswers' => $correctedAnswers,
+			'showHashes' => $showHashes,
 		]);
 		return $this->htmlResponse();
 	}

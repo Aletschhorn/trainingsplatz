@@ -48,7 +48,7 @@
 </f:if>
 
 <f:if condition="{step}==4">
-	<f:render partial="Training/Step4" arguments="{training:training,sports:sports,intensities:intensities,seriesDates:seriesDates}" />
+	<f:render partial="Training/Step4" arguments="{training:training,sports:sports,intensities:intensities,seriesDates:seriesDates,showHashes:showHashes}" />
 	<div class="col-sm-offset-0 col-xs-offset-0">
 		<f:link.action action="list" pageUid="{settings.mainPid}" class="btn btn-default">Abbrechen</f:link.action> &nbsp; 
 		<f:form.submit value="Zurück" class="btn btn-default" additionalAttributes="{onclick: 'document.getElementById(\'step\').value=2'}" /> &nbsp; 
